@@ -1,30 +1,27 @@
 import argparse
-import asyncio
-import logging
-import warnings
 
-from src.adk_spike import format_result
-from src.adk_spike import run_spike
+from src.file_reader import FileReadError
+from src.file_reader import read_file
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(
-        description="Run the minimal ADK feasibility spike."
-    )
-    parser.add_argument("review_text", help="Single review input string.")
+    parser = argparse.ArgumentParser(description="Read a single source file safely.")
+    parser.add_argument("file_path", help="Path to a single source code file.")
     return parser.parse_args()
 
 
 def main() -> None:
-    logging.getLogger("google_adk").setLevel(logging.ERROR)
-    warnings.filterwarnings(
-        "ignore",
-        message=r"\[EXPERIMENTAL\] feature FeatureName\.JSON_SCHEMA_FOR_FUNC_DECL is enabled\.",
-        category=UserWarning,
-    )
     args = parse_args()
-    result = asyncio.run(run_spike(args.review_text))
-    print(format_result(result))
+    try:
+        file_content = read_file(args.file_path)
+    except FileReadError as exc:
+        raise SystemExit(f"File read failed: {exc}") from exc
+
+    print("File read successfully")
+    print(f"Path: {file_content.path}")
+    print(f"Extension: {file_content.extension}")
+    print(f"Lines: {file_content.line_count}")
+    print(f"Characters: {len(file_content.raw_text)}")
 
 
 if __name__ == "__main__":

@@ -83,3 +83,25 @@ Completed:
 Result:
 - Repository state and documentation now match the actual completed foundation work.
 - Phase 2 is ready to begin.
+
+### Phase 2 - File Reader
+
+Completed:
+- Added a `FileContent` schema for file metadata plus raw text.
+- Implemented `src/file_reader.py` with a focused `read_file()` function.
+- Added `FileReadError` handling for missing files, directories, permission
+  issues, and non-UTF-8 content.
+- Replaced the CLI entry path in `src/main.py` so it now accepts one file path
+  and prints file metadata.
+- Added `examples/sample_input.py` for manual testing.
+- Updated Phase 2 documentation and status references.
+
+Tested:
+- Ran the CLI against `examples/sample_input.py`.
+- Verified the success summary prints path, extension, line count, and
+  character count.
+
+Result:
+- Phase 2 now has a real MVP input component for one-file reading.
+- The implementation remains intentionally narrow and does not pull in future
+  extraction, review, reporting, or evaluation behavior.

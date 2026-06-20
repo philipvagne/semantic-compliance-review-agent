@@ -1,0 +1,971 @@
+Semantic Compliance Review Agent
+CURRENT PLAN – VERSION 4
+
+Date: June 20, 2026
+Status: Post-Capstone Release Planning Draft
+
+===============================================================================
+PROJECT STATUS
+===============================================================================
+
+Completed:
+[✓] Capstone Requirements Released
+[✓] Project Scope Defined
+[✓] Architecture Defined
+[✓] Documentation Strategy Defined
+[✓] Evaluation Strategy Defined
+[✓] ADK Risk Mitigation Defined
+
+Current Phase:
+Phase 0.5 — ADK Feasibility Spike
+
+Next Milestone:
+Phase 1 — Repository Foundation
+
+================================================================================
+PROJECT OVERVIEW
+================================================================================
+
+The Semantic Compliance Review Agent is an AI-assisted compliance review system
+built for the Google x Kaggle AI Agents: Intensive Vibe Coding Capstone Project.
+
+It is NOT an autonomous code modification tool.
+
+The purpose of the agent is to identify potentially risky human-written text
+inside source code repositories and assist developers in producing safer,
+more professional, and more compliant codebases.
+
+The project focuses on comments, documentation, TODO/FIXME notes, docstrings,
+and selected human-readable strings that traditional static analysis tools
+typically ignore.
+
+Core principle:
+
+    "Assist the developer.
+     Never replace the developer."
+
+================================================================================
+CAPSTONE ALIGNMENT SUMMARY
+================================================================================
+
+The official capstone emphasizes:
+
+- A real-world agent solving a meaningful problem
+- Clear project value and communication
+- Technical implementation quality
+- Thoughtful architecture
+- Strong documentation
+- Public code or project link
+- Kaggle writeup
+- Public video demo
+- Demonstration of at least three course concepts
+
+This project is aligned with those expectations by focusing on:
+
+- A practical developer workflow problem
+- Agent-based semantic review
+- Security and compliance-related risk detection
+- Human-in-the-loop decision making
+- Evaluation and measurable results
+- Clear documentation and sample reports
+
+================================================================================
+PRIMARY TRACK
+================================================================================
+
+Recommended Track:
+
+    Enterprise Agents
+
+Reason:
+
+The project targets developer workflows, source code review, security,
+compliance-related risk detection, internal terminology exposure, and
+professional repository preparation.
+
+These are business and engineering workflow problems, making the Enterprise
+Agents track the strongest fit.
+
+================================================================================
+THE PROBLEM
+================================================================================
+
+Developers frequently leave behind information inside source code that can
+create security, legal, intellectual property, compliance, or reputation risks.
+
+Examples:
+
+- Internal project codenames
+- Security shortcuts
+- Temporary credentials
+- Unprofessional comments
+- Sarcastic remarks
+- TODO notes containing sensitive information
+- Internal system descriptions
+- Risky documentation
+
+Traditional linters and static analysis tools generally cannot understand
+the semantic meaning behind this text.
+
+Humans can.
+
+Modern LLM-powered agents can assist.
+
+================================================================================
+BUSINESS VALUE
+================================================================================
+
+1. Intellectual Property Protection
+
+2. Legal & PR Risk Reduction
+
+3. Security Risk Reduction
+
+4. Documentation Quality
+
+================================================================================
+PROJECT PHILOSOPHY
+================================================================================
+
+Useful over flashy
+Review before modification
+Human responsibility remains final
+Boring, safe, but finished.
+
+ENGINEERING PRINCIPLES
+
+Secure over autonomous
+Explainable over magical
+Structured over complex
+
+================================================================================
+HUMAN RESPONSIBILITY PRINCIPLE
+================================================================================
+
+The AI agent assists review.
+
+The developer remains responsible for:
+
+- Approving changes
+- Rejecting suggestions
+- Accepting risk
+- Maintaining code quality
+
+The system is intentionally designed with Human-in-the-Loop decision making.
+
+No automatic approval.
+No automatic deletion.
+No automatic commit.
+
+================================================================================
+REVIEW TARGETS
+================================================================================
+
+PRIMARY TARGETS
+
+- Single-line comments
+- Block comments
+- Docstrings
+- TODO notes
+- FIXME notes
+
+SECONDARY TARGETS
+
+- Log messages
+- Error messages
+- User-facing strings
+- Human-readable source text
+
+================================================================================
+CAPSTONE COURSE CONCEPTS TO DEMONSTRATE
+================================================================================
+
+The capstone asks submissions to demonstrate at least three course concepts.
+
+This project will intentionally demonstrate the following:
+
+1. Agent / Multi-Agent System (ADK)
+
+Default Build Path:
+
+- Single ADK-powered Compliance Review Agent
+
+The agent reviews extracted human-written source code text, classifies risks,
+assigns confidence levels, and produces structured findings.
+
+Multi-agent architecture remains optional and is only considered if final
+requirements explicitly require it.
+
+2. Security Features
+
+Security is central to the project.
+
+Implemented through:
+
+- Secret and credential-related text detection
+- Sensitive TODO detection
+- Internal codename exposure detection
+- Guardrails preventing autonomous code modification
+- Original file preservation
+- Human-in-the-loop review
+- Audit reporting
+
+3. Agent Skills / Tool Use
+
+The agent will use custom tools/skills for:
+
+- Reading source files
+- Extracting reviewable text
+- Loading project context and sensitive terms
+- Generating audit reports
+- Saving suggested clean copies
+- Running evaluation cases
+
+4. Evaluation
+
+The project will include an evaluation dataset and expected outputs.
+
+The evaluation will measure:
+
+- Correct detections
+- False positives
+- False negatives
+- Precision
+- Recall
+
+5. Observability
+
+The project will include lightweight logging around:
+
+- Files reviewed
+- Findings generated
+- Confidence levels
+- Timestamps
+- Evaluation results
+
+6. Deployability / Reproducibility
+
+Deployment to a live endpoint is not required for judging, but reproducibility
+is important.
+
+The project should include:
+
+- Clear local setup instructions
+- Environment variable documentation
+- Example commands
+- Optional Docker support if time allows
+
+================================================================================
+MVP SCOPE
+================================================================================
+
+INPUT
+
+Single source code file
+
+OUTPUT
+
+1. Audit Report
+2. Suggested Clean Copy
+3. Risk Summary
+4. Confidence Ratings
+5. Evaluation Output
+
+================================================================================
+PROPOSED ARCHITECTURE
+================================================================================
+
+Developer
+    ↓
+CLI Command
+    ↓
+File Reader Tool
+    ↓
+Text Extraction Layer
+    ↓
+Context Layer
+    - Sensitive Terms
+    - Project Context
+    ↓
+ADK Compliance Review Agent
+    ↓
+Risk Classification
+    ↓
+Confidence Scoring
+    ↓
+Structured Findings
+    ↓
+Audit Report Generation
+    ↓
+Developer Review
+
+================================================================================
+DEFAULT BUILD PATH
+================================================================================
+
+The default project should remain simple and controlled:
+
+Single ADK Agent
+    +
+Custom Tools
+    +
+Security Features
+    +
+Evaluation Dataset
+    +
+Markdown Audit Report
+    +
+Strong Documentation
+
+Do not add extra agents, web UI, repository-wide scanning, or deployment unless
+requirements force the change or the MVP is fully complete.
+
+===============================================================================
+WHAT WE ARE NOT BUILDING
+===============================================================================
+
+Not part of the MVP:
+
+- Web UI
+- Database
+- Authentication
+- Repository-wide scanning
+- Autonomous code modification
+- Multi-agent architecture
+- Cloud deployment
+
+These items may only be considered after the MVP is complete.
+
+================================================================================
+POTENTIAL STRETCH GOAL
+================================================================================
+
+Only if capstone requirements mandate multi-agent demonstration;
+not part of the default build path.
+
+Multi-Agent Architecture:
+
+Reviewer Agent
+    +
+Report Agent
+
+================================================================================
+CONFIDENCE MODEL
+================================================================================
+
+HIGH CONFIDENCE
+
+Examples:
+- Credential exposure
+- Configured sensitive term match
+- Obvious professionalism violations
+
+Action:
+- Suggest remediation
+
+MEDIUM CONFIDENCE
+
+Examples:
+- Potentially sensitive references
+- Ambiguous language
+- Unknown possible codename references
+
+Action:
+- Review recommended
+
+LOW CONFIDENCE
+
+Examples:
+- Weak signal
+- Uncertain interpretation
+
+Action:
+- Informational only
+
+================================================================================
+CONTEXT-AWARE RISK DETECTION
+================================================================================
+
+Certain risk categories benefit from additional context.
+
+Examples include:
+
+- Internal project codenames
+- Product names
+- Confidential initiatives
+- Organization-specific terminology
+
+The system may optionally receive:
+
+1. Organization-defined keyword lists
+
+Example:
+
+sensitive_terms:
+    - Project Titan
+    - Falcon
+    - NovaPay
+
+2. Project-specific context
+
+Example:
+
+- Industry
+- Public vs private repository
+- Sensitive business domains
+
+This context improves detection reliability while reducing false positives.
+
+================================================================================
+RISK CATEGORIES
+================================================================================
+
+- Security Risk
+- Professionalism Risk
+- Compliance Risk
+- Internal Codename Exposure
+- Intellectual Property Risk
+- Reputation Risk
+
+SPECIAL NOTE: INTERNAL CODENAME EXPOSURE
+
+Internal codename detection presents a unique challenge because codenames are
+often organization-specific and cannot always be identified through semantic
+analysis alone.
+
+To improve reliability, the system combines:
+
+- Organization-defined sensitive term lists
+- Project-specific context
+- Semantic analysis
+
+Known sensitive terms can be detected deterministically.
+
+Unknown suspicious references may be flagged through semantic review and
+assigned an appropriate confidence level.
+
+================================================================================
+SECURITY PRINCIPLES
+================================================================================
+
+The agent must:
+
+- Never overwrite original files
+- Preserve code structure
+- Preserve business logic
+- Maintain an audit trail
+- Explain all findings
+- Prefer reporting over modification
+- Keep API keys and secrets out of the repository
+
+================================================================================
+GUARDRAILS
+================================================================================
+
+The agent must NEVER:
+
+- Remove functions
+- Remove classes
+- Remove imports
+- Remove variables
+- Modify executable code
+- Change application behavior
+- Commit changes automatically
+- Delete content automatically
+
+Version 1:
+
+Comments and documentation may receive suggested replacements.
+Human-readable strings are report-only.
+
+================================================================================
+AUDIT REPORT OUTPUT
+================================================================================
+
+The Markdown audit report is a first-class project output.
+
+It should include:
+
+- Target file
+- Generated timestamp
+- Agent version
+- Model
+- Scan mode
+- Configured sensitive term count
+- Audit status
+- Finding count
+- Scan statistics
+- Individual findings
+- Severity
+- Confidence
+- Detection method
+- Why the finding was flagged
+- Suggested remediation when appropriate
+- Diff-style suggestions
+- Summary matrix
+- Finding reference guide
+- Human review disclaimer
+
+The report acts as the user-facing interface for the CLI version.
+A web UI is not required for MVP.
+
+================================================================================
+EVALUATION STRATEGY
+================================================================================
+
+The project should contain an evaluation dataset.
+
+Example:
+
+evaluation/
+
+- safe_comments.py
+- security_risks.py
+- professionalism_risks.py
+- codename_exposure.py
+- mixed_cases.py
+
+Measure:
+
+- Correct detections
+- False positives
+- False negatives
+- Precision
+- Recall
+
+Codename Detection Evaluation:
+
+HIGH CONFIDENCE
+- Configured sensitive term detected
+Expected Result: Flagged
+
+MEDIUM CONFIDENCE
+- Unknown project reference
+Expected Result: Review Recommended
+
+LOW CONFIDENCE
+- Generic technical reference
+Expected Result: Informational or No Finding
+
+Purpose:
+
+Demonstrate measurable agent performance.
+
+================================================================================
+OBSERVABILITY
+================================================================================
+
+The system should log:
+
+- Files reviewed
+- Findings generated
+- Confidence levels
+- Review timestamps
+- Evaluation runs
+- Report generation
+
+Purpose:
+
+Provide transparency and assist debugging.
+
+================================================================================
+DOCUMENTATION STRATEGY
+================================================================================
+
+Documentation is part of the implementation.
+
+A task is not complete until relevant documentation is updated.
+
+Documentation should include:
+
+README.md
+- Problem
+- Solution
+- Setup
+- Usage
+- Example output
+- Project architecture
+- Capstone concept mapping
+
+docs/build-log.md
+- Daily build notes
+- What changed
+- What was tested
+- What comes next
+
+docs/decisions.md
+- Important architectural and product decisions
+- Why those decisions were made
+
+docs/architecture.md
+- System flow
+- Tools
+- Agent responsibilities
+- Data flow
+
+docs/security-guardrails.md
+- What the agent is allowed to do
+- What it is not allowed to do
+- Human-in-the-loop rules
+
+docs/evaluation-plan.md
+- Evaluation dataset
+- Expected results
+- Metrics
+- Known limitations
+
+docs/course-concepts.md
+- Explicit mapping between capstone concepts and implementation
+
+examples/sample-audit-report.md
+- Human-readable example of the final report output
+
+================================================================================
+DOCUMENTATION RULE FOR CODEX
+================================================================================
+
+For any non-trivial change:
+
+- Update relevant documentation
+- Update architecture docs if behavior or system flow changes
+- Update evaluation docs if detection behavior changes
+- Update README if setup, commands, or user-facing behavior changes
+
+Do not rewrite unrelated documentation.
+
+Do not make cosmetic documentation changes unless needed.
+
+For minor internal refactors that do not affect usage or behavior, no
+documentation update is required.
+
+================================================================================
+REPOSITORY STRUCTURE
+================================================================================
+
+semantic-compliance-review-agent/
+
+    README.md
+    requirements.txt
+    .env.example
+    .gitignore
+
+    specs/
+        project-plan-v4.txt
+
+    docs/
+        build-log.md
+        decisions.md
+        architecture.md
+        security-guardrails.md
+        evaluation-plan.md
+        course-concepts.md
+
+    examples/
+        sample-audit-report.md
+        sample_clean_copy.py
+
+    evaluation/
+        cases/
+            safe_comments.py
+            security_risks.py
+            professionalism_risks.py
+            codename_exposure.py
+            mixed_cases.py
+
+        expected/
+            safe_comments.expected.json
+            security_risks.expected.json
+            professionalism_risks.expected.json
+            codename_exposure.expected.json
+            mixed_cases.expected.json
+
+    config/
+        sensitive_terms.yaml
+        project_context.yaml
+
+    src/
+        __init__.py
+        main.py
+        agent.py
+        prompts.py
+        file_reader.py
+        text_extractor.py
+        context_loader.py
+        report_writer.py
+        clean_copy_writer.py
+        evaluator.py
+        schemas.py
+        logger.py
+
+    output/
+        .gitkeep
+
+================================================================================
+PROJECT PHASES
+================================================================================
+
+PHASE 0 — REQUIREMENT ALIGNMENT
+
+- Read full capstone rules
+- Confirm required deliverables
+- Confirm if ADK is mandatory
+- Confirm if Agents CLI is required
+- Confirm if MCP is optional or required
+- Confirm if deployment is optional or required
+- Update plan if needed
+
+PHASE 0.5 — ADK FEASIBILITY SPIKE
+
+Goal:
+
+Prove that ADK can support the project architecture before building the real
+agent.
+
+The spike must prove:
+
+[ ] ADK installs locally
+[ ] Agent runs locally
+[ ] Agent accepts review input
+[ ] Agent calls at least one custom tool
+[ ] Tool output is consumed by the agent
+[ ] Agent returns structured output
+[ ] Structured output can be parsed into project schema
+[ ] Workflow can be invoked from a CLI command
+
+Example:
+
+Input:
+"# TODO: remove temporary admin password before production"
+
+Agent:
+-> load_sensitive_terms()
+
+Tool Output:
+["Project Titan", "Falcon", "NovaPay"]
+
+Agent Output:
+Structured Finding JSON
+
+Fallback:
+
+If ADK creates significant friction for 2–3 focused working days,
+switch to a direct Gemini API runtime while preserving:
+
+- Schemas
+- Prompts
+- Tools
+- Evaluation
+- Reports
+- Guardrails
+- Documentation
+
+
+
+PHASE 1 — REPO FOUNDATION
+
+- Create repository structure
+- Add README draft
+- Add docs folder
+- Add project plan
+- Add sample report
+- Add .env.example
+- Add .gitignore
+
+Exit Criteria:
+
+[ ] Repository created
+[ ] GitHub repository created
+[ ] Documentation structure created
+[ ] First commit pushed
+
+PHASE 2 — CLI AND FILE READING
+
+- CLI accepts file path
+- Reads file safely
+- Prints metadata
+- Handles missing files and invalid paths
+
+PHASE 3 — TEXT EXTRACTION
+
+- Extract comments/docstrings/TODO/FIXME notes
+- Preserve line numbers
+- Keep executable code untouched
+
+PHASE 4 — CONTEXT LOADING
+
+- Load sensitive_terms.yaml
+- Load project_context.yaml
+- Pass context into agent review
+
+PHASE 5 — ADK AGENT REVIEW
+
+- Build ADK Compliance Review Agent
+- Send extracted text and context
+- Receive structured findings
+- Enforce output schema
+
+Exit Criteria:
+
+[ ] Agent receives extracted text
+[ ] Agent receives project context
+[ ] Structured findings returned
+[ ] Output schema validated
+
+PHASE 6 — REPORT GENERATION
+
+- Generate Markdown audit report
+- Include findings, confidence, methods, remediation, and summary matrix
+
+PHASE 7 — CLEAN COPY GENERATION
+
+- Generate suggested clean copy
+- Never overwrite original file
+- Only apply safe comment/docstring suggestions
+
+PHASE 8 — EVALUATION
+
+- Add evaluation cases
+- Add expected outputs
+- Run evaluation command
+- Report precision and recall
+
+Exit Criteria:
+
+[ ] Evaluation dataset exists
+[ ] Expected outputs exist
+[ ] Precision reported
+[ ] Recall reported
+
+PHASE 9 — FINAL DOCUMENTATION
+
+- Final README
+- Architecture docs
+- Security docs
+- Evaluation docs
+- Course concept mapping
+- Build log summary
+
+PHASE 10 — SUBMISSION PREP
+
+- Kaggle writeup
+- Video demo
+- Public project link
+- Screenshots/media gallery
+- Final repo cleanup
+
+Exit Criteria:
+
+[ ] Writeup completed
+[ ] Video completed
+[ ] Public repository ready
+[ ] Submission package ready
+
+================================================================================
+KAGGLE WRITEUP REQUIREMENTS
+================================================================================
+
+The Kaggle writeup should include:
+
+- Title
+- Subtitle
+- Problem statement
+- Solution overview
+- Why agents
+- Architecture
+- Course concepts demonstrated
+- Technical implementation
+- Evaluation
+- Security and guardrails
+- Project journey
+- Public project link
+- Video attachment
+- Cover image/media gallery
+
+Word limit:
+
+- 2,500 words maximum
+
+================================================================================
+VIDEO REQUIREMENTS
+================================================================================
+
+The video should be:
+
+- Public
+- Uploaded to YouTube
+- Attached to the Kaggle media gallery
+- 5 minutes or less
+
+The video should explain:
+
+- Problem statement
+- Why agents
+- Architecture
+- Demo
+- How it was built
+- Tools and technologies used
+
+================================================================================
+SUCCESS CRITERIA
+================================================================================
+
+The project is successful if:
+
+- It solves a real developer problem
+- It demonstrates at least three capstone concepts
+- It includes an ADK-powered agent
+- It includes security features
+- It includes evaluation
+- It includes guardrails
+- It remains understandable
+- It can be completed within the capstone timeframe
+- It becomes a portfolio-quality project
+- The creator can explain every major design decision
+
+================================================================================
+PROJECT STORY
+================================================================================
+
+Developers regularly leave behind information inside source code that creates
+security, compliance, intellectual property, and reputation risks.
+
+I built the Semantic Compliance Review Agent to semantically review human-written
+source code text, identify these risks, generate auditable reports, and assist
+developers in producing safer and more professional repositories while
+preserving human responsibility and oversight.
+
+================================================================================
+CURRENT PROJECT STATE
+================================================================================
+
+Official capstone requirements reviewed at a high level.
+
+V3 plan still valid.
+
+V4 adds explicit alignment with:
+
+- ADK
+- Security features
+- Agent skills/tools
+- Evaluation
+- Observability
+- Deployability/reproducibility
+- Kaggle writeup
+- Public video
+- Public project link
+
+Completed:
+
+- Capstone requirements reviewed
+- Architecture defined
+- Documentation strategy defined
+- Evaluation strategy defined
+- ADK risk mitigation defined
+
+Next Actions:
+
+1. Create repository foundation
+2. Commit and push repository
+3. Execute ADK feasibility spike
+4. Validate results
+5. Begin implementation.

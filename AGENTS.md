@@ -49,3 +49,17 @@ Before finishing, Codex must report:
 Codex must not defer documentation synchronization to a later cleanup step unless the user explicitly asks for that.
 
 The user reviews the diff. The user does not manually synchronize documentation unless needed.
+
+## Code Documentation Rule
+
+Each major component should contain a short
+module-level docstring describing:
+
+- Purpose
+- Inputs
+- Outputs
+- Responsibilities
+- Non-responsibilities
+
+Avoid implementation comments unless they
+clarify non-obvious logic.

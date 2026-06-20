@@ -10,6 +10,8 @@ The repository now contains:
 
 The current runnable CLI path is the File Reader flow.
 
+The next approved design step is Phase 2.5: Text Extraction Design.
+
 ## Implemented Flow
 
 User
@@ -156,22 +158,89 @@ Fields:
 - language
 - surrounding_context
 
+Planned source types:
+
+- COMMENT
+- DOCSTRING
+- TODO
+- FIXME
+- NOTE
+- STRING_LITERAL
+
 On Failure:
 
-Raises ExtractionError
+- Returns an empty list if no reviewable text exists
+- Raises ExtractionError only for unexpected parser/runtime failures
+- No reviewable text is not an error
 
-Returns empty list if no reviewable text exists.
+MVP scope decision for first implementation:
+
+- Support Python comments
+- Support Python docstrings
+- Support TODO / FIXME / NOTE comments
+- Do not implement string literal extraction in the first implementation
+
+Reason:
+
+- Comments and docstrings are the core promise
+- String literals add complexity and higher misclassification risk
+- String literal extraction should be added later as a controlled expansion
 
 Responsibility:
 
+- Preserve line numbers
+- Preserve source type
+- Preserve surrounding context
 - Extract comments
 - Extract TODO/FIXME notes
 - Extract reviewable human-written text
 
 Does NOT:
 
-- Classify findings
+- Classify risk
+- Call ADK
+- Assign severity
+- Generate findings
 - Generate reports
+- Modify source files
+
+Phase 3 implementation note:
+
+- `src/text_extractor.py` should include a short module-level docstring covering
+  purpose, input, output, responsibilities, and non-responsibilities
+- Avoid noisy implementation comments; use comments and docstrings to explain
+  component boundaries rather than obvious code
+
+Example design input:
+
+```python
+# TODO: remove temporary admin password before production
+
+def login():
+    """Authenticate user against internal Project Titan service."""
+    pass
+```
+
+Example design output:
+
+```json
+[
+  {
+    "source_type": "TODO",
+    "text": "TODO: remove temporary admin password before production",
+    "line_start": 1,
+    "line_end": 1,
+    "language": "python"
+  },
+  {
+    "source_type": "DOCSTRING",
+    "text": "Authenticate user against internal Project Titan service.",
+    "line_start": 4,
+    "line_end": 4,
+    "language": "python"
+  }
+]
+```
 
 ## Context Loader
 

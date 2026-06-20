@@ -16,9 +16,10 @@ Completed:
 [✓] Evaluation Strategy Defined
 [✓] ADK Risk Mitigation Defined
 [✓] Phase 2 File Reader Implemented
+[✓] Phase 2.5 Text Extraction Design Approved
 
 Current Phase:
-PHASE 3 - TEXT EXTRACTION
+PHASE 2.5 - TEXT EXTRACTION DESIGN
 
 Next Milestone:
 PHASE 3 - TEXT EXTRACTION
@@ -827,6 +828,33 @@ Exit Criteria:
 [✓] Missing files and invalid paths are handled
 [✓] Phase scope remains limited to single-file input
 
+PHASE 2.5 — TEXT EXTRACTION DESIGN
+
+- Document the `FileContent -> Text Extractor -> ReviewableText[]` flow
+- Document the `ReviewableText` contract
+- Lock first implementation scope before Phase 3 coding begins
+- Record failure behavior and non-responsibilities
+
+Approved first implementation scope:
+
+- Python comments
+- Python docstrings
+- TODO comments
+- FIXME comments
+- NOTE comments
+
+Explicitly deferred:
+
+- String literal extraction
+
+Exit Criteria:
+
+[✓] ReviewableText contract documented
+[✓] Initial source types documented
+[✓] First implementation scope approved
+[✓] Failure behavior documented
+[✓] Phase 3 coding boundary clarified
+
 PHASE 3 — TEXT EXTRACTION
 
 - Extract comments/docstrings/TODO/FIXME notes
@@ -1008,10 +1036,11 @@ Completed:
 - MVP workflow design completed
 - Foundation review completed
 - File Reader implemented
+- Text Extraction design approved
 
 Next Actions:
 
 1. Begin Phase 3 - Text Extraction
-2. Preserve line numbers and keep executable code untouched
-3. Continue updating affected documentation within each phase task
+2. Implement only Python comments, Python docstrings, and TODO / FIXME / NOTE extraction
+3. Preserve line numbers, source type, and surrounding context without touching runtime behavior outside Phase 3 scope
 

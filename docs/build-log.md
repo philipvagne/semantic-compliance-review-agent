@@ -105,3 +105,26 @@ Result:
 - Phase 2 now has a real MVP input component for one-file reading.
 - The implementation remains intentionally narrow and does not pull in future
   extraction, review, reporting, or evaluation behavior.
+
+### Phase 2.5 - Text Extraction Design
+
+Completed:
+- Recorded the approved Text Extraction design before Phase 3 implementation.
+- Documented the `FileContent -> Text Extractor -> ReviewableText[]` flow.
+- Documented the `ReviewableText` contract fields and planned source types.
+- Locked the first implementation scope to Python comments, Python docstrings,
+  and TODO / FIXME / NOTE comments only.
+- Explicitly deferred string literal extraction to a later controlled expansion.
+- Documented failure behavior: empty list for no reviewable text, and
+  `ExtractionError` only for unexpected parser/runtime failures.
+- Recorded the module-level docstring requirement for major components, with
+  `src/text_extractor.py` called out for Phase 3.
+
+Tested:
+- Documentation-only task; no runtime code was changed.
+- Reviewed status and architecture docs for consistency with the approved design.
+
+Result:
+- Phase 3 implementation now has a documented contract and clear MVP boundary.
+- The repository remains unchanged at runtime while the next component design is
+  now approved and recorded.

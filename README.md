@@ -10,7 +10,8 @@ ADK feasibility spike complete.
 MVP workflow/component contracts complete.
 Foundation review complete.
 Phase 2 - File Reader complete.
-Next: Phase 3 - Text Extraction.
+Phase 2.5 - Text Extraction design approved.
+Next: Phase 3 - Text Extraction implementation.
 
 ## Purpose
 
@@ -19,7 +20,7 @@ human-written text inside source code repositories.
 
 ## Current Phase
 
-Phase 3 - Text Extraction
+Phase 2.5 - Text Extraction Design
 
 ## Phase 2 File Reader
 
@@ -52,6 +53,25 @@ Current File Reader scope:
 - does not extract text
 - does not call the agent
 - does not generate reports
+
+## Phase 2.5 Text Extraction Design
+
+The next component has now been documented and approved before implementation:
+
+`FileContent -> Text Extractor -> ReviewableText[]`
+
+First implementation scope for Phase 3:
+
+- Python comments
+- Python docstrings
+- TODO / FIXME / NOTE comments
+
+Explicitly deferred from the first implementation:
+
+- string literal extraction
+
+The design also records that no reviewable text should return an empty list,
+while `ExtractionError` is reserved for unexpected parser or runtime failures.
 
 ## Phase 0.5 Spike
 

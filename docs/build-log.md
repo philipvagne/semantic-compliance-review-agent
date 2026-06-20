@@ -5,12 +5,12 @@
 ### Repository Foundation
 
 Completed:
-
-- Created repository
-- Created folder structure
-- Added project plan
-- Added sample report
+- Created local repository structure.
+- Added project plan.
+- Added documentation skeleton.
+- Added sample audit report.
+- Created public GitHub repository.
+- Pushed initial foundation commit.
 
 Next:
-
-- ADK feasibility spike
+- Begin Phase 0.5 — ADK Feasibility Spike.

@@ -6,7 +6,10 @@ Google x Kaggle AI Agents Capstone Project
 
 Planning complete.
 Repository foundation complete.
-ADK feasibility spike implemented.
+ADK feasibility spike complete.
+MVP workflow/component contracts complete.
+Foundation review complete.
+Next: Phase 2 - File Reader.
 
 ## Purpose
 
@@ -15,7 +18,7 @@ human-written text inside source code repositories.
 
 ## Current Phase
 
-Phase 0.5 - ADK Feasibility Spike
+Phase 2 - File Reader
 
 ## Phase 0.5 Spike
 

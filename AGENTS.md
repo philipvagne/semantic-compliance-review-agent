@@ -24,6 +24,28 @@ Do NOT add:
 
 unless explicitly requested.
 
-## Documentation Rule
+## Documentation Sync Rule
 
-A task is not complete until relevant documentation has been updated.
+For every non-trivial task, Codex must identify which documentation files are affected and update them in the same task.
+
+Codex must check at minimum:
+- README.md
+- specs/project-plan-v4.txt
+- docs/build-log.md
+- docs/architecture.md
+- docs/codex-workflow.md
+- docs/security-guardrails.md
+- docs/evaluation-plan.md
+- docs/course-concepts.md
+
+Codex should only update files affected by the task.
+
+Before finishing, Codex must report:
+1. Which documentation files were checked
+2. Which documentation files were updated
+3. Which documentation files were intentionally left unchanged
+4. Why each unchanged file did not need an update
+
+Codex must not defer documentation synchronization to a later cleanup step unless the user explicitly asks for that.
+
+The user reviews the diff. The user does not manually synchronize documentation unless needed.

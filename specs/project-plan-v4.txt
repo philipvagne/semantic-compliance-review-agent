@@ -17,10 +17,10 @@ Completed:
 [✓] ADK Risk Mitigation Defined
 
 Current Phase:
-Phase 0.5 — ADK Feasibility Spike
+PHASE 2 - FILE READER
 
 Next Milestone:
-Phase 1 — Repository Foundation
+PHASE 2 - FILE READER
 
 ================================================================================
 PROJECT OVERVIEW
@@ -723,14 +723,14 @@ agent.
 
 The spike must prove:
 
-[ ] ADK installs locally
-[ ] Agent runs locally
-[ ] Agent accepts review input
-[ ] Agent calls at least one custom tool
-[ ] Tool output is consumed by the agent
-[ ] Agent returns structured output
-[ ] Structured output can be parsed into project schema
-[ ] Workflow can be invoked from a CLI command
+[✓] ADK installs locally
+[✓] Agent runs locally
+[✓] Agent accepts review input
+[✓] Agent calls at least one custom tool
+[✓] Tool output is consumed by the agent
+[✓] Agent returns structured output
+[✓] Structured output can be parsed into project schema
+[✓] Workflow can be invoked from a CLI command
 
 Example:
 
@@ -773,12 +773,45 @@ PHASE 1 — REPO FOUNDATION
 
 Exit Criteria:
 
-[ ] Repository created
-[ ] GitHub repository created
-[ ] Documentation structure created
-[ ] First commit pushed
+[✓] Repository created
+[✓] GitHub repository created
+[✓] Documentation structure created
+[✓] First commit pushed
 
-PHASE 2 — CLI AND FILE READING
+PHASE 1.5 — MVP WORKFLOW DESIGN
+
+- Define MVP workflow
+- Define component contracts
+- Document CLI → File Reader → Text Extractor → Context Loader → Agent Review → Report Writer
+- Define failure behavior for each component
+- Define ADK boundary as a swappable seam
+
+Exit Criteria:
+
+[✓] MVP workflow documented
+[✓] Component contracts documented
+[✓] Failure behavior documented
+[✓] ADK boundary documented
+[✓] Changes committed and pushed
+
+PHASE 1.75 — FOUNDATION REVIEW
+
+- Review repository structure
+- Review documentation foundation
+- Review AGENTS.md and Codex workflow
+- Review ADK feasibility spike
+- Review current project-plan-v4.txt alignment
+- Identify blockers before Phase 2
+
+Exit Criteria:
+
+[completed] Repository structure reviewed
+[completed] Documentation reviewed
+[completed] ADK spike reviewed
+[completed] Any critical issues resolved
+[completed] Phase 2 approved
+
+PHASE 2 — FILE READER
 
 - CLI accepts file path
 - Reads file safely
@@ -961,11 +994,14 @@ Completed:
 - Documentation strategy defined
 - Evaluation strategy defined
 - ADK risk mitigation defined
+- Repository foundation completed
+- ADK feasibility spike completed
+- MVP workflow design completed
+- Foundation review completed
 
 Next Actions:
 
-1. Create repository foundation
-2. Commit and push repository
-3. Execute ADK feasibility spike
-4. Validate results
-5. Begin implementation.
+1. Begin Phase 2 - File Reader
+2. Keep implementation scoped to safe single-file input handling
+3. Update affected documentation during the Phase 2 task.
+

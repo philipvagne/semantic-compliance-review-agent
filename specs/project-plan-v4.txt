@@ -24,6 +24,7 @@ Completed:
 [✓] Phase 5 ADK Agent Review Implemented
 [✓] Phase 5.1 Optional Gemini Review Path Design Approved
 [✓] Phase 5.2 Gemini Review Path Implemented
+[✓] Phase 5.25 Live Gemini Verification Documented
 
 Current Phase:
 PHASE 6 - REPORT GENERATION
@@ -1046,6 +1047,28 @@ Exit Criteria:
 [✓] Unsupported backend values are rejected by CLI validation
 [✓] No silent fallback to Deterministic when Gemini is selected
 
+PHASE 5.25 — LIVE GEMINI VERIFICATION
+
+- Record successful live Gemini verification without changing runtime behavior
+- Confirm the default Gemini backend works with valid local credentials
+- Confirm structured findings parse through the existing review boundary
+
+Verification recorded:
+
+- `python -m src.main examples/sample_input.py` completed successfully
+- Gemini ran as the default backend
+- File Reader, Text Extractor, Context Loader, and Agent Review all completed
+- Gemini returned valid findings that parsed into the `Finding` schema
+- Live Gemini output differed materially from deterministic fallback output
+
+Exit Criteria:
+
+[✓] Live Gemini request succeeded
+[✓] Credentials accepted correctly
+[✓] ADK integration worked with a real model
+[✓] Structured output validation succeeded
+[✓] Real semantic review path documented
+
 PHASE 6 — REPORT GENERATION
 
 - Generate Markdown audit report
@@ -1209,6 +1232,7 @@ Completed:
 - Agent Review implemented
 - Optional Gemini review path design approved
 - Gemini review path implemented
+- Live Gemini verification documented
 
 Next Actions:
 

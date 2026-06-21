@@ -18,6 +18,7 @@ Phase 4.5 - Agent Review design complete.
 Phase 5 - Agent Review complete.
 Phase 5.1 - Optional Gemini Review Path design complete.
 Phase 5.2 - Gemini Review Path complete.
+Phase 5.25 - Live Gemini verification documented.
 Next: Phase 6 - Report Generation.
 
 ## Purpose
@@ -183,6 +184,14 @@ Current CLI behavior:
 - missing Gemini credentials fail during CLI startup before file reading begins
 - Gemini provider failures fail clearly and do not silently fall back to deterministic
 - supported environment variables are `GOOGLE_API_KEY` and `GEMINI_API_KEY`
+
+Live verification milestone recorded:
+
+- Gemini was successfully exercised as the default backend with a valid local API key
+- the CLI completed successfully through File Reader, Text Extractor, Context Loader, and Agent Review
+- Gemini returned valid findings that parsed into the `Finding` schema
+- the live Gemini output was materially different from the deterministic fallback output
+- the project now has a verified real semantic review path
 
 ## Phase 0.5 Spike
 

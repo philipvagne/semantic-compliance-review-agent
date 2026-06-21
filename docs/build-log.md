@@ -306,3 +306,41 @@ Result:
   without changing the public Agent Review boundary.
 - Live Gemini wiring is in place, but it was not exercised in this environment
   because Gemini credentials were not available locally.
+
+### Phase 5.25 - Live Gemini Verification
+
+Completed:
+- Recorded the successful live verification milestone for the Gemini review
+  path.
+- Confirmed Gemini was used as the default backend with a valid local API key.
+- Confirmed the CLI completed successfully through File Reader, Text
+  Extractor, Context Loader, and Agent Review.
+- Confirmed Gemini returned valid findings that parsed into the `Finding`
+  schema.
+- Confirmed the public
+  `review(reviewable_texts, review_context) -> list[Finding]` boundary works
+  with a real model.
+- Confirmed live Gemini output differs materially from deterministic fallback
+  output.
+
+Verified with:
+- `python -m src.main examples/sample_input.py`
+
+Observed result:
+- `Backend: Gemini`
+- File Reader executed successfully
+- Text Extractor executed successfully
+- Context Loader executed successfully
+- Agent Review executed successfully
+- structured output validation succeeded
+- CLI completed successfully
+
+Observed findings:
+- one `HIGH SECURITY_RISK` finding for the temporary admin password TODO
+- one `LOW PROFESSIONALISM_RISK` finding for the FIXME example value comment
+
+Result:
+- The project now has a verified real semantic review path through ADK and
+  Gemini.
+- Phase 6 design can proceed with a documented live model verification
+  milestone in place.

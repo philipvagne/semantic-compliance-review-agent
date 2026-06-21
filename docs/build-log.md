@@ -401,3 +401,28 @@ Result:
 - Phase 6.5 now generates one human-readable Markdown audit report from the
   existing pipeline output.
 - Runtime behavior remains intentionally limited to Markdown output only.
+
+### Phase 6.6 - Report Experience & Readability Design
+
+Completed:
+- Recorded the approved report readability and experience design before
+  implementation.
+- Compared the current generated report with `examples/sample-audit-report.md`
+  as the primary UX reference.
+- Documented the approved executive summary addition, summary matrix
+  placement change, narrative finding layout, diff-style suggested replacement
+  presentation, and improved zero-findings experience.
+- Documented the rule that Report Writer should become a better presenter of
+  findings without becoming a second reviewer.
+- Documented the guardrails against inventing findings, metrics, statistics,
+  or new analysis.
+
+Tested:
+- Documentation-only task; no runtime code was changed.
+- Reviewed README, project plan, architecture, build log, sample report, and
+  current generated report alignment.
+
+Result:
+- Phase 6.7 implementation now has a clearer readability target for report UX
+  without changing the underlying review pipeline contract.
+- Runtime behavior remains unchanged.

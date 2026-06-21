@@ -27,12 +27,13 @@ Completed:
 [✓] Phase 5.25 Live Gemini Verification Documented
 [✓] Phase 6 Report Generation Design Approved
 [✓] Phase 6.5 Report Writer Implemented
+[✓] Phase 6.6 Report Experience & Readability Design Approved
 
 Current Phase:
-PHASE 7 - CLEAN COPY GENERATION
+PHASE 6.7 - REPORT READABILITY IMPLEMENTATION
 
 Next Milestone:
-PHASE 8 - EVALUATION
+PHASE 7 - CLEAN COPY GENERATION
 
 ================================================================================
 PROJECT OVERVIEW
@@ -1148,6 +1149,45 @@ Exit Criteria:
 [✓] Existing report files overwritten without prompting
 [✓] CLI writes report after agent review and prints report path
 
+PHASE 6.6 — REPORT EXPERIENCE & READABILITY DESIGN
+
+- Document the approved report readability and experience improvements before implementation
+- Keep the Report Writer as a presenter of findings, not a second reviewer
+- Align report presentation more closely with the blueprint report while using only real pipeline data
+
+Approved readability changes:
+
+- add a stronger executive summary near the top
+- move the Audit Summary Matrix closer to the top
+- make finding sections more narrative and easier to scan
+- show diff-style suggested replacements when `suggested_replacement` exists
+- keep the Finding Reference Guide
+- improve Review Philosophy wording
+- make zero-findings reports feel complete and successful
+
+Approved guardrails:
+
+- do not invent findings
+- do not invent metrics or statistics
+- do not fabricate counts
+- do not generate new analysis
+- do not recalculate severity
+- do not reorder findings
+- do not modify source files
+
+Exit Criteria:
+
+[✓] Executive summary design documented
+[✓] Finding layout improvements documented
+[✓] Summary matrix placement change documented
+[✓] Zero-findings experience documented
+[✓] Phase 6.7 coding boundary clarified
+
+PHASE 6.7 — REPORT READABILITY IMPLEMENTATION
+
+- Improve report readability and UX without changing the underlying review data
+- Keep all displayed information limited to the current pipeline output
+
 PHASE 7 — CLEAN COPY GENERATION
 
 - Generate suggested clean copy
@@ -1309,10 +1349,11 @@ Completed:
 - Live Gemini verification documented
 - Report Generation design approved
 - Report Writer implemented
+- Report readability design approved
 
 Next Actions:
 
-1. Begin Phase 7 - Clean Copy Generation
-2. Keep source modifications optional and separate from report generation
-3. Preserve the human-in-the-loop guardrails while keeping repository-wide scanning deferred
+1. Begin Phase 6.7 - Report Readability implementation
+2. Keep the report as a presenter of existing findings rather than a second reviewer
+3. Preserve the human-in-the-loop guardrails while keeping clean copy generation deferred
 

@@ -21,7 +21,8 @@ Phase 5.2 - Gemini Review Path complete.
 Phase 5.25 - Live Gemini verification documented.
 Phase 6 - Report Generation design complete.
 Phase 6.5 - Report Writer implementation complete.
-Next: Phase 7 - Clean Copy Generation.
+Phase 6.6 - Report readability design complete.
+Next: Phase 6.7 - Report readability implementation.
 
 ## Purpose
 
@@ -30,7 +31,7 @@ human-written text inside source code repositories.
 
 ## Current Phase
 
-Phase 7 - Clean Copy Generation
+Phase 6.7 - Report Readability Implementation
 
 ## Phase 3 Text Extraction
 
@@ -256,6 +257,32 @@ Current report contents:
 - audit summary matrix
 - finding reference guide
 - review philosophy
+
+## Phase 6.6 Report Experience & Readability Design
+
+The next report improvement phase focuses on presentation only.
+
+Core design rule:
+
+- the Report Writer should become a better presenter of findings, not a second reviewer
+
+Approved readability changes:
+
+- add a stronger executive summary near the top
+- move the audit summary matrix closer to the top
+- make each finding section more narrative and human-readable
+- show diff-style suggested replacements when a suggested replacement exists
+- keep the finding reference guide
+- improve review philosophy wording
+- make zero-findings reports feel complete and successful
+
+Approved guardrails for this phase:
+
+- do not invent findings, metrics, statistics, or analysis
+- do not recalculate severity or confidence
+- do not reorder findings
+- do not modify source files
+- use `examples/sample-audit-report.md` as the primary UX reference, but only display data that actually exists in the current pipeline
 
 ## Phase 0.5 Spike
 

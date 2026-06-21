@@ -15,12 +15,13 @@ The repository now contains:
 - a completed Phase 5.2 Gemini Review Path
 - an approved Phase 6 Report Generation design
 - a completed Phase 6.5 Report Writer
+- an approved Phase 6.6 Report Experience & Readability design
 - the documented MVP workflow for later phases
 
 The current runnable CLI path is the File Reader plus Text Extractor plus
 Context Loader plus Agent Review plus Report Writer flow.
 
-The next approved implementation step is Phase 7: Clean Copy Generation.
+The next approved implementation step is Phase 6.7: Report Readability implementation.
 
 ## Implemented Flow
 
@@ -671,6 +672,23 @@ Phase 6.5 implementation note:
 - existing report files are overwritten instead of versioned
 - the CLI now fails clearly on `ReportWriteError`
 - the CLI prints the written report path after successful report generation
+
+Phase 6.6 readability design note:
+
+- report readability should improve without changing the underlying review data
+- the report should add a stronger executive summary near the top using only:
+  - findings count
+  - highest severity present
+  - detected categories
+  - audit status
+- the Audit Summary Matrix should move closer to the top of the report
+- detailed finding sections should become more narrative and easier to scan
+- if `suggested_replacement` exists, it should be shown in a diff-style block
+- if `suggested_replacement` is null, keep:
+  - `No automatic suggestion generated.`
+- zero-findings reports should still feel complete and successful
+- the report must not invent findings, statistics, or new analysis
+- the report must not reorder findings or recalculate severity/confidence
 
 ## Clean Copy Writer
 

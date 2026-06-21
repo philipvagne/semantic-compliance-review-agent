@@ -204,3 +204,29 @@ Result:
 - Phase 4 now returns a structured `ReviewContext` object within the approved
   scope.
 - Agent review, risk classification, and later phases remain deferred.
+
+### Phase 4.5 - Agent Review Design
+
+Completed:
+- Recorded the approved Agent Review design before Phase 5 implementation.
+- Documented the `ReviewableText[] + ReviewContext -> Agent Review -> Finding[]`
+  flow.
+- Defined the clean review boundary as
+  `agent_review.review(reviewable_texts, review_context) -> list[Finding]`.
+- Documented the approved `Finding` fields, categories, severity values,
+  confidence values, and detection methods.
+- Documented the distinction between severity and confidence so the MVP does
+  not conflate them.
+- Documented the TERM_MATCH confidence rule, zero-findings rule, structured
+  output retry rule, and suggested replacement rule.
+- Updated status docs so Phase 4.5 is recorded as a design step and Phase 5
+  remains the next implementation phase.
+
+Tested:
+- Documentation-only task; no runtime code was changed.
+- Reviewed README, project plan, architecture, and workflow alignment.
+
+Result:
+- Phase 5 now has an approved Agent Review contract and failure model before
+  implementation begins.
+- Runtime behavior remains unchanged.

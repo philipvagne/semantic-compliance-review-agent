@@ -14,7 +14,8 @@ Phase 2.5 - Text Extraction design complete.
 Phase 3 - Text Extraction complete for Python comments and docstrings.
 Phase 3.5 - Context Loading design complete.
 Phase 4 - Context Loading complete.
-Next: Phase 5 - ADK Agent Review.
+Phase 4.5 - Agent Review design complete.
+Next: Phase 5 - Agent Review implementation.
 
 ## Purpose
 
@@ -23,7 +24,7 @@ human-written text inside source code repositories.
 
 ## Current Phase
 
-Phase 5 - ADK Agent Review
+Phase 4.5 - Agent Review Design
 
 ## Phase 3 Text Extraction
 
@@ -104,6 +105,46 @@ Current Context Loading scope:
 - no agent review
 - no risk classification
 - no report generation
+
+## Phase 4.5 Agent Review Design
+
+The next component has now been documented before implementation:
+
+`ReviewableText[] + ReviewContext -> Agent Review -> Finding[]`
+
+Approved review boundary:
+
+`agent_review.review(reviewable_texts, review_context) -> list[Finding]`
+
+The rest of the application should not care whether findings come from:
+
+- ADK
+- direct Gemini fallback
+- test stub
+- future local model
+
+Approved `Finding` fields:
+
+- `id`
+- `reviewable_text_id`
+- `category`
+- `severity`
+- `confidence`
+- `detection_method`
+- `source_text`
+- `line_start`
+- `line_end`
+- `explanation`
+- `recommendation`
+- `suggested_replacement`
+
+Approved MVP review behavior:
+
+- zero findings is a successful result
+- TERM_MATCH findings are HIGH confidence by construction
+- retry once on malformed structured output
+- send all extracted text and context in one review request
+- suggested replacements stay optional
 
 ## Phase 0.5 Spike
 

@@ -9,12 +9,13 @@ The repository now contains:
 - a completed Phase 3 Text Extractor for Python comments and docstrings
 - an approved Phase 3.5 Context Loader design
 - a completed Phase 4 Context Loader
+- an approved Phase 4.5 Agent Review design
 - the documented MVP workflow for later phases
 
 The current runnable CLI path is the File Reader plus Text Extractor plus
 Context Loader flow.
 
-The next approved implementation step is Phase 5: ADK Agent Review.
+The next approved implementation step is Phase 5: Agent Review.
 
 ## Implemented Flow
 
@@ -370,7 +371,7 @@ Phase 4 implementation note:
 
 Input:
 
-- ReviewableText
+- ReviewableText[]
 - ReviewContext
 
 Output:
@@ -380,6 +381,7 @@ List[Finding]
 Fields:
 
 - id
+- reviewable_text_id
 - category
 - severity
 - confidence
@@ -391,27 +393,127 @@ Fields:
 - recommendation
 - suggested_replacement
 
+Approved finding categories:
+
+- SECURITY_RISK
+- PROFESSIONALISM_RISK
+- COMPLIANCE_RISK
+- INTERNAL_CODENAME_EXPOSURE
+- INTELLECTUAL_PROPERTY_RISK
+- REPUTATION_RISK
+
+Approved severity values:
+
+- LOW
+- MEDIUM
+- HIGH
+- CRITICAL
+
+MVP severity note:
+
+- Avoid CRITICAL unless the finding is clearly credential/security related
+
+Approved confidence values:
+
+- LOW
+- MEDIUM
+- HIGH
+
+Important distinction:
+
+- Severity describes how dangerous the issue may be
+- Confidence describes how certain the agent is that the text should be reviewed
+- Severity and confidence must not be conflated
+
+Approved detection methods:
+
+- TERM_MATCH
+- SEMANTIC_ANALYSIS
+- HYBRID
+
+Detection method definitions:
+
+- TERM_MATCH: a known sensitive term from config was detected
+- SEMANTIC_ANALYSIS: the agent flagged risk based on meaning, tone, or implication
+- HYBRID: a configured sensitive term is present and surrounding language adds semantic risk
+
+HYBRID example:
+
+`TODO: remove the Project Titan workaround before launch`
+
+Reason:
+
+- `Project Titan` matches a configured sensitive term
+- `remove`, `workaround`, and `before launch` add semantic risk
+
+TERM_MATCH confidence rule:
+
+- TERM_MATCH findings are HIGH confidence by construction
+
+Zero findings rule:
+
+- An empty findings list is a successful review result
+- `Findings generated: 0` is valid CLI output
+- Zero findings is not an AgentReviewError
+
 On Failure:
 
-Raises AgentReviewError
+- Raises AgentReviewError when:
+  - the ADK agent fails
+  - the model call fails
+  - structured output cannot be parsed after one retry
+  - an unexpected runtime failure occurs
 
 Responsibility:
 
 - Perform semantic review
 - Use project context
 - Generate structured findings
+- Explain why each item was flagged
+- Recommend safe human-reviewed remediation
+
+MVP behavior:
+
+- Use ADK-backed review if available
+- Keep structured output validation
+- Return findings only
+- Print findings summary in the CLI
+- Send all `ReviewableText` items and `ReviewContext` in one review request
+- Do not call the model once per item
+
+Structured output retry rule:
+
+- Retry once if the first agent response cannot be parsed into the `Finding` schema
+- Raise AgentReviewError if the second attempt also fails
+
+Suggested replacement rule:
+
+- `suggested_replacement` is optional
+- Include it only when the remediation is clearly safe
+- Use `null` when uncertain
 
 Does NOT:
 
 - Read files
+- Extract text
+- Load config files
 - Write reports
 - Modify source code
+- Create clean copies
+- Commit changes
 
 Important Boundary:
 
-`agent.review(reviewable_text, context) -> findings`
+`agent_review.review(reviewable_texts, review_context) -> list[Finding]`
 
 This boundary should remain isolated so ADK can be replaced later if required.
+
+The rest of the application should not care whether findings come from:
+
+- ADK
+- direct Gemini fallback
+- test stub
+- future local model
 
 ## Report Writer
 

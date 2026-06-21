@@ -20,12 +20,13 @@ Completed:
 [✓] Phase 3 Text Extraction Implemented
 [✓] Phase 3.5 Context Loading Design Approved
 [✓] Phase 4 Context Loading Implemented
+[✓] Phase 4.5 Agent Review Design Approved
 
 Current Phase:
-PHASE 5 - ADK AGENT REVIEW
+PHASE 4.5 - AGENT REVIEW DESIGN
 
 Next Milestone:
-PHASE 6 - REPORT GENERATION
+PHASE 5 - ADK AGENT REVIEW
 
 ================================================================================
 PROJECT OVERVIEW
@@ -906,6 +907,75 @@ Exit Criteria:
 [✓] Missing or empty config files warn and continue
 [✓] Invalid YAML and invalid structure stop the CLI run
 
+PHASE 4.5 — AGENT REVIEW DESIGN
+
+- Document the `ReviewableText[] + ReviewContext -> Agent Review -> Finding[]` flow
+- Document the `Finding` contract
+- Lock the review boundary before Phase 5 coding begins
+- Record failure behavior and non-responsibilities
+
+Approved review boundary:
+
+- `agent_review.review(reviewable_texts, review_context) -> list[Finding]`
+
+Approved `Finding` fields:
+
+- `id`
+- `reviewable_text_id`
+- `category`
+- `severity`
+- `confidence`
+- `detection_method`
+- `source_text`
+- `line_start`
+- `line_end`
+- `explanation`
+- `recommendation`
+- `suggested_replacement`
+
+Approved finding categories:
+
+- `SECURITY_RISK`
+- `PROFESSIONALISM_RISK`
+- `COMPLIANCE_RISK`
+- `INTERNAL_CODENAME_EXPOSURE`
+- `INTELLECTUAL_PROPERTY_RISK`
+- `REPUTATION_RISK`
+
+Approved severity values:
+
+- `LOW`
+- `MEDIUM`
+- `HIGH`
+- `CRITICAL`
+
+Approved confidence values:
+
+- `LOW`
+- `MEDIUM`
+- `HIGH`
+
+Approved detection methods:
+
+- `TERM_MATCH`
+- `SEMANTIC_ANALYSIS`
+- `HYBRID`
+
+Important MVP rules:
+
+- `TERM_MATCH` findings are HIGH confidence by construction
+- zero findings is a successful review result
+- retry once if structured output cannot be parsed
+- `suggested_replacement` stays optional
+
+Exit Criteria:
+
+[✓] Review boundary documented
+[✓] Finding contract documented
+[✓] Failure behavior documented
+[✓] Retry behavior documented
+[✓] Phase 5 coding boundary clarified
+
 PHASE 5 — ADK AGENT REVIEW
 
 - Build ADK Compliance Review Agent
@@ -1079,6 +1149,7 @@ Completed:
 - Text Extraction implemented for Python comments and docstrings
 - Context Loading design approved
 - Context Loading implemented
+- Agent Review design approved
 
 Next Actions:
 

@@ -10,12 +10,13 @@ The repository now contains:
 - an approved Phase 3.5 Context Loader design
 - a completed Phase 4 Context Loader
 - an approved Phase 4.5 Agent Review design
+- a completed Phase 5 Agent Review
 - the documented MVP workflow for later phases
 
 The current runnable CLI path is the File Reader plus Text Extractor plus
-Context Loader flow.
+Context Loader plus Agent Review flow.
 
-The next approved implementation step is Phase 5: Agent Review.
+The next approved implementation step is Phase 6: Report Generation.
 
 ## Implemented Flow
 
@@ -24,11 +25,13 @@ User
 -> File Reader
 -> Text Extractor
 -> Context Loader
+-> Agent Review
 -> Console Summary
 
 The current CLI accepts one source file path, reads it as UTF-8, extracts
 reviewable text from Python files, loads review context from YAML config files,
-and prints a console summary of the extracted items and loaded context.
+reviews the extracted text through the Agent Review boundary, and prints a
+console summary of the extracted items, loaded context, and findings.
 
 ## ADK Spike Status
 
@@ -41,9 +44,8 @@ Implemented in Phase 0.5:
 - one structured finding schema
 - local deterministic orchestration validation
 
-Not part of the Phase 2 runtime path:
+Not part of the current runtime path:
 
-- agent review from the CLI
 - report generation
 - evaluation
 - clean copy generation
@@ -514,6 +516,14 @@ The rest of the application should not care whether findings come from:
 - direct Gemini fallback
 - test stub
 - future local model
+
+Phase 5 implementation note:
+
+- `src/agent_review.py` now implements the review boundary behind ADK
+- the current working local behavior uses a deterministic in-process fallback
+  model so Phase 5 can be tested without live model credentials
+- structured finding validation remains enforced
+- all extracted text and context are sent in one review request for the MVP
 
 ## Report Writer
 

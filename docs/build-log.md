@@ -230,3 +230,26 @@ Result:
 - Phase 5 now has an approved Agent Review contract and failure model before
   implementation begins.
 - Runtime behavior remains unchanged.
+
+### Phase 5 - Agent Review
+
+Completed:
+- Added a `Finding` schema for structured review output.
+- Added `src/agent_review.py` with an ADK-backed review boundary.
+- Added `AgentReviewError`.
+- Reused the Phase 0.5 ADK pattern with an in-process deterministic fallback
+  model so local behavior works without live credentials.
+- Added structured finding validation plus one retry for malformed output.
+- Updated the CLI in `src/main.py` to run agent review after context loading
+  and print a findings summary.
+- Updated status and architecture docs to reflect completed Phase 5 behavior.
+
+Tested:
+- Ran syntax compilation for `src/`.
+- Ran the CLI against `examples/sample_input.py`.
+- Verified zero findings is treated as a successful review result.
+
+Result:
+- Phase 5 now converts `ReviewableText[] + ReviewContext` into structured
+  `Finding[]` within the approved boundary.
+- Report generation, evaluation, and clean copy generation remain deferred.

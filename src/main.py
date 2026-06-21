@@ -1,5 +1,7 @@
 import argparse
 
+from src.agent_review import AgentReviewError
+from src.agent_review import review
 from src.context_loader import ContextLoadError
 from src.context_loader import load_review_context
 from src.file_reader import FileReadError
@@ -41,11 +43,24 @@ def main() -> None:
     if review_context.config_warnings:
         print(f"Config warnings: {len(review_context.config_warnings)}")
 
+    try:
+        findings = review(reviewable_items, review_context)
+    except AgentReviewError as exc:
+        raise SystemExit(f"Agent review failed: {exc}") from exc
+
+    print(f"Findings generated: {len(findings)}")
+
     for item in reviewable_items:
         preview = item.text.replace("\n", " ").strip()
         if len(preview) > 80:
             preview = f"{preview[:77]}..."
         print(f"- {item.source_type} {item.line_start}-{item.line_end}: {preview}")
+
+    for finding in findings:
+        summary = finding.explanation.split(".")[0].strip()
+        if not summary:
+            summary = finding.source_text.replace("\n", " ").strip()
+        print(f"* {finding.severity} {finding.category} line {finding.line_start}: {summary}")
 
 
 if __name__ == "__main__":

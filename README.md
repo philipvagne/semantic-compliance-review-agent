@@ -15,7 +15,8 @@ Phase 3 - Text Extraction complete for Python comments and docstrings.
 Phase 3.5 - Context Loading design complete.
 Phase 4 - Context Loading complete.
 Phase 4.5 - Agent Review design complete.
-Next: Phase 5 - Agent Review implementation.
+Phase 5 - Agent Review complete.
+Next: Phase 6 - Report Generation.
 
 ## Purpose
 
@@ -24,13 +25,13 @@ human-written text inside source code repositories.
 
 ## Current Phase
 
-Phase 4.5 - Agent Review Design
+Phase 6 - Report Generation
 
 ## Phase 3 Text Extraction
 
 The CLI now accepts a single source file path, reads the file as UTF-8,
 extracts reviewable text from Python files, loads review context from YAML
-config files, and prints a small summary.
+config files, runs agent review, and prints a small summary.
 
 Run it with:
 
@@ -46,12 +47,14 @@ Path: examples/sample_input.py
 Reviewable text items found: 6
 Context loaded successfully
 Sensitive terms loaded: 3
+Findings generated: 1
 - DOCSTRING 1-1: Small sample file for Phase 3 manual text-extraction testing.
 - TODO 3-3: TODO: remove the temporary admin password before release
 - NOTE 4-4: NOTE: this sample intentionally contains several reviewable text types
 - DOCSTRING 8-8: Return a friendly greeting for manual extractor testing.
 - COMMENT 9-9: Friendly example content for the extractor.
 - FIXME 14-14: FIXME: replace the hard-coded example value later
+* HIGH SECURITY_RISK line 3: The text references a temporary or administrative secret-like value that should be reviewed before release
 ```
 
 Current Text Extraction scope:
@@ -106,9 +109,10 @@ Current Context Loading scope:
 - no risk classification
 - no report generation
 
-## Phase 4.5 Agent Review Design
+## Phase 5 Agent Review
 
-The next component has now been documented before implementation:
+The CLI now sends all extracted text plus loaded review context into the Agent
+Review boundary:
 
 `ReviewableText[] + ReviewContext -> Agent Review -> Finding[]`
 
@@ -145,6 +149,13 @@ Approved MVP review behavior:
 - retry once on malformed structured output
 - send all extracted text and context in one review request
 - suggested replacements stay optional
+
+Current Phase 5 implementation note:
+
+- the review boundary is ADK-backed
+- local working behavior uses a deterministic in-process fallback model
+- this preserves the ADK architecture without assuming live model credentials
+- a future phase can swap in a live provider behind the same review boundary
 
 ## Phase 0.5 Spike
 

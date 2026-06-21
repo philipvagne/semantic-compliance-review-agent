@@ -1,3 +1,5 @@
+from typing import Literal
+
 from pydantic import BaseModel
 
 
@@ -25,6 +27,28 @@ class ReviewContext(BaseModel):
     project_description: str | None
     review_focus: list[str]
     config_warnings: list[str]
+
+
+class Finding(BaseModel):
+    id: str
+    reviewable_text_id: str
+    category: Literal[
+        "SECURITY_RISK",
+        "PROFESSIONALISM_RISK",
+        "COMPLIANCE_RISK",
+        "INTERNAL_CODENAME_EXPOSURE",
+        "INTELLECTUAL_PROPERTY_RISK",
+        "REPUTATION_RISK",
+    ]
+    severity: Literal["LOW", "MEDIUM", "HIGH", "CRITICAL"]
+    confidence: Literal["LOW", "MEDIUM", "HIGH"]
+    detection_method: Literal["TERM_MATCH", "SEMANTIC_ANALYSIS", "HYBRID"]
+    source_text: str
+    line_start: int
+    line_end: int
+    explanation: str
+    recommendation: str
+    suggested_replacement: str | None
 
 
 class ReviewFinding(BaseModel):

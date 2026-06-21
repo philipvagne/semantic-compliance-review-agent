@@ -10,8 +10,9 @@ ADK feasibility spike complete.
 MVP workflow/component contracts complete.
 Foundation review complete.
 Phase 2 - File Reader complete.
-Phase 2.5 - Text Extraction design approved.
-Next: Phase 3 - Text Extraction implementation.
+Phase 2.5 - Text Extraction design complete.
+Phase 3 - Text Extraction complete for Python comments and docstrings.
+Next: Phase 4 - Context Loading.
 
 ## Purpose
 
@@ -20,12 +21,13 @@ human-written text inside source code repositories.
 
 ## Current Phase
 
-Phase 2.5 - Text Extraction Design
+Phase 4 - Context Loading
 
-## Phase 2 File Reader
+## Phase 3 Text Extraction
 
-The CLI now accepts a single source file path, reads the file as UTF-8, and
-prints a small metadata summary.
+The CLI now accepts a single source file path, reads the file as UTF-8,
+extracts reviewable text from Python files, and prints a small extraction
+summary.
 
 Run it with:
 
@@ -38,40 +40,30 @@ Expected output:
 ```text
 File read successfully
 Path: examples/sample_input.py
-Extension: .py
-Lines: 10
-Characters: 226
+Reviewable text items found: 6
+- DOCSTRING 1-1: Small sample file for Phase 3 manual text-extraction testing.
+- TODO 3-3: TODO: remove the temporary admin password before release
+- NOTE 4-4: NOTE: this sample intentionally contains several reviewable text types
+- DOCSTRING 8-8: Return a friendly greeting for manual extractor testing.
+- COMMENT 9-9: Friendly example content for the extractor.
+- FIXME 14-14: FIXME: replace the hard-coded example value later
 ```
 
-Current File Reader scope:
-
-- reads one file only
-- returns file metadata plus raw text internally
-- rejects missing files
-- rejects directories passed instead of files
-- rejects non-UTF-8 content
-- does not extract text
-- does not call the agent
-- does not generate reports
-
-## Phase 2.5 Text Extraction Design
-
-The next component has now been documented and approved before implementation:
-
-`FileContent -> Text Extractor -> ReviewableText[]`
-
-First implementation scope for Phase 3:
+Current Text Extraction scope:
 
 - Python comments
 - Python docstrings
 - TODO / FIXME / NOTE comments
+- preserved line numbers, language, and surrounding context
+- returns an empty list when no reviewable text is found
+- raises `ExtractionError` only for unexpected extraction failures
 
 Explicitly deferred from the first implementation:
 
 - string literal extraction
-
-The design also records that no reviewable text should return an empty list,
-while `ExtractionError` is reserved for unexpected parser or runtime failures.
+- agent review
+- risk classification
+- report generation
 
 ## Phase 0.5 Spike
 

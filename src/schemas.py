@@ -9,6 +9,16 @@ class FileContent(BaseModel):
     line_count: int
 
 
+class ReviewableText(BaseModel):
+    id: str
+    source_type: str
+    text: str
+    line_start: int
+    line_end: int
+    language: str
+    surrounding_context: str
+
+
 class ReviewFinding(BaseModel):
     category: str
     severity: str

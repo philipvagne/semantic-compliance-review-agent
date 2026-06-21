@@ -6,22 +6,24 @@ The repository now contains:
 
 - a completed Phase 0.5 ADK feasibility spike
 - a completed Phase 2 File Reader
+- a completed Phase 3 Text Extractor for Python comments and docstrings
 - the documented MVP workflow for later phases
 
-The current runnable CLI path is the File Reader flow.
+The current runnable CLI path is the File Reader plus Text Extractor flow.
 
-The next approved design step is Phase 2.5: Text Extraction Design.
+The next approved implementation step is Phase 4: Context Loading.
 
 ## Implemented Flow
 
 User
 -> CLI
 -> File Reader
+-> Text Extractor
 -> Console Summary
 
-The File Reader is the first real MVP input component. It accepts one source
-file path, reads the file as UTF-8, and returns structured file metadata plus
-raw text.
+The current CLI accepts one source file path, reads it as UTF-8, extracts
+reviewable text from Python files, and prints a console summary of the
+extracted items.
 
 ## ADK Spike Status
 
@@ -206,10 +208,9 @@ Does NOT:
 
 Phase 3 implementation note:
 
-- `src/text_extractor.py` should include a short module-level docstring covering
-  purpose, input, output, responsibilities, and non-responsibilities
-- Avoid noisy implementation comments; use comments and docstrings to explain
-  component boundaries rather than obvious code
+- `src/text_extractor.py` now includes the required module-level docstring
+- The implementation uses tokenization for comments and AST parsing for
+  docstrings so line numbers remain traceable without touching executable code
 
 Example design input:
 

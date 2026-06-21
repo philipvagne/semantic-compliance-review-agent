@@ -128,3 +128,29 @@ Result:
 - Phase 3 implementation now has a documented contract and clear MVP boundary.
 - The repository remains unchanged at runtime while the next component design is
   now approved and recorded.
+
+## 2026-06-21
+
+### Phase 3 - Text Extraction
+
+Completed:
+- Added a `ReviewableText` schema for extracted human-written source text.
+- Added `src/text_extractor.py` with Python-only extraction for comments,
+  docstrings, and TODO / FIXME / NOTE comments.
+- Added `ExtractionError` for unexpected extraction failures.
+- Added the missing `pydantic` dependency to `requirements.txt`.
+- Updated the CLI in `src/main.py` to read a file, run extraction, and print a
+  reviewable-text summary.
+- Updated `examples/sample_input.py` with comment and docstring cases for manual
+  testing.
+- Updated architecture and README status to reflect completed Phase 3 behavior.
+
+Tested:
+- Ran the CLI against `examples/sample_input.py`.
+- Verified file-read success output, extracted item count, and per-item preview
+  lines.
+
+Result:
+- Phase 3 now produces `ReviewableText[]` from Python source files within the
+  approved MVP scope.
+- String literal extraction, agent review, and later phases remain deferred.

@@ -253,3 +253,26 @@ Result:
 - Phase 5 now converts `ReviewableText[] + ReviewContext` into structured
   `Finding[]` within the approved boundary.
 - Report generation, evaluation, and clean copy generation remain deferred.
+
+### Phase 5.1 - Optional Gemini Review Path Design
+
+Completed:
+- Recorded the approved optional Gemini backend design before implementation.
+- Documented that Agent Review should support two backends:
+  Gemini and Deterministic.
+- Documented Gemini as the approved default backend.
+- Documented Deterministic as the approved explicit offline/test backend.
+- Documented CLI backend selection flags:
+  `--backend gemini` and `--backend deterministic`.
+- Documented the failure rule that Gemini selection must fail clearly and must
+  not silently fall back to Deterministic.
+- Updated status docs so Phase 5.1 is recorded as a design step and Phase 5.2
+  becomes the next implementation phase.
+
+Tested:
+- Documentation-only task; no runtime code was changed.
+- Reviewed README, project plan, architecture, and workflow alignment.
+
+Result:
+- The Gemini backend design is now recorded without changing current Agent
+  Review behavior.

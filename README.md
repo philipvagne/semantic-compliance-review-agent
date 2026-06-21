@@ -16,7 +16,8 @@ Phase 3.5 - Context Loading design complete.
 Phase 4 - Context Loading complete.
 Phase 4.5 - Agent Review design complete.
 Phase 5 - Agent Review complete.
-Next: Phase 6 - Report Generation.
+Phase 5.1 - Optional Gemini Review Path design complete.
+Next: Phase 5.2 - Gemini Review Path implementation.
 
 ## Purpose
 
@@ -25,7 +26,7 @@ human-written text inside source code repositories.
 
 ## Current Phase
 
-Phase 6 - Report Generation
+Phase 5.1 - Optional Gemini Review Path Design
 
 ## Phase 3 Text Extraction
 
@@ -156,6 +157,30 @@ Current Phase 5 implementation note:
 - local working behavior uses a deterministic in-process fallback model
 - this preserves the ADK architecture without assuming live model credentials
 - a future phase can swap in a live provider behind the same review boundary
+
+## Phase 5.1 Optional Gemini Review Path Design
+
+The next Agent Review design update adds two approved backends behind the same
+review boundary:
+
+- Gemini
+- Deterministic
+
+Approved backend selection:
+
+- default backend: Gemini
+- explicit offline/test backend: Deterministic
+- CLI flags:
+  - `--backend gemini`
+  - `--backend deterministic`
+
+Approved CLI behavior:
+
+- `python -m src.main examples/sample_input.py` uses Gemini
+- `python -m src.main examples/sample_input.py --backend deterministic` uses the deterministic backend
+- the CLI must print which backend was used
+- if Gemini is selected and fails, the CLI must fail clearly
+- the CLI must not silently fall back to deterministic
 
 ## Phase 0.5 Spike
 

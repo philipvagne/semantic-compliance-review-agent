@@ -22,12 +22,13 @@ Completed:
 [✓] Phase 4 Context Loading Implemented
 [✓] Phase 4.5 Agent Review Design Approved
 [✓] Phase 5 ADK Agent Review Implemented
+[✓] Phase 5.1 Optional Gemini Review Path Design Approved
 
 Current Phase:
-PHASE 6 - REPORT GENERATION
+PHASE 5.1 - OPTIONAL GEMINI REVIEW PATH DESIGN
 
 Next Milestone:
-PHASE 7 - CLEAN COPY GENERATION
+PHASE 5.2 - GEMINI REVIEW PATH IMPLEMENTATION
 
 ================================================================================
 PROJECT OVERVIEW
@@ -991,6 +992,43 @@ Exit Criteria:
 [✓] Structured findings returned
 [✓] Output schema validated
 
+PHASE 5.1 — OPTIONAL GEMINI REVIEW PATH DESIGN
+
+- Document the optional Gemini backend design behind the existing review boundary
+- Keep deterministic mode as an explicit offline/test backend
+- Lock backend-selection behavior before implementation
+
+Approved backend design:
+
+- supported backends:
+  - `Gemini`
+  - `Deterministic`
+- default backend:
+  - `Gemini`
+- explicit offline/test backend:
+  - `Deterministic`
+
+Approved backend selection:
+
+- `--backend gemini`
+- `--backend deterministic`
+
+Approved behavior:
+
+- the `agent_review.review(reviewable_texts, review_context) -> list[Finding]` boundary remains unchanged
+- one review request is used per file
+- if Gemini is selected and fails, the CLI must fail clearly
+- the CLI must not silently fall back to Deterministic
+- the CLI should print which backend was used
+
+Exit Criteria:
+
+[✓] Backend design documented
+[✓] CLI backend selection documented
+[✓] Failure behavior documented
+[✓] Boundary preserved
+[✓] Phase 5.2 coding boundary clarified
+
 PHASE 6 — REPORT GENERATION
 
 - Generate Markdown audit report
@@ -1152,10 +1190,11 @@ Completed:
 - Context Loading implemented
 - Agent Review design approved
 - Agent Review implemented
+- Optional Gemini review path design approved
 
 Next Actions:
 
-1. Begin Phase 6 - Report Generation
-2. Keep findings as structured input to report writing without changing source files
-3. Preserve the human-in-the-loop guardrails while keeping clean copy generation deferred
+1. Begin Phase 5.2 - Gemini Review Path implementation
+2. Add backend selection without changing the `agent_review.review(...)` boundary
+3. Preserve explicit deterministic mode for offline/testing and avoid silent fallback
 

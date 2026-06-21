@@ -11,12 +11,13 @@ The repository now contains:
 - a completed Phase 4 Context Loader
 - an approved Phase 4.5 Agent Review design
 - a completed Phase 5 Agent Review
+- an approved Phase 5.1 Optional Gemini Review Path design
 - the documented MVP workflow for later phases
 
 The current runnable CLI path is the File Reader plus Text Extractor plus
 Context Loader plus Agent Review flow.
 
-The next approved implementation step is Phase 6: Report Generation.
+The next approved implementation step is Phase 5.2: Gemini Review Path implementation.
 
 ## Implemented Flow
 
@@ -524,6 +525,23 @@ Phase 5 implementation note:
   model so Phase 5 can be tested without live model credentials
 - structured finding validation remains enforced
 - all extracted text and context are sent in one review request for the MVP
+
+Phase 5.1 backend design note:
+
+- the `agent_review.review(reviewable_texts, review_context) -> list[Finding]`
+  boundary remains unchanged
+- Agent Review should support two backends:
+  - Gemini
+  - Deterministic
+- Gemini is the approved default backend
+- Deterministic is the approved explicit offline/test backend
+- backend selection should happen via CLI flags:
+  - `--backend gemini`
+  - `--backend deterministic`
+- one review request should still be used per file
+- if Gemini is selected and fails, the CLI must fail clearly and must not
+  silently fall back to Deterministic
+- the CLI should print which backend was used
 
 ## Report Writer
 

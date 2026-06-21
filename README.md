@@ -30,10 +30,11 @@ for human review.
 Current implemented workflow:
 
 1. Read one source file.
-2. Extract reviewable text from supported source types.
-3. Load review context from YAML config files.
-4. Run semantic review through the agent boundary.
-5. Write one audit report to `output/`.
+2. Fail clearly if the file type is unsupported.
+3. Extract reviewable text from supported source types.
+4. Load review context from YAML config files.
+5. Run semantic review through the agent boundary.
+6. Write one audit report to `output/`.
 
 Current supported extraction scope:
 
@@ -41,6 +42,9 @@ Current supported extraction scope:
 - comments
 - docstrings
 - TODO / FIXME / NOTE comments
+
+If the input file type is unsupported, the CLI fails clearly and no audit is
+performed.
 
 Current review outputs:
 
@@ -155,6 +159,12 @@ Report written to: output/sample_input-audit-report.md
 ```
 
 The exact findings may differ between Gemini and deterministic mode.
+
+Unsupported file example:
+
+```text
+Text extraction failed: Unsupported file type '.md' for semantic review. Current supported file types: .py. No audit was performed.
+```
 
 ## Backends
 
@@ -274,11 +284,11 @@ semantic-compliance-review-agent/
 
 Current phase:
 
-- Phase 6.9B - Runtime Cleanup
+- Phase 7 - Clean Copy Generation
 
 Most recently completed:
 
-- Phase 6.9A - Documentation & Submission Readiness
+- Phase 6.9B - Runtime Cleanup
 
 Implemented through Phase 6.75:
 
@@ -303,11 +313,10 @@ Not implemented yet:
 
 Expected next phases:
 
-1. Phase 6.9B - Runtime Cleanup
-2. Phase 7 - Clean Copy Generation
-3. Phase 8 - Evaluation
-4. Phase 9 - Final Documentation
-5. Phase 10 - Submission Prep
+1. Phase 7 - Clean Copy Generation
+2. Phase 8 - Evaluation
+3. Phase 9 - Final Documentation
+4. Phase 10 - Submission Prep
 
 Highest-priority gaps before submission:
 

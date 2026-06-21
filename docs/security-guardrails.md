@@ -81,6 +81,7 @@ Examples:
 
 - missing Gemini credentials when Gemini is selected
 - invalid YAML configuration
+- unsupported file type input
 - malformed structured model output after one retry
 - unreadable or invalid input files
 

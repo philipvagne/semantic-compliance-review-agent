@@ -231,3 +231,19 @@ planned capstone deliverable. The roadmap must acknowledge that gap honestly.
 Status:
 
 Accepted as a roadmap requirement
+
+### Unsupported File Types Must Fail Clearly
+
+Decision:
+
+Do not treat unsupported file types as clean zero-finding audits.
+
+Reason:
+
+A zero-finding report implies that a review was actually performed. For the
+current Python-only MVP, unsupported inputs should fail clearly and state that
+no audit was performed.
+
+Status:
+
+Accepted

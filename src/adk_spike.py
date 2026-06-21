@@ -1,3 +1,25 @@
+"""Retain the narrow Phase 0.5 ADK feasibility spike artifact.
+
+Purpose:
+- Prove that ADK tool use and structured output worked locally before the main
+  review pipeline was built.
+
+Input:
+- One review text string for the spike path.
+
+Output:
+- One structured spike result payload.
+
+Responsibilities:
+- Exercise minimal ADK orchestration.
+- Validate the retained spike schema path.
+
+Non-responsibilities:
+- Read source files.
+- Run the current CLI review pipeline.
+- Generate audit reports.
+"""
+
 import json
 from typing import AsyncGenerator
 

@@ -31,12 +31,13 @@ Completed:
 [✓] Phase 6.7 Report Readability Implemented
 [✓] Phase 6.75 Report Polish & Humanization Implemented
 [completed] Phase 6.9A Documentation & Submission Readiness Implemented
+[completed] Phase 6.9B Runtime Cleanup Implemented
 
 Current Phase:
-PHASE 6.9B - RUNTIME CLEANUP
+PHASE 7 - CLEAN COPY GENERATION
 
 Next Milestone:
-PHASE 7 - CLEAN COPY GENERATION
+PHASE 8 - EVALUATION
 
 ================================================================================
 PROJECT OVERVIEW
@@ -1410,13 +1411,14 @@ Completed:
 - Report readability implemented
 - Report polish and humanization implemented
 - Documentation and submission-readiness stabilization completed
+- Runtime cleanup completed
 
 Next Actions:
 
-1. Begin Phase 6.9B - Runtime Cleanup
+1. Begin Phase 7 - Clean Copy Generation
 2. Keep source modification optional and separate from reporting
 3. Preserve the human-in-the-loop guardrails while keeping repository-wide scanning deferred
-4. Begin Phase 7 - Clean Copy Generation after stabilization
+4. Begin Phase 8 - Evaluation after clean-copy generation
 
 Future Polish:
 - Convert "Why This Was Flagged" explanations into concise audit-style bullet points.

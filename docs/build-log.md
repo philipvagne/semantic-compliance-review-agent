@@ -551,3 +551,29 @@ Result:
   implemented pipeline.
 - Remaining gaps are now documented more clearly instead of being implied or
   left blank.
+
+### Phase 6.9B - Runtime Cleanup
+
+Completed:
+- Updated unsupported-file handling so non-Python inputs fail clearly instead
+  of appearing as zero-finding clean audits.
+- Added the missing module-level docstrings to the current CLI and shared
+  schema/file-reader modules, and retained the ADK spike with its own docstring.
+- Kept `ReviewFinding` in place because it is still used by the retained ADK
+  spike artifact and is not dead schema code.
+- Updated CLI config-warning output so warnings are printed as actual messages
+  rather than only as a count.
+- Expanded `.gitignore` to cover common local environment and secret files.
+- Updated affected docs to reflect the fail-clear unsupported-file behavior and
+  the Phase 6.9B cleanup milestone.
+
+Tested:
+- Ran syntax compilation for `src/`.
+- Ran the CLI against `examples/sample_input.py --backend deterministic`.
+- Ran the CLI against an unsupported non-Python file in deterministic mode and
+  verified that the run fails clearly before audit generation.
+
+Result:
+- The current Python-only MVP no longer presents unsupported inputs as clean
+  audit results.
+- Project hygiene and CLI usability improved without expanding product scope.

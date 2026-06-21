@@ -1,3 +1,29 @@
+"""Run the current single-file semantic compliance review CLI.
+
+Purpose:
+- Coordinate the implemented file-read, extraction, context, review, and report
+  pipeline from one command-line entry point.
+
+Input:
+- One source file path.
+- One optional backend selection flag.
+
+Output:
+- Console status output.
+- One Markdown audit report on success.
+
+Responsibilities:
+- Validate CLI arguments.
+- Coordinate the current pipeline in order.
+- Fail clearly when a required step cannot complete.
+
+Non-responsibilities:
+- Extract text directly.
+- Generate findings directly.
+- Modify source files.
+- Evaluate model quality.
+"""
+
 import argparse
 
 from src.agent_review import AgentReviewError
@@ -17,7 +43,7 @@ from src.text_extractor import extract_reviewable_text
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Read one source file and summarize extracted reviewable text."
+        description="Review one supported source file and write one Markdown audit report."
     )
     parser.add_argument("file_path", help="Path to a single source code file.")
     parser.add_argument(
@@ -58,7 +84,9 @@ def main() -> None:
     print("Context loaded successfully")
     print(f"Sensitive terms loaded: {len(review_context.sensitive_terms)}")
     if review_context.config_warnings:
-        print(f"Config warnings: {len(review_context.config_warnings)}")
+        print("Config warnings:")
+        for warning in review_context.config_warnings:
+            print(f"* {warning}")
 
     try:
         findings = review(reviewable_items, review_context)

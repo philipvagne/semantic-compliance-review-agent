@@ -1,3 +1,26 @@
+"""Read one source file into the shared FileContent contract.
+
+Purpose:
+- Convert a single on-disk file into the normalized file object used by the
+  rest of the pipeline.
+
+Input:
+- Path to one source file.
+
+Output:
+- One FileContent object.
+
+Responsibilities:
+- Validate that the path points to a readable file.
+- Read text safely as UTF-8.
+- Return basic file metadata plus raw text.
+
+Non-responsibilities:
+- Extract reviewable text.
+- Classify risk.
+- Generate findings or reports.
+"""
+
 from pathlib import Path
 
 from src.schemas import FileContent

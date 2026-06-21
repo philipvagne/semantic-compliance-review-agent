@@ -1,3 +1,26 @@
+"""Define the structured data contracts used by the review pipeline.
+
+Purpose:
+- Provide shared schemas for file input, extracted text, review context, and
+  structured findings.
+
+Input:
+- Data created by the file reader, extractor, context loader, and review layer.
+
+Output:
+- Validated schema objects used across the CLI pipeline.
+
+Responsibilities:
+- Centralize runtime data contracts.
+- Constrain structured review output fields and allowed values.
+
+Non-responsibilities:
+- Read files.
+- Extract text.
+- Call models.
+- Write reports.
+"""
+
 from typing import Literal
 
 from pydantic import BaseModel

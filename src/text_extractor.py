@@ -33,6 +33,7 @@ from src.schemas import ReviewableText
 
 
 SPECIAL_COMMENT_PATTERN = re.compile(r"^(TODO|FIXME|NOTE)\b[:\-\s]?(.*)$", re.IGNORECASE)
+SUPPORTED_SOURCE_EXTENSIONS = (".py",)
 
 
 class ExtractionError(Exception):
@@ -40,8 +41,7 @@ class ExtractionError(Exception):
 
 
 def extract_reviewable_text(file_content: FileContent) -> list[ReviewableText]:
-    if file_content.extension.lower() != ".py":
-        return []
+    _validate_supported_file_type(file_content)
 
     try:
         comments = _extract_comments(file_content)
@@ -60,6 +60,19 @@ def extract_reviewable_text(file_content: FileContent) -> list[ReviewableText]:
         item.id = _build_item_id(file_content, item, index)
 
     return extracted_items
+
+
+def _validate_supported_file_type(file_content: FileContent) -> None:
+    extension = file_content.extension.lower() or "[no extension]"
+    if extension in SUPPORTED_SOURCE_EXTENSIONS:
+        return
+
+    supported_types = ", ".join(SUPPORTED_SOURCE_EXTENSIONS)
+    raise ExtractionError(
+        f"Unsupported file type '{extension}' for semantic review. "
+        f"Current supported file types: {supported_types}. "
+        "No audit was performed."
+    )
 
 
 def _extract_comments(file_content: FileContent) -> list[ReviewableText]:

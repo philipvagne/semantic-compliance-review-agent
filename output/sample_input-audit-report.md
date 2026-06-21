@@ -3,11 +3,11 @@
 |                                |                            |
 | ------------------------------ | -------------------------- |
 | **Target File**                | `examples/sample_input.py` |
-| **Generated On**               | 2026-06-21 · 14:46 UTC     |
-| **Backend**                    | Gemini                     |
-| **Model**                      | `gemini-2.5-flash`         |
+| **Generated On**               | 2026-06-21 · 17:55 UTC     |
+| **Backend**                    | Deterministic              |
+| **Model**                      | `deterministic-local`      |
 | **Configured Sensitive Terms** | 3                          |
-| **Findings Count**             | 2                          |
+| **Findings Count**             | 1                          |
 | **Audit Status**               | **ISSUES FOUND**           |
 
 ---
@@ -17,18 +17,17 @@
 This audit completed with status **ISSUES FOUND**.
 
 - Reviewable text items analyzed: 6
-- Findings generated: 2
-- Highest severity found: 🔴 Critical
-- Categories detected: Security Risk, Professionalism Risk
+- Findings generated: 1
+- Highest severity found: 🟠 High
+- Categories detected: Security Risk
 
 ---
 
 ## Audit Summary Matrix
 
-| Reference | Category             | Severity   | Confidence |
-| --------- | -------------------- | ---------- | ---------- |
-| SEC-001   | Security Risk        | 🔴 Critical | ● High     |
-| PRO-001   | Professionalism Risk | 🟡 Medium   | ● High     |
+| Reference | Category      | Severity | Confidence |
+| --------- | ------------- | -------- | ---------- |
+| SEC-001   | Security Risk | 🟠 High   | ● High     |
 
 ---
 
@@ -36,7 +35,7 @@ This audit completed with status **ISSUES FOUND**.
 
 ### SEC-001: Security Risk
 
-**Severity:** 🔴 Critical | **Confidence:** ● High
+**Severity:** 🟠 High | **Confidence:** ● High
 
 **Detection Method:** Semantic Analysis
 
@@ -50,46 +49,17 @@ TODO: remove the temporary admin password before release
 
 #### Why This Was Flagged
 
-- The text mentions a 'temporary admin password' which implies sensitive credential information may be present or referenced in the code, posing a significant security risk if not removed before release.
+- The text references a temporary or administrative secret-like value that should be reviewed before release.
 
 #### Recommended Action
 
-Ensure no hardcoded or temporary credentials remain in the code. Replace direct mentions of credentials with abstract placeholders or a general task description.
+Remove the sensitive reference or replace it with a neutral, human-reviewed task description.
 
 #### Suggested Replacement
 
 ```diff
 - TODO: remove the temporary admin password before release
 + TODO: remove the temporary admin credential reference before release
-```
-
-### PRO-001: Professionalism Risk
-
-**Severity:** 🟡 Medium | **Confidence:** ● High
-
-**Detection Method:** Semantic Analysis
-
-`examples/sample_input.py` — line 14
-
-#### Source Text
-
-```text
-FIXME: replace the hard-coded example value later
-```
-
-#### Why This Was Flagged
-
-- The text indicates a 'hard-coded example value' that needs to be replaced, suggesting a placeholder that is not suitable for production and could lead to issues if left unaddressed.
-
-#### Recommended Action
-
-Ensure all placeholder values are replaced with appropriate production values or configurable options before release.
-
-#### Suggested Replacement
-
-```diff
-- FIXME: replace the hard-coded example value later
-+ FIXME: replace the placeholder value before release
 ```
 
 ---

@@ -75,7 +75,7 @@ def _load_yaml_file(path: Path, config_type: str, warnings: list[str]) -> object
     normalized_path = str(path).replace("\\", "/")
 
     if not path.exists():
-        warnings.append(f"Missing {config_type} config file: {normalized_path}")
+        warnings.append(_build_missing_or_empty_warning(normalized_path, config_type, state="missing"))
         return None
 
     try:
@@ -84,7 +84,7 @@ def _load_yaml_file(path: Path, config_type: str, warnings: list[str]) -> object
         raise ContextLoadError(f"Unable to read {config_type} config at {normalized_path}: {exc}") from exc
 
     if not raw_text.strip():
-        warnings.append(f"Empty {config_type} config file: {normalized_path}")
+        warnings.append(_build_missing_or_empty_warning(normalized_path, config_type, state="empty"))
         return None
 
     try:
@@ -189,3 +189,9 @@ def _format_yaml_error(path: str, config_type: str, error: yaml.YAMLError) -> st
     if mark is not None:
         message = f"{message} (line {mark.line + 1}, column {mark.column + 1})"
     return message
+
+
+def _build_missing_or_empty_warning(path: str, config_type: str, *, state: str) -> str:
+    if config_type == "sensitive terms":
+        return f"{path} {state}; using empty sensitive term list."
+    return f"{path} {state}; using default project context values."

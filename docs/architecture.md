@@ -42,6 +42,9 @@ reviews the extracted text through the Agent Review boundary, writes one
 Markdown audit report, and prints a console summary of the extracted items,
 loaded context, findings, and report path.
 
+If the file type is unsupported, the CLI now fails clearly before review and no
+audit report is generated.
+
 ## ADK Spike Status
 
 The ADK spike remains in the repository as a narrow feasibility artifact.
@@ -187,7 +190,8 @@ Planned source types:
 
 On Failure:
 
-- Returns an empty list if no reviewable text exists
+- Raises ExtractionError for unsupported file types
+- Returns an empty list if no reviewable text exists in a supported file type
 - Raises ExtractionError only for unexpected parser/runtime failures
 - No reviewable text is not an error
 
@@ -197,6 +201,7 @@ MVP scope decision for first implementation:
 - Support Python docstrings
 - Support TODO / FIXME / NOTE comments
 - Do not implement string literal extraction in the first implementation
+- Fail clearly for unsupported file types instead of producing a zero-finding report
 
 Reason:
 
@@ -227,6 +232,8 @@ Phase 3 implementation note:
 - `src/text_extractor.py` now includes the required module-level docstring
 - The implementation uses tokenization for comments and AST parsing for
   docstrings so line numbers remain traceable without touching executable code
+- unsupported non-Python inputs now fail clearly with a message that lists the
+  current supported file type and states that no audit was performed
 
 Example design input:
 
@@ -362,7 +369,7 @@ Responsibility:
 - Load organization-defined sensitive terms
 - Validate expected types
 - Return ReviewContext
-- Collect config warnings
+- Collect concise config warnings
 
 Does NOT:
 
@@ -718,6 +725,15 @@ Phase 6.7 implementation note:
 - suggested replacements render as diff-style blocks when present
 - zero-findings reports now read as successful completed audits
 - the readability improvements do not change finding order or underlying review data
+
+Phase 6.9B cleanup note:
+
+- unsupported file types now fail clearly instead of appearing as zero-finding
+  clean audits
+- `src/main.py`, `src/schemas.py`, and `src/file_reader.py` now include the
+  required module-level docstrings
+- CLI config warnings now print the warning messages instead of only a count
+- `.gitignore` now blocks common local environment and secret files more safely
 
 Phase 6.75 implementation note:
 

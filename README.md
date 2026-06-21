@@ -1,6 +1,6 @@
 # Semantic Compliance Review Agent
 
-An AI-assisted CLI tool that reviews human-written source code text for
+An AI-assisted CLI agent that reviews human-written source code text for
 security, compliance, professionalism, and internal-information risks.
 
 The current implementation is intentionally narrow:
@@ -25,7 +25,7 @@ This project extracts reviewable text, adds project context, sends it through
 an ADK-backed review boundary, and produces a structured Markdown audit report
 for human review.
 
-## What The Tool Does Today
+## What The Agent Does Today
 
 Current implemented workflow:
 
@@ -117,7 +117,7 @@ Gemini is the default backend.
 If Gemini is selected and no credentials are available, the CLI fails clearly.
 It does not silently fall back to deterministic mode.
 
-### 3. Run the Tool
+### 3. Run the Agent
 
 Default Gemini run:
 
@@ -334,5 +334,6 @@ Key docs:
 This repository follows a documentation-sync workflow: non-trivial work should
 update relevant docs in the same task.
 
-The goal is a boring, safe, but finished capstone project that can be clearly
-explained and defended.
+This project is being developed as a capstone demonstration of AI-agent
+architecture, structured semantic review workflows, and human-in-the-loop
+software governance.

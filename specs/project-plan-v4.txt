@@ -25,9 +25,10 @@ Completed:
 [✓] Phase 5.1 Optional Gemini Review Path Design Approved
 [✓] Phase 5.2 Gemini Review Path Implemented
 [✓] Phase 5.25 Live Gemini Verification Documented
+[✓] Phase 6 Report Generation Design Approved
 
 Current Phase:
-PHASE 6 - REPORT GENERATION
+PHASE 6.5 - REPORT WRITER IMPLEMENTATION
 
 Next Milestone:
 PHASE 7 - CLEAN COPY GENERATION
@@ -1071,8 +1072,72 @@ Exit Criteria:
 
 PHASE 6 — REPORT GENERATION
 
+- Document the approved Report Writer design before implementation
+- Define the Markdown report contract and section layout
+- Keep the MVP limited to one file in, one review, one Markdown report out
+
+Approved Report Writer contract:
+
+- Input:
+  - `FileContent`
+  - `ReviewableText[]`
+  - `ReviewContext`
+  - `Finding[]`
+  - backend metadata
+- Output:
+  - Markdown audit report file
+- Responsibilities:
+  - generate Markdown report
+  - summarize findings
+  - preserve finding order
+  - preserve line numbers
+  - preserve source text
+  - include backend/model metadata
+  - write report to the output directory
+- Non-responsibilities:
+  - call Gemini
+  - generate findings
+  - modify source code
+  - create clean copies
+  - evaluate quality
+  - scan repositories
+  - rewrite files
+
+Approved report sections:
+
+- Report Header
+- Metadata Table
+- Scan Statistics
+- Findings
+- Zero Findings Section
+- Audit Summary Matrix
+- Finding Reference Guide
+- Review Philosophy
+
+Approved MVP rules:
+
+- use the sample report as a structure/style guide only
+- include only information actually produced by the current pipeline
+- do not invent metrics, placeholder findings, fake statistics, or fabricated counts
+- `Findings > 0` -> `ISSUES FOUND`
+- `Findings == 0` -> `NO ISSUES FOUND`
+- finding references use per-category numbering such as `SEC-001`, `PRO-001`, and `CDX-001`
+- if `suggested_replacement` is null, display `No automatic suggestion generated.`
+- existing report files are overwritten without prompting
+
+Exit Criteria:
+
+[✓] Report Writer contract documented
+[✓] Approved report sections documented
+[✓] Failure behavior documented
+[✓] Reference numbering rules documented
+[✓] Phase 6.5 coding boundary clarified
+
+PHASE 6.5 — REPORT WRITER IMPLEMENTATION
+
 - Generate Markdown audit report
-- Include findings, confidence, methods, remediation, and summary matrix
+- Write report into the output directory
+- Keep report contents limited to pipeline-produced data only
 
 PHASE 7 — CLEAN COPY GENERATION
 
@@ -1233,10 +1298,11 @@ Completed:
 - Optional Gemini review path design approved
 - Gemini review path implemented
 - Live Gemini verification documented
+- Report Generation design approved
 
 Next Actions:
 
-1. Begin Phase 6 - Report Generation
-2. Keep findings as structured input to report writing without changing source files
+1. Begin Phase 6.5 - Report Writer implementation
+2. Keep report contents limited to data already produced by the current pipeline
 3. Preserve the human-in-the-loop guardrails while keeping clean copy generation deferred
 

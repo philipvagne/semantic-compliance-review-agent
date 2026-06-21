@@ -344,3 +344,30 @@ Result:
   Gemini.
 - Phase 6 design can proceed with a documented live model verification
   milestone in place.
+
+### Phase 6 - Report Generation Design
+
+Completed:
+- Recorded the approved Report Writer design before implementation.
+- Documented the component contract:
+  `FileContent + ReviewableText[] + ReviewContext + Finding[] + backend metadata -> Markdown report`.
+- Documented approved report sections, including the metadata table, scan
+  statistics, findings, zero-findings behavior, summary matrix, finding
+  reference guide, and review philosophy.
+- Documented the human-readable finding reference scheme such as `SEC-001`,
+  `PRO-001`, and `CDX-001`.
+- Documented overwrite behavior for existing report files.
+- Documented `ReportWriteError` failure behavior for output creation and write
+  failures.
+- Used `examples/sample-audit-report.md` as a style reference while explicitly
+  constraining the real implementation to pipeline-produced data only.
+
+Tested:
+- Documentation-only task; no runtime code was changed.
+- Reviewed README, project plan, architecture, workflow, and sample report
+  alignment.
+
+Result:
+- Phase 6 implementation now has a documented Report Writer boundary and MVP
+  output contract before coding begins.
+- Runtime behavior remains unchanged.

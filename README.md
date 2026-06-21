@@ -19,7 +19,8 @@ Phase 5 - Agent Review complete.
 Phase 5.1 - Optional Gemini Review Path design complete.
 Phase 5.2 - Gemini Review Path complete.
 Phase 5.25 - Live Gemini verification documented.
-Next: Phase 6 - Report Generation.
+Phase 6 - Report Generation design complete.
+Next: Phase 6.5 - Report Writer implementation.
 
 ## Purpose
 
@@ -28,7 +29,7 @@ human-written text inside source code repositories.
 
 ## Current Phase
 
-Phase 6 - Report Generation
+Phase 6.5 - Report Writer Implementation
 
 ## Phase 3 Text Extraction
 
@@ -192,6 +193,41 @@ Live verification milestone recorded:
 - Gemini returned valid findings that parsed into the `Finding` schema
 - the live Gemini output was materially different from the deterministic fallback output
 - the project now has a verified real semantic review path
+
+## Phase 6 Report Generation Design
+
+The next component will convert:
+
+`FileContent + ReviewableText[] + ReviewContext + Finding[] + backend metadata -> Markdown audit report`
+
+Approved Report Writer responsibilities:
+
+- generate a Markdown audit report
+- summarize findings without reordering them
+- preserve line numbers and source text
+- include backend and model metadata when available
+- write the report into the `output/` directory
+
+Approved report sections:
+
+- report header
+- metadata table
+- scan statistics using only pipeline-available values
+- one section per finding
+- zero-findings section when no findings exist
+- audit summary matrix
+- finding reference guide
+- review philosophy
+
+Approved MVP rules:
+
+- use `examples/sample-audit-report.md` as a style guide only
+- do not invent metrics, placeholder findings, or fabricated counts
+- overwrite an existing report file instead of creating copies
+- `Findings > 0` maps to `ISSUES FOUND`
+- `Findings == 0` maps to `NO ISSUES FOUND`
+- suggested replacement should display `No automatic suggestion generated.` when null
+- finding references must follow category prefixes such as `SEC-001`, `PRO-001`, and `CDX-001`
 
 ## Phase 0.5 Spike
 

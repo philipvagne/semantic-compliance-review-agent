@@ -13,12 +13,13 @@ The repository now contains:
 - a completed Phase 5 Agent Review
 - an approved Phase 5.1 Optional Gemini Review Path design
 - a completed Phase 5.2 Gemini Review Path
+- an approved Phase 6 Report Generation design
 - the documented MVP workflow for later phases
 
 The current runnable CLI path is the File Reader plus Text Extractor plus
 Context Loader plus Agent Review flow.
 
-The next approved implementation step is Phase 6: Report Generation.
+The next approved implementation step is Phase 6.5: Report Writer implementation.
 
 ## Implemented Flow
 
@@ -565,8 +566,10 @@ Phase 5.2 implementation note:
 Input:
 
 - FileContent
+- ReviewableText[]
 - Findings
 - ReviewContext
+- Backend metadata
 
 Output:
 
@@ -579,12 +582,84 @@ Raises ReportWriteError
 Responsibility:
 
 - Generate Markdown audit report
+- Summarize findings
+- Preserve finding order
+- Preserve line numbers
+- Preserve source text
+- Include backend/model metadata
 - Write report to output directory
 
 Does NOT:
 
+- Call Gemini
+- Generate findings
 - Modify source files
 - Re-run agent review
+- Create clean copies
+- Evaluate quality
+- Scan repositories
+- Rewrite files
+
+Approved report sections:
+
+1. Report Header
+   - `Semantic Compliance Audit Report`
+2. Metadata Table
+   - include only available metadata such as target file, generated timestamp,
+     backend, model, configured sensitive terms, findings count, and audit
+     status
+3. Scan Statistics
+   - include only statistics currently available from the pipeline, such as
+     reviewable text items analyzed and findings generated
+4. Findings
+   - one section per finding, preserving input order
+   - include reference, category, severity, confidence, detection method,
+     line numbers, source text, explanation, recommendation, and suggested
+     replacement when present
+5. Zero Findings Section
+   - zero findings is a successful report result
+   - generate the report anyway and state that no findings were generated
+6. Audit Summary Matrix
+   - include reference, category, severity, and confidence
+7. Finding Reference Guide
+   - include category legend for CDX, SEC, PRO, CMP, IPR, and REP
+8. Review Philosophy
+   - include AI-assisted review, human review required, no automatic source
+     modification, and developer responsibility
+
+Approved MVP rules:
+
+- use `examples/sample-audit-report.md` as a structure and style guide only
+- do not invent metrics, placeholder findings, fake statistics, or fabricated
+  counts
+- `Findings > 0` maps to `ISSUES FOUND`
+- `Findings == 0` maps to `NO ISSUES FOUND`
+- report references must use category prefixes:
+  - `SECURITY_RISK -> SEC`
+  - `PROFESSIONALISM_RISK -> PRO`
+  - `COMPLIANCE_RISK -> CMP`
+  - `INTERNAL_CODENAME_EXPOSURE -> CDX`
+  - `INTELLECTUAL_PROPERTY_RISK -> IPR`
+  - `REPUTATION_RISK -> REP`
+- numbering is per category, starts at `001`, and follows the existing
+  `Finding[]` order without reordering
+- when `suggested_replacement` is null, display:
+  - `No automatic suggestion generated.`
+- if the report file already exists, overwrite it without prompting or creating
+  copy files
+
+Failure behavior:
+
+- raise `ReportWriteError` when:
+  - the output directory cannot be created
+  - the report file cannot be written
+  - invalid report data is received
+  - an unexpected write failure occurs
+
+Phase 6 design note:
+
+- the first implementation should keep the MVP intentionally simple:
+  one file in, one review, one Markdown report out
 
 ## Clean Copy Writer
 

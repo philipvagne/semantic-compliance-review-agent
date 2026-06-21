@@ -12,12 +12,13 @@ The repository now contains:
 - an approved Phase 4.5 Agent Review design
 - a completed Phase 5 Agent Review
 - an approved Phase 5.1 Optional Gemini Review Path design
+- a completed Phase 5.2 Gemini Review Path
 - the documented MVP workflow for later phases
 
 The current runnable CLI path is the File Reader plus Text Extractor plus
 Context Loader plus Agent Review flow.
 
-The next approved implementation step is Phase 5.2: Gemini Review Path implementation.
+The next approved implementation step is Phase 6: Report Generation.
 
 ## Implemented Flow
 
@@ -542,6 +543,22 @@ Phase 5.1 backend design note:
 - if Gemini is selected and fails, the CLI must fail clearly and must not
   silently fall back to Deterministic
 - the CLI should print which backend was used
+
+Phase 5.2 implementation note:
+
+- `src/main.py` now accepts `--backend gemini` and `--backend deterministic`
+- unsupported backend values are rejected by CLI argument validation
+- Gemini is the default backend
+- Deterministic remains the explicit offline/test backend
+- missing Gemini credentials fail during CLI startup before file reading, text
+  extraction, context loading, or agent review begins
+- supported environment variables are `GOOGLE_API_KEY` and `GEMINI_API_KEY`
+- Gemini model selection is currently `gemini-2.5-flash`
+- one review request is still used per file
+- malformed structured output still retries once
+- provider failures do not silently fall back to Deterministic
+- the `agent_review.review(reviewable_texts, review_context) -> list[Finding]`
+  boundary remains unchanged
 
 ## Report Writer
 

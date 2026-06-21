@@ -17,7 +17,8 @@ Phase 4 - Context Loading complete.
 Phase 4.5 - Agent Review design complete.
 Phase 5 - Agent Review complete.
 Phase 5.1 - Optional Gemini Review Path design complete.
-Next: Phase 5.2 - Gemini Review Path implementation.
+Phase 5.2 - Gemini Review Path complete.
+Next: Phase 6 - Report Generation.
 
 ## Purpose
 
@@ -26,7 +27,7 @@ human-written text inside source code repositories.
 
 ## Current Phase
 
-Phase 5.1 - Optional Gemini Review Path Design
+Phase 6 - Report Generation
 
 ## Phase 3 Text Extraction
 
@@ -37,7 +38,7 @@ config files, runs agent review, and prints a small summary.
 Run it with:
 
 ```text
-python -m src.main examples/sample_input.py
+python -m src.main examples/sample_input.py --backend deterministic
 ```
 
 Expected output:
@@ -45,6 +46,7 @@ Expected output:
 ```text
 File read successfully
 Path: examples/sample_input.py
+Backend: Deterministic
 Reviewable text items found: 6
 Context loaded successfully
 Sensitive terms loaded: 3
@@ -154,19 +156,18 @@ Approved MVP review behavior:
 Current Phase 5 implementation note:
 
 - the review boundary is ADK-backed
-- local working behavior uses a deterministic in-process fallback model
-- this preserves the ADK architecture without assuming live model credentials
-- a future phase can swap in a live provider behind the same review boundary
+- Gemini is now the default backend
+- the deterministic backend remains available as an explicit offline/test mode
+- both backends stay behind the same review boundary
 
-## Phase 5.1 Optional Gemini Review Path Design
+## Phase 5.2 Gemini Review Path
 
-The next Agent Review design update adds two approved backends behind the same
-review boundary:
+Agent Review now supports two backends behind the same review boundary:
 
 - Gemini
 - Deterministic
 
-Approved backend selection:
+Current backend selection:
 
 - default backend: Gemini
 - explicit offline/test backend: Deterministic
@@ -174,13 +175,14 @@ Approved backend selection:
   - `--backend gemini`
   - `--backend deterministic`
 
-Approved CLI behavior:
+Current CLI behavior:
 
 - `python -m src.main examples/sample_input.py` uses Gemini
 - `python -m src.main examples/sample_input.py --backend deterministic` uses the deterministic backend
-- the CLI must print which backend was used
-- if Gemini is selected and fails, the CLI must fail clearly
-- the CLI must not silently fall back to deterministic
+- the CLI prints which backend was used
+- missing Gemini credentials fail during CLI startup before file reading begins
+- Gemini provider failures fail clearly and do not silently fall back to deterministic
+- supported environment variables are `GOOGLE_API_KEY` and `GEMINI_API_KEY`
 
 ## Phase 0.5 Spike
 

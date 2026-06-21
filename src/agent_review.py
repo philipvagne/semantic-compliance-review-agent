@@ -26,18 +26,26 @@ from __future__ import annotations
 
 import asyncio
 import contextlib
+from functools import cached_property
 import io
 import json
 import logging
+import os
 import re
 from typing import AsyncGenerator
+from typing import Literal
 
 from google.adk.agents import Agent
+from google.adk.models import Gemini
 from google.adk.models.base_llm import BaseLlm
 from google.adk.models.llm_request import LlmRequest
 from google.adk.models.llm_response import LlmResponse
 from google.adk.runners import InMemoryRunner
+from google.genai import Client
 from google.genai import types
+from google.genai.errors import APIError
+from google.genai.errors import ClientError
+from google.genai.errors import ServerError
 from pydantic import TypeAdapter
 from pydantic import ValidationError
 
@@ -47,6 +55,12 @@ from src.schemas import ReviewableText
 
 
 logging.getLogger("google.adk").setLevel(logging.ERROR)
+
+BackendName = Literal["gemini", "deterministic"]
+DEFAULT_BACKEND: BackendName = "gemini"
+GEMINI_MODEL_NAME = "gemini-2.5-flash"
+_configured_backend: BackendName = DEFAULT_BACKEND
+_configured_api_key: str | None = None
 
 FINDINGS_ADAPTER = TypeAdapter(list[Finding])
 SECURITY_KEYWORDS = (
@@ -87,6 +101,19 @@ class AgentReviewError(Exception):
     """Raised when the agent review component fails."""
 
 
+class ConfiguredGeminiModel(Gemini):
+    """Gemini model with explicit API-key configuration for this project."""
+
+    @cached_property
+    def api_client(self) -> Client:
+        api_key = _configured_api_key
+        if not api_key:
+            raise AgentReviewError(
+                "Gemini backend requires GOOGLE_API_KEY or GEMINI_API_KEY to be set."
+            )
+        return Client(api_key=api_key)
+
+
 class DeterministicAgentReviewModel(BaseLlm):
     """Local ADK model fallback that provides deterministic structured findings."""
 
@@ -109,30 +136,57 @@ class DeterministicAgentReviewModel(BaseLlm):
 
 def review(reviewable_texts: list[ReviewableText], review_context: ReviewContext) -> list[Finding]:
     try:
-        return asyncio.run(_run_review(reviewable_texts, review_context))
+        return asyncio.run(_run_review(reviewable_texts, review_context, _configured_backend))
     except AgentReviewError:
         raise
     except Exception as exc:
         raise AgentReviewError(f"Unexpected agent review failure: {exc}") from exc
 
 
-def build_agent() -> Agent:
+def configure_backend(backend: BackendName) -> None:
+    global _configured_backend
+    global _configured_api_key
+
+    if backend not in ("gemini", "deterministic"):
+        raise AgentReviewError(f"Unsupported agent review backend: {backend}")
+
+    _configured_backend = backend
+    _configured_api_key = None
+
+    if backend == "gemini":
+        api_key = _resolve_gemini_api_key()
+        if not api_key:
+            raise AgentReviewError(
+                "Gemini backend requires GOOGLE_API_KEY or GEMINI_API_KEY. "
+                "Set one of these environment variables before running the CLI."
+            )
+        _configured_api_key = api_key
+
+
+def get_backend_display_name() -> str:
+    return "Gemini" if _configured_backend == "gemini" else "Deterministic"
+
+
+def build_agent(backend: BackendName) -> Agent:
     return Agent(
         name="semantic_compliance_review_agent",
         description="Phase 5 ADK-backed semantic compliance review agent.",
         instruction=(
             "Review all extracted text and return only structured Finding JSON "
-            "that matches the documented contract."
+            "that matches the documented contract. Keep severity and confidence "
+            "separate. Return an empty JSON list when there are no findings."
         ),
-        model=DeterministicAgentReviewModel(),
+        model=_build_model(backend),
+        output_schema=list[Finding],
     )
 
 
 async def _run_review(
     reviewable_texts: list[ReviewableText],
     review_context: ReviewContext,
+    backend: BackendName,
 ) -> list[Finding]:
-    runner = InMemoryRunner(agent=build_agent())
+    runner = InMemoryRunner(agent=build_agent(backend))
     prompt = json.dumps(
         {
             "reviewable_texts": [item.model_dump() for item in reviewable_texts],
@@ -151,12 +205,24 @@ async def _run_review(
             last_error = exc
         except AgentReviewError:
             raise
+        except (ClientError, ServerError, APIError, TimeoutError) as exc:
+            raise AgentReviewError(f"{get_backend_display_name()} backend failed: {exc}") from exc
         except Exception as exc:
-            raise AgentReviewError(f"ADK agent failed: {exc}") from exc
+            raise AgentReviewError(f"{get_backend_display_name()} backend failed: {exc}") from exc
 
     raise AgentReviewError(
         "Structured output could not be parsed into the Finding schema after one retry."
     ) from last_error
+
+
+def _build_model(backend: BackendName) -> BaseLlm:
+    if backend == "gemini":
+        return ConfiguredGeminiModel(model=GEMINI_MODEL_NAME)
+    return DeterministicAgentReviewModel()
+
+
+def _resolve_gemini_api_key() -> str | None:
+    return os.environ.get("GOOGLE_API_KEY") or os.environ.get("GEMINI_API_KEY")
 
 
 def _extract_prompt_text(llm_request: LlmRequest) -> str:

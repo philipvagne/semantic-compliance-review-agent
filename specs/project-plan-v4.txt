@@ -23,12 +23,13 @@ Completed:
 [✓] Phase 4.5 Agent Review Design Approved
 [✓] Phase 5 ADK Agent Review Implemented
 [✓] Phase 5.1 Optional Gemini Review Path Design Approved
+[✓] Phase 5.2 Gemini Review Path Implemented
 
 Current Phase:
-PHASE 5.1 - OPTIONAL GEMINI REVIEW PATH DESIGN
+PHASE 6 - REPORT GENERATION
 
 Next Milestone:
-PHASE 5.2 - GEMINI REVIEW PATH IMPLEMENTATION
+PHASE 7 - CLEAN COPY GENERATION
 
 ================================================================================
 PROJECT OVERVIEW
@@ -1029,6 +1030,22 @@ Exit Criteria:
 [✓] Boundary preserved
 [✓] Phase 5.2 coding boundary clarified
 
+PHASE 5.2 — GEMINI REVIEW PATH IMPLEMENTATION
+
+- Implement backend selection for Agent Review only
+- Keep Gemini as default backend
+- Keep Deterministic as explicit offline/test backend
+- Preserve the existing review boundary
+
+Exit Criteria:
+
+[✓] Gemini is the default backend
+[✓] Deterministic remains explicit
+[✓] CLI backend selection implemented
+[✓] Missing Gemini credentials fail before pipeline startup
+[✓] Unsupported backend values are rejected by CLI validation
+[✓] No silent fallback to Deterministic when Gemini is selected
+
 PHASE 6 — REPORT GENERATION
 
 - Generate Markdown audit report
@@ -1191,10 +1208,11 @@ Completed:
 - Agent Review design approved
 - Agent Review implemented
 - Optional Gemini review path design approved
+- Gemini review path implemented
 
 Next Actions:
 
-1. Begin Phase 5.2 - Gemini Review Path implementation
-2. Add backend selection without changing the `agent_review.review(...)` boundary
-3. Preserve explicit deterministic mode for offline/testing and avoid silent fallback
+1. Begin Phase 6 - Report Generation
+2. Keep findings as structured input to report writing without changing source files
+3. Preserve the human-in-the-loop guardrails while keeping clean copy generation deferred
 

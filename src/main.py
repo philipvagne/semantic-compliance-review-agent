@@ -1,6 +1,8 @@
 import argparse
 
 from src.agent_review import AgentReviewError
+from src.agent_review import configure_backend
+from src.agent_review import get_backend_display_name
 from src.agent_review import review
 from src.context_loader import ContextLoadError
 from src.context_loader import load_review_context
@@ -15,11 +17,22 @@ def parse_args() -> argparse.Namespace:
         description="Read one source file and summarize extracted reviewable text."
     )
     parser.add_argument("file_path", help="Path to a single source code file.")
+    parser.add_argument(
+        "--backend",
+        choices=("gemini", "deterministic"),
+        default="gemini",
+        help="Agent review backend to use. Defaults to Gemini.",
+    )
     return parser.parse_args()
 
 
 def main() -> None:
     args = parse_args()
+    try:
+        configure_backend(args.backend)
+    except AgentReviewError as exc:
+        raise SystemExit(f"Agent review startup failed: {exc}") from exc
+
     try:
         file_content = read_file(args.file_path)
     except FileReadError as exc:
@@ -37,6 +50,7 @@ def main() -> None:
 
     print("File read successfully")
     print(f"Path: {file_content.path}")
+    print(f"Backend: {get_backend_display_name()}")
     print(f"Reviewable text items found: {len(reviewable_items)}")
     print("Context loaded successfully")
     print(f"Sensitive terms loaded: {len(review_context.sensitive_terms)}")

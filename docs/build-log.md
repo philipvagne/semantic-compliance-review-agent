@@ -276,3 +276,33 @@ Tested:
 Result:
 - The Gemini backend design is now recorded without changing current Agent
   Review behavior.
+
+### Phase 5.2 - Gemini Review Path
+
+Completed:
+- Updated `src/agent_review.py` to support explicit backend selection behind
+  the existing `review(reviewable_texts, review_context)` boundary.
+- Kept Gemini as the default backend and Deterministic as the explicit
+  offline/test backend.
+- Wired the Gemini backend through ADK using the `gemini-2.5-flash` model.
+- Added startup credential validation so missing Gemini credentials fail before
+  file reading, text extraction, context loading, or agent review begins.
+- Updated `src/main.py` to accept `--backend gemini` and
+  `--backend deterministic`.
+- Updated CLI output to print which backend was used.
+- Added `.env.example` entries for `GOOGLE_API_KEY` and the optional
+  `GEMINI_API_KEY` alias.
+- Updated status and architecture docs to reflect completed Phase 5.2
+  behavior.
+
+Tested:
+- Ran syntax compilation for `src/`.
+- Ran the CLI against `examples/sample_input.py --backend deterministic`.
+- Verified missing Gemini credentials fail clearly during CLI startup.
+- Verified unsupported backend values are rejected by CLI argument validation.
+
+Result:
+- Phase 5.2 now supports explicit Gemini and Deterministic review backends
+  without changing the public Agent Review boundary.
+- Live Gemini wiring is in place, but it was not exercised in this environment
+  because Gemini credentials were not available locally.

@@ -1,5 +1,7 @@
 import argparse
 
+from src.context_loader import ContextLoadError
+from src.context_loader import load_review_context
 from src.file_reader import FileReadError
 from src.file_reader import read_file
 from src.text_extractor import ExtractionError
@@ -26,9 +28,18 @@ def main() -> None:
     except ExtractionError as exc:
         raise SystemExit(f"Text extraction failed: {exc}") from exc
 
+    try:
+        review_context = load_review_context()
+    except ContextLoadError as exc:
+        raise SystemExit(f"Context loading failed: {exc}") from exc
+
     print("File read successfully")
     print(f"Path: {file_content.path}")
     print(f"Reviewable text items found: {len(reviewable_items)}")
+    print("Context loaded successfully")
+    print(f"Sensitive terms loaded: {len(review_context.sensitive_terms)}")
+    if review_context.config_warnings:
+        print(f"Config warnings: {len(review_context.config_warnings)}")
 
     for item in reviewable_items:
         preview = item.text.replace("\n", " ").strip()

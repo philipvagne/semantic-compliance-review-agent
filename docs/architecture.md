@@ -8,11 +8,13 @@ The repository now contains:
 - a completed Phase 2 File Reader
 - a completed Phase 3 Text Extractor for Python comments and docstrings
 - an approved Phase 3.5 Context Loader design
+- a completed Phase 4 Context Loader
 - the documented MVP workflow for later phases
 
-The current runnable CLI path is the File Reader plus Text Extractor flow.
+The current runnable CLI path is the File Reader plus Text Extractor plus
+Context Loader flow.
 
-The next approved implementation step is Phase 4: Context Loading.
+The next approved implementation step is Phase 5: ADK Agent Review.
 
 ## Implemented Flow
 
@@ -20,11 +22,12 @@ User
 -> CLI
 -> File Reader
 -> Text Extractor
+-> Context Loader
 -> Console Summary
 
 The current CLI accepts one source file path, reads it as UTF-8, extracts
-reviewable text from Python files, and prints a console summary of the
-extracted items.
+reviewable text from Python files, loads review context from YAML config files,
+and prints a console summary of the extracted items and loaded context.
 
 ## ADK Spike Status
 
@@ -355,6 +358,13 @@ Does NOT:
 - Call ADK
 - Modify configuration
 - Generate reports
+
+Phase 4 implementation note:
+
+- `src/context_loader.py` now includes the required module-level docstring
+- The implementation uses `yaml.safe_load()` plus explicit schema validation
+- Missing or empty config files produce warnings instead of hard failures
+- Invalid YAML or invalid structure/type raises `ContextLoadError`
 
 ## Agent Review
 

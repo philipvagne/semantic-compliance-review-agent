@@ -181,3 +181,26 @@ Result:
 - Phase 4 now has an approved Context Loader contract and failure model before
   implementation begins.
 - Runtime behavior remains unchanged.
+
+### Phase 4 - Context Loading
+
+Completed:
+- Added a `ReviewContext` schema for validated project context.
+- Added `src/context_loader.py` with safe YAML loading for
+  `config/sensitive_terms.yaml` and `config/project_context.yaml`.
+- Added `ContextLoadError` for invalid YAML and invalid config structure/type.
+- Populated both config files with safe sample values for manual testing.
+- Updated the CLI in `src/main.py` to load context after text extraction and
+  print a short context summary.
+- Added the missing `PyYAML` dependency to `requirements.txt`.
+- Updated status and architecture docs to reflect completed Phase 4 behavior.
+
+Tested:
+- Ran syntax compilation for `src/`.
+- Verified context loading behavior with sample config files.
+- Verified CLI summary output includes context loading details.
+
+Result:
+- Phase 4 now returns a structured `ReviewContext` object within the approved
+  scope.
+- Agent review, risk classification, and later phases remain deferred.

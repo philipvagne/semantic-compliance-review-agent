@@ -13,7 +13,8 @@ Phase 2 - File Reader complete.
 Phase 2.5 - Text Extraction design complete.
 Phase 3 - Text Extraction complete for Python comments and docstrings.
 Phase 3.5 - Context Loading design complete.
-Next: Phase 4 - Context Loading implementation.
+Phase 4 - Context Loading complete.
+Next: Phase 5 - ADK Agent Review.
 
 ## Purpose
 
@@ -22,13 +23,13 @@ human-written text inside source code repositories.
 
 ## Current Phase
 
-Phase 3.5 - Context Loading Design
+Phase 5 - ADK Agent Review
 
 ## Phase 3 Text Extraction
 
 The CLI now accepts a single source file path, reads the file as UTF-8,
-extracts reviewable text from Python files, and prints a small extraction
-summary.
+extracts reviewable text from Python files, loads review context from YAML
+config files, and prints a small summary.
 
 Run it with:
 
@@ -42,6 +43,8 @@ Expected output:
 File read successfully
 Path: examples/sample_input.py
 Reviewable text items found: 6
+Context loaded successfully
+Sensitive terms loaded: 3
 - DOCSTRING 1-1: Small sample file for Phase 3 manual text-extraction testing.
 - TODO 3-3: TODO: remove the temporary admin password before release
 - NOTE 4-4: NOTE: this sample intentionally contains several reviewable text types
@@ -66,18 +69,18 @@ Explicitly deferred from the first implementation:
 - risk classification
 - report generation
 
-## Phase 3.5 Context Loading Design
+## Phase 4 Context Loading
 
-The next component has now been documented before implementation:
+The CLI now loads review context after text extraction using:
 
 `ReviewableText[] + config files -> Context Loader -> ReviewContext`
 
-Approved config inputs:
+Config inputs:
 
 - `config/sensitive_terms.yaml`
 - `config/project_context.yaml`
 
-Approved `ReviewContext` fields:
+`ReviewContext` fields:
 
 - `sensitive_terms: list[str]`
 - `project_name: str | None`
@@ -85,13 +88,22 @@ Approved `ReviewContext` fields:
 - `review_focus: list[str]`
 - `config_warnings: list[str]`
 
-Approved failure behavior:
+Current Context Loading behavior:
 
 - missing config file -> warn and continue with defaults
 - empty config file -> warn and continue with defaults
 - invalid YAML -> raise `ContextLoadError`
 - invalid structure/type -> raise `ContextLoadError`
 - missing optional fields -> allowed
+
+Current Context Loading scope:
+
+- safe YAML loading only
+- strict validation of expected config types
+- sample config files included for manual testing
+- no agent review
+- no risk classification
+- no report generation
 
 ## Phase 0.5 Spike
 

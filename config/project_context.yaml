@@ -1,0 +1,8 @@
+project_name: Semantic Compliance Review Agent
+project_description: >
+  A CLI tool that reviews human-written source code text for potentially risky
+  or sensitive content while preserving human oversight.
+review_focus:
+  - confidential information
+  - internal project names
+  - professionalism in comments and docstrings

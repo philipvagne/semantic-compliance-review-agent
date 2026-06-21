@@ -19,6 +19,14 @@ class ReviewableText(BaseModel):
     surrounding_context: str
 
 
+class ReviewContext(BaseModel):
+    sensitive_terms: list[str]
+    project_name: str | None
+    project_description: str | None
+    review_focus: list[str]
+    config_warnings: list[str]
+
+
 class ReviewFinding(BaseModel):
     category: str
     severity: str

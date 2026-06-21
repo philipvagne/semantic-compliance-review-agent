@@ -426,3 +426,102 @@ Result:
 - Phase 6.7 implementation now has a clearer readability target for report UX
   without changing the underlying review pipeline contract.
 - Runtime behavior remains unchanged.
+
+### Phase 6.7 - Report Readability Implementation
+
+Completed:
+- Updated `src/report_writer.py` to improve report readability and hierarchy
+  without changing underlying finding data.
+- Added a stronger Executive Summary near the top of the report.
+- Moved the Audit Summary Matrix before Detailed Findings.
+- Reworked finding sections into a more narrative review format.
+- Added diff-style suggested replacement rendering when a suggested
+  replacement exists.
+- Improved zero-findings report wording so successful audits still feel
+  complete.
+- Improved Review Philosophy wording to align more closely with the blueprint
+  report.
+- Regenerated `output/sample_input-audit-report.md` with the updated report
+  presentation.
+
+Tested:
+- Ran syntax compilation for `src/`.
+- Ran the CLI against `examples/sample_input.py --backend deterministic`.
+- Verified the regenerated report is easier to scan and still uses only
+  current pipeline data.
+- Verified zero-findings report behavior with a focused local report-writer
+  test.
+
+Result:
+- Phase 6.7 now improves report readability and human usefulness without
+  changing finding generation or report scope.
+- Runtime behavior remains limited to Markdown report presentation only.
+
+### Phase 6.75 - Report Polish & Humanization
+
+Completed:
+- Updated `src/report_writer.py` with small presentation polish improvements
+  only.
+- Humanized severity, confidence, and detection-method display values.
+- Added visual indicators for severity and confidence.
+- Improved single-line versus multi-line location wording.
+- Improved no-suggestion wording to feel more like a professional audit report.
+- Regenerated `output/sample_input-audit-report.md` with the polished report
+  presentation.
+
+Tested:
+- Ran syntax compilation for `src/`.
+- Ran the CLI against `examples/sample_input.py --backend deterministic`.
+- Verified the regenerated report is more human-friendly without changing
+  finding order or underlying review data.
+
+Result:
+- Phase 6.75 makes the report feel more polished and professional without
+  redesigning the report or changing the review pipeline.
+
+### Agent Review Suggested Replacement Guidance
+
+Completed:
+- Tightened Gemini Agent Review instructions so `suggested_replacement` is
+  included only when a safe neutral rewrite is obvious.
+- Kept `suggested_replacement` optional and preserved `null` when remediation
+  remains uncertain.
+- Added deterministic parity for obvious HIGH-confidence replacement cases so
+  report rendering can be verified locally without live Gemini credentials.
+- Regenerated `output/sample_input-audit-report.md` and verified diff-style
+  replacement rendering when a replacement exists.
+
+Tested:
+- Ran syntax compilation for `src/`.
+- Ran the CLI against `examples/sample_input.py --backend deterministic`.
+- Verified the regenerated report now shows a diff block for the security TODO.
+- Verified the no-suggestion message still renders when
+  `suggested_replacement` is `null`.
+
+Result:
+- The review layer, not the report writer, now provides safe replacement text
+  more consistently for obvious HIGH-confidence cases.
+
+### Agent Review Detection Method Guidance
+
+Completed:
+- Tightened Gemini Agent Review instructions so `detection_method` follows the
+  documented TERM_MATCH / SEMANTIC_ANALYSIS / HYBRID contract more strictly.
+- Added explicit negative rules stating that HYBRID must not be used just
+  because semantic reasoning was involved, a finding is severe, or a suggested
+  replacement exists.
+- Kept the earlier suggested-replacement guidance intact.
+- Regenerated `output/sample_input-audit-report.md` after verification.
+
+Tested:
+- Ran syntax compilation for `src/`.
+- Ran the CLI against `examples/sample_input.py --backend deterministic`.
+- Verified the deterministic report still renders diff-style suggested
+  replacements when present.
+- Verified the deterministic finding continues to use
+  `SEMANTIC_ANALYSIS`, which matches the documented contract because no
+  configured sensitive term appears in the source text.
+
+Result:
+- The Gemini review prompt now gives much clearer detection-method boundaries
+  without changing schemas, backend selection, or report-writer behavior.

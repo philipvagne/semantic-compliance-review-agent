@@ -28,12 +28,14 @@ Completed:
 [✓] Phase 6 Report Generation Design Approved
 [✓] Phase 6.5 Report Writer Implemented
 [✓] Phase 6.6 Report Experience & Readability Design Approved
+[✓] Phase 6.7 Report Readability Implemented
+[✓] Phase 6.75 Report Polish & Humanization Implemented
 
 Current Phase:
-PHASE 6.7 - REPORT READABILITY IMPLEMENTATION
+PHASE 7 - CLEAN COPY GENERATION
 
 Next Milestone:
-PHASE 7 - CLEAN COPY GENERATION
+PHASE 8 - EVALUATION
 
 ================================================================================
 PROJECT OVERVIEW
@@ -968,12 +970,29 @@ Approved detection methods:
 - `SEMANTIC_ANALYSIS`
 - `HYBRID`
 
+Detection method rules:
+
+- `TERM_MATCH` = configured sensitive term detected, no additional semantic
+  reasoning needed
+- `SEMANTIC_ANALYSIS` = meaning, tone, or implication based finding with no
+  configured sensitive-term match
+- `HYBRID` = configured sensitive term detected plus additional semantic risk
+- do not use `HYBRID` just because semantic reasoning was used
+- do not use `HYBRID` just because the finding is high severity
+- do not use `HYBRID` just because a suggested replacement exists
+
 Important MVP rules:
 
 - `TERM_MATCH` findings are HIGH confidence by construction
 - zero findings is a successful review result
 - retry once if structured output cannot be parsed
 - `suggested_replacement` stays optional
+- use `suggested_replacement` when a HIGH-confidence finding has an obvious,
+  safe, neutral rewrite based only on the source text; otherwise use `null`
+- suggested replacements must preserve intent while removing risky, sensitive,
+  or unprofessional wording
+- suggested replacements must not introduce secrets, internal codenames,
+  credentials, or speculative information
 
 Exit Criteria:
 
@@ -1188,6 +1207,42 @@ PHASE 6.7 — REPORT READABILITY IMPLEMENTATION
 - Improve report readability and UX without changing the underlying review data
 - Keep all displayed information limited to the current pipeline output
 
+Exit Criteria:
+
+[✓] Executive Summary added near the top
+[✓] Audit Summary Matrix moved before Detailed Findings
+[✓] Finding sections made more narrative and easier to scan
+[✓] Diff-style suggested replacements rendered when present
+[✓] Zero-findings report experience improved
+[✓] Finding order preserved
+[✓] No new analysis, metrics, or fabricated statistics added
+
+PHASE 6.75 — REPORT POLISH & HUMANIZATION
+
+- Improve the human readability and presentation quality of the generated Markdown report
+- Keep the report structure established in Phase 6.7
+- Focus on presentation polish only
+
+Approved polish changes:
+
+- humanize category display labels
+- humanize detection method labels
+- humanize severity display with visual indicators
+- humanize confidence display with visual indicators
+- humanize single-line versus multi-line location wording
+- improve no-suggestion messaging
+- make explanation presentation feel less machine-generated
+
+Exit Criteria:
+
+[✓] Category display humanized
+[✓] Detection method display humanized
+[✓] Severity display humanized with approved indicators
+[✓] Confidence display humanized with approved indicators
+[✓] Location wording improved
+[✓] No-suggestion messaging improved
+[✓] Report structure preserved
+
 PHASE 7 — CLEAN COPY GENERATION
 
 - Generate suggested clean copy
@@ -1350,10 +1405,15 @@ Completed:
 - Report Generation design approved
 - Report Writer implemented
 - Report readability design approved
+- Report readability implemented
+- Report polish and humanization implemented
 
 Next Actions:
 
-1. Begin Phase 6.7 - Report Readability implementation
-2. Keep the report as a presenter of existing findings rather than a second reviewer
-3. Preserve the human-in-the-loop guardrails while keeping clean copy generation deferred
+1. Begin Phase 7 - Clean Copy Generation
+2. Keep source modification optional and separate from reporting
+3. Preserve the human-in-the-loop guardrails while keeping repository-wide scanning deferred
 
+Future Polish:
+- Convert "Why This Was Flagged" explanations into concise audit-style bullet points.
+- Improve narrative wording in generated reports.

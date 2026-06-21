@@ -16,12 +16,14 @@ The repository now contains:
 - an approved Phase 6 Report Generation design
 - a completed Phase 6.5 Report Writer
 - an approved Phase 6.6 Report Experience & Readability design
+- a completed Phase 6.7 Report Readability implementation
+- a completed Phase 6.75 Report Polish & Humanization
 - the documented MVP workflow for later phases
 
 The current runnable CLI path is the File Reader plus Text Extractor plus
 Context Loader plus Agent Review plus Report Writer flow.
 
-The next approved implementation step is Phase 6.7: Report Readability implementation.
+The next approved implementation step is Phase 7: Clean Copy Generation.
 
 ## Implemented Flow
 
@@ -446,6 +448,14 @@ Detection method definitions:
 - SEMANTIC_ANALYSIS: the agent flagged risk based on meaning, tone, or implication
 - HYBRID: a configured sensitive term is present and surrounding language adds semantic risk
 
+Detection method guardrails:
+
+- do not use HYBRID when no configured sensitive term is present
+- do not use HYBRID only because the finding is severe or high confidence
+- do not use HYBRID only because a suggested replacement exists
+- if a configured term match alone is sufficient, use TERM_MATCH
+- if no configured term match exists, use SEMANTIC_ANALYSIS
+
 HYBRID example:
 
 `TODO: remove the Project Titan workaround before launch`
@@ -500,6 +510,12 @@ Suggested replacement rule:
 - `suggested_replacement` is optional
 - Include it only when the remediation is clearly safe
 - Use `null` when uncertain
+- For HIGH-confidence findings, include a safe neutral replacement when one is
+  obvious from the source text alone
+- Suggested replacements must preserve comment intent while removing risky,
+  sensitive, or unprofessional wording
+- Suggested replacements must not introduce secrets, internal codenames,
+  credentials, or speculative information
 
 Does NOT:
 
@@ -562,6 +578,10 @@ Phase 5.2 implementation note:
 - one review request is still used per file
 - malformed structured output still retries once
 - provider failures do not silently fall back to Deterministic
+- Gemini is now explicitly instructed to include `suggested_replacement` only
+  when a safe neutral rewrite is obvious; otherwise it should return `null`
+- Gemini is also explicitly instructed to keep `detection_method` aligned with
+  the TERM_MATCH / SEMANTIC_ANALYSIS / HYBRID contract and not overuse HYBRID
 - the `agent_review.review(reviewable_texts, review_context) -> list[Finding]`
   boundary remains unchanged
 
@@ -689,6 +709,24 @@ Phase 6.6 readability design note:
 - zero-findings reports should still feel complete and successful
 - the report must not invent findings, statistics, or new analysis
 - the report must not reorder findings or recalculate severity/confidence
+
+Phase 6.7 implementation note:
+
+- the report now presents a stronger Executive Summary near the top
+- the Audit Summary Matrix now appears before Detailed Findings
+- detailed findings use a more narrative layout for location, explanation, and recommended action
+- suggested replacements render as diff-style blocks when present
+- zero-findings reports now read as successful completed audits
+- the readability improvements do not change finding order or underlying review data
+
+Phase 6.75 implementation note:
+
+- category labels remain human-readable throughout the report
+- detection methods now display as human-readable labels
+- severity and confidence now use approved visual indicators
+- location display now uses `line` for single-line findings and `lines` for ranges
+- no-suggestion messaging is more human-friendly while preserving meaning
+- this phase improves presentation only and does not change report structure or review data
 
 ## Clean Copy Writer
 

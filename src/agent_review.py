@@ -62,6 +62,60 @@ GEMINI_MODEL_NAME = "gemini-2.5-flash"
 _configured_backend: BackendName = DEFAULT_BACKEND
 _configured_api_key: str | None = None
 
+AGENT_REVIEW_INSTRUCTION = """
+Review all extracted text and return only structured Finding JSON that matches
+the documented contract.
+
+Rules:
+- Keep severity and confidence separate.
+- Return an empty JSON list when there are no findings.
+- `detection_method` must follow the documented contract exactly.
+- Use `TERM_MATCH` only when a configured sensitive term is detected and no
+  additional semantic reasoning is needed to justify the finding.
+- Use `SEMANTIC_ANALYSIS` when the finding comes from meaning, tone, or
+  implication and there is no configured sensitive-term match in the source
+  text.
+- Use `HYBRID` only when both are true:
+  1. a configured sensitive term is present in the source text
+  2. surrounding language adds additional semantic risk
+- Do not use `HYBRID` just because semantic reasoning was used.
+- Do not use `HYBRID` just because the finding is high severity.
+- Do not use `HYBRID` just because `suggested_replacement` exists.
+- `suggested_replacement` is optional.
+- Use `null` for `suggested_replacement` when remediation is uncertain.
+- Include `suggested_replacement` when the finding is HIGH confidence and a safe,
+  neutral replacement is obvious from the source text alone.
+- Suggested replacements must preserve the intent of the original comment while
+  removing risky, sensitive, or unprofessional wording.
+- Suggested replacements must not include secrets, internal codenames,
+  credentials, speculative information, or new claims not present in the source.
+- TERM_MATCH findings are HIGH confidence by construction.
+- HYBRID findings should be HIGH confidence only when both a sensitive term match
+  and additional semantic risk are clearly present.
+
+Examples:
+- Source: "TODO: remove the temporary admin password before release"
+  detection_method: `SEMANTIC_ANALYSIS`
+  Reason: no configured sensitive term is present in the source text.
+- Source: "TODO: remove the temporary admin password before release"
+  Safe suggested_replacement:
+  "TODO: remove the temporary admin credential reference before release"
+- Source: "Project Titan"
+  detection_method: `TERM_MATCH`
+  Reason: a configured sensitive term is present without added semantic risk.
+- Source: "TODO: remove the Project Titan workaround before launch"
+  detection_method: `HYBRID`
+  Reason: a configured sensitive term is present and surrounding language adds
+  semantic risk.
+- Source: "FIXME: replace the hard-coded example value later"
+  detection_method: `SEMANTIC_ANALYSIS`
+  Reason: no configured sensitive term is present in the source text.
+- Source: "FIXME: replace the hard-coded example value later"
+  Safe suggested_replacement:
+  "FIXME: replace the placeholder value before release"
+- If no clearly safe rewrite is obvious, use `null`.
+""".strip()
+
 FINDINGS_ADAPTER = TypeAdapter(list[Finding])
 SECURITY_KEYWORDS = (
     "password",
@@ -175,11 +229,7 @@ def build_agent(backend: BackendName) -> Agent:
     return Agent(
         name="semantic_compliance_review_agent",
         description="Phase 5 ADK-backed semantic compliance review agent.",
-        instruction=(
-            "Review all extracted text and return only structured Finding JSON "
-            "that matches the documented contract. Keep severity and confidence "
-            "separate. Return an empty JSON list when there are no findings."
-        ),
+        instruction=AGENT_REVIEW_INSTRUCTION,
         model=_build_model(backend),
         output_schema=list[Finding],
     )
@@ -284,7 +334,11 @@ def _generate_findings(payload: dict) -> list[dict]:
                     recommendation=(
                         "Remove the sensitive reference or replace it with a neutral, human-reviewed task description."
                     ),
-                    suggested_replacement=None,
+                    suggested_replacement=_build_safe_suggested_replacement(
+                        text,
+                        category="SECURITY_RISK",
+                        confidence="HIGH",
+                    ),
                 )
             )
             continue
@@ -308,7 +362,11 @@ def _generate_findings(payload: dict) -> list[dict]:
                     recommendation=(
                         "Review whether the internal project reference should be removed, generalized, or kept internal."
                     ),
-                    suggested_replacement=None,
+                    suggested_replacement=_build_safe_suggested_replacement(
+                        text,
+                        category="INTERNAL_CODENAME_EXPOSURE",
+                        confidence="HIGH",
+                    ),
                 )
             )
             continue
@@ -323,7 +381,11 @@ def _generate_findings(payload: dict) -> list[dict]:
                     detection_method="SEMANTIC_ANALYSIS",
                     explanation="The text appears to reference regulated or confidential material that may require review.",
                     recommendation="Review the comment or docstring for compliance-sensitive wording before sharing externally.",
-                    suggested_replacement=None,
+                    suggested_replacement=_build_safe_suggested_replacement(
+                        text,
+                        category="COMPLIANCE_RISK",
+                        confidence="MEDIUM",
+                    ),
                 )
             )
             continue
@@ -338,7 +400,11 @@ def _generate_findings(payload: dict) -> list[dict]:
                     detection_method="SEMANTIC_ANALYSIS",
                     explanation="The text appears to use unprofessional or dismissive wording that may not be suitable to keep.",
                     recommendation="Replace the wording with a neutral, professional explanation.",
-                    suggested_replacement=None,
+                    suggested_replacement=_build_safe_suggested_replacement(
+                        text,
+                        category="PROFESSIONALISM_RISK",
+                        confidence="MEDIUM",
+                    ),
                 )
             )
 
@@ -383,3 +449,64 @@ def _find_sensitive_terms(text: str, sensitive_terms: list[str]) -> list[str]:
 
 def _contains_any(text: str, keywords: tuple[str, ...]) -> bool:
     return any(re.search(rf"\b{re.escape(keyword)}\b", text) for keyword in keywords)
+
+
+def _build_safe_suggested_replacement(
+    text: str,
+    *,
+    category: str,
+    confidence: str,
+) -> str | None:
+    normalized_text = text.strip()
+    if confidence != "HIGH" or not normalized_text:
+        return None
+
+    if category == "SECURITY_RISK":
+        replacement = normalized_text
+        replacement = re.sub(
+            r"\badmin password\b",
+            "admin credential reference",
+            replacement,
+            flags=re.IGNORECASE,
+        )
+        replacement = re.sub(
+            r"\bpassword\b",
+            "credential reference",
+            replacement,
+            flags=re.IGNORECASE,
+        )
+        replacement = re.sub(
+            r"\bsecret\b",
+            "sensitive reference",
+            replacement,
+            flags=re.IGNORECASE,
+        )
+        replacement = re.sub(
+            r"\bapi key\b",
+            "API credential reference",
+            replacement,
+            flags=re.IGNORECASE,
+        )
+        replacement = re.sub(
+            r"\bprivate key\b",
+            "private credential reference",
+            replacement,
+            flags=re.IGNORECASE,
+        )
+        replacement = re.sub(
+            r"\btoken\b",
+            "token reference",
+            replacement,
+            flags=re.IGNORECASE,
+        )
+        return replacement if replacement != normalized_text else None
+
+    if category == "INTERNAL_CODENAME_EXPOSURE":
+        replacement = re.sub(
+            r"\bProject\s+[A-Z][A-Za-z0-9_-]*\b",
+            "the internal project",
+            normalized_text,
+        )
+        return replacement if replacement != normalized_text else None
+
+    return None

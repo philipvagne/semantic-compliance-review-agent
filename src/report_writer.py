@@ -30,9 +30,10 @@ Non-responsibilities:
 from __future__ import annotations
 
 from collections import defaultdict
-from datetime import datetime
 from datetime import UTC
+from datetime import datetime
 from pathlib import Path
+import re
 
 from src.schemas import FileContent
 from src.schemas import Finding
@@ -66,6 +67,32 @@ REFERENCE_GUIDE_ROWS = [
     ("IPR", "Intellectual Property Risk"),
     ("REP", "Reputation Risk"),
 ]
+
+SEVERITY_RANK = {
+    "LOW": 1,
+    "MEDIUM": 2,
+    "HIGH": 3,
+    "CRITICAL": 4,
+}
+
+SEVERITY_DISPLAY = {
+    "CRITICAL": "🔴 Critical",
+    "HIGH": "🟠 High",
+    "MEDIUM": "🟡 Medium",
+    "LOW": "🟢 Low",
+}
+
+CONFIDENCE_DISPLAY = {
+    "HIGH": "● High",
+    "MEDIUM": "◐ Medium",
+    "LOW": "○ Low",
+}
+
+DETECTION_METHOD_DISPLAY = {
+    "TERM_MATCH": "Term Match",
+    "SEMANTIC_ANALYSIS": "Semantic Analysis",
+    "HYBRID": "Hybrid",
+}
 
 
 class ReportWriteError(Exception):
@@ -158,15 +185,19 @@ def _build_report_markdown(
         "",
         "---",
         "",
-        _build_scan_statistics(reviewable_texts=reviewable_texts, findings=findings),
-        "",
-        "---",
-        "",
-        _build_findings_section(findings=findings, references=references),
+        _build_executive_summary(reviewable_texts=reviewable_texts, findings=findings),
         "",
         "---",
         "",
         _build_summary_matrix(findings=findings, references=references),
+        "",
+        "---",
+        "",
+        _build_findings_section(
+            file_content=file_content,
+            findings=findings,
+            references=references,
+        ),
         "",
         "---",
         "",
@@ -188,68 +219,71 @@ def _build_metadata_table(
     model: str | None,
 ) -> str:
     rows = [
-        ("Target File", f"`{file_content.path}`"),
-        ("Generated On", datetime.now(UTC).strftime("%Y-%m-%d · %H:%M UTC")),
+        ("**Target File**", f"`{file_content.path}`"),
+        ("**Generated On**", datetime.now(UTC).strftime("%Y-%m-%d · %H:%M UTC")),
     ]
     if backend:
-        rows.append(("Backend", backend))
+        rows.append(("**Backend**", backend))
     if model:
-        rows.append(("Model", f"`{model}`"))
+        rows.append(("**Model**", f"`{model}`"))
     rows.extend(
         [
-            ("Configured Sensitive Terms", str(len(review_context.sensitive_terms))),
-            ("Findings Count", str(len(findings))),
-            ("Audit Status", f"**{_get_audit_status(findings)}**"),
+            ("**Configured Sensitive Terms**", str(len(review_context.sensitive_terms))),
+            ("**Findings Count**", str(len(findings))),
+            ("**Audit Status**", f"**{_get_audit_status(findings)}**"),
         ]
     )
     return _render_two_column_table(rows)
 
 
-def _build_scan_statistics(
+def _build_executive_summary(
     *,
     reviewable_texts: list[ReviewableText],
     findings: list[Finding],
 ) -> str:
-    rows = [
-        ("Metric", "Value"),
-        ("Reviewable text items analyzed", str(len(reviewable_texts))),
-        ("Findings generated", str(len(findings))),
-    ]
     return "\n".join(
         [
-            "## Scan Statistics",
+            "## Executive Summary",
             "",
-            _render_table(rows),
+            f"This audit completed with status **{_get_audit_status(findings)}**.",
+            "",
+            f"- Reviewable text items analyzed: {len(reviewable_texts)}",
+            f"- Findings generated: {len(findings)}",
+            f"- Highest severity found: {_format_severity(_get_highest_severity(findings))}",
+            f"- Categories detected: {_get_detected_categories(findings)}",
         ]
     )
 
 
 def _build_findings_section(
     *,
+    file_content: FileContent,
     findings: list[Finding],
     references: list[str],
 ) -> str:
     if not findings:
         return "\n".join(
             [
-                "## Findings",
+                "## Detailed Findings",
                 "",
                 "No findings were generated for this file.",
+                "The audit completed successfully.",
+                "Human review is still recommended before publication or release.",
             ]
         )
 
-    sections = ["## Findings", ""]
+    sections = ["## Detailed Findings", ""]
     for index, finding in enumerate(findings):
         reference = references[index]
         sections.extend(
             [
                 f"### {reference}: {CATEGORY_LABEL[finding.category]}",
                 "",
-                f"- Category: {CATEGORY_LABEL[finding.category]}",
-                f"- Severity: {finding.severity}",
-                f"- Confidence: {finding.confidence}",
-                f"- Detection Method: {finding.detection_method}",
-                f"- Line Numbers: {finding.line_start}-{finding.line_end}",
+                f"**Severity:** {_format_severity(finding.severity)} | **Confidence:** {_format_confidence(finding.confidence)}",
+                "",
+                f"**Detection Method:** {_format_detection_method(finding.detection_method)}",
+                "",
+                _format_location(file_content.path, finding.line_start, finding.line_end),
                 "",
                 "#### Source Text",
                 "",
@@ -257,17 +291,17 @@ def _build_findings_section(
                 finding.source_text,
                 "```",
                 "",
-                "#### Explanation",
+                "#### Why This Was Flagged",
                 "",
-                finding.explanation,
+                _format_explanation_text(finding.explanation),
                 "",
-                "#### Recommendation",
+                "#### Recommended Action",
                 "",
                 finding.recommendation,
                 "",
                 "#### Suggested Replacement",
                 "",
-                finding.suggested_replacement or "No automatic suggestion generated.",
+                _build_suggested_replacement_block(finding),
                 "",
             ]
         )
@@ -281,8 +315,8 @@ def _build_summary_matrix(*, findings: list[Finding], references: list[str]) -> 
             (
                 reference,
                 CATEGORY_LABEL[finding.category],
-                finding.severity,
-                finding.confidence,
+                _format_severity(finding.severity),
+                _format_confidence(finding.confidence),
             )
         )
 
@@ -314,10 +348,15 @@ def _build_review_philosophy() -> str:
         [
             "## Review Philosophy",
             "",
-            "- AI-assisted review",
-            "- Human review required",
-            "- No automatic source modification",
-            "- Developer remains responsible",
+            "The Semantic Compliance Review Agent provides AI-assisted semantic review to help identify potentially risky human-written text.",
+            "",
+            "Human review is required before any action is taken.",
+            "",
+            "No source code was modified during this audit.",
+            "",
+            "No changes should be applied automatically without developer review.",
+            "",
+            "The developer remains responsible for final decisions.",
         ]
     )
 
@@ -338,6 +377,74 @@ def _build_references(findings: list[Finding]) -> list[str]:
 
 def _get_audit_status(findings: list[Finding]) -> str:
     return "ISSUES FOUND" if findings else "NO ISSUES FOUND"
+
+
+def _get_highest_severity(findings: list[Finding]) -> str:
+    if not findings:
+        return "None"
+    return max(findings, key=lambda finding: SEVERITY_RANK[finding.severity]).severity
+
+
+def _get_detected_categories(findings: list[Finding]) -> str:
+    if not findings:
+        return "None"
+
+    seen: set[str] = set()
+    ordered_labels: list[str] = []
+    for finding in findings:
+        if finding.category in seen:
+            continue
+        seen.add(finding.category)
+        ordered_labels.append(CATEGORY_LABEL[finding.category])
+    return ", ".join(ordered_labels)
+
+
+def _build_suggested_replacement_block(finding: Finding) -> str:
+    suggested_replacement = (finding.suggested_replacement or "").strip()
+    if not suggested_replacement:
+        return (
+            "No automatic suggestion generated — confidence was not high enough "
+            "for automated remediation."
+        )
+
+    return "\n".join(
+        [
+            "```diff",
+            f"- {finding.source_text}",
+            f"+ {suggested_replacement}",
+            "```",
+        ]
+    )
+
+
+def _format_severity(severity: str) -> str:
+    if severity == "None":
+        return "None"
+    return SEVERITY_DISPLAY.get(severity, severity.title())
+
+
+def _format_confidence(confidence: str) -> str:
+    return CONFIDENCE_DISPLAY.get(confidence, confidence.title())
+
+
+def _format_detection_method(detection_method: str) -> str:
+    return DETECTION_METHOD_DISPLAY.get(detection_method, detection_method.title())
+
+
+def _format_location(path: str, line_start: int, line_end: int) -> str:
+    if line_start == line_end:
+        return f"`{path}` — line {line_start}"
+    return f"`{path}` — lines {line_start}-{line_end}"
+
+
+def _format_explanation_text(explanation: str) -> str:
+    sentences = [
+        sentence.strip()
+        for sentence in re.split(r"(?<=[.!?])\s+", explanation.strip())
+        if sentence.strip()
+    ]
+    bullet_points = sentences[:3] or [explanation.strip()]
+    return "\n".join(f"- {bullet}" for bullet in bullet_points)
 
 
 def _render_two_column_table(rows: list[tuple[str, str]]) -> str:

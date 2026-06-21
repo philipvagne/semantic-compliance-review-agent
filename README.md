@@ -22,7 +22,9 @@ Phase 5.25 - Live Gemini verification documented.
 Phase 6 - Report Generation design complete.
 Phase 6.5 - Report Writer implementation complete.
 Phase 6.6 - Report readability design complete.
-Next: Phase 6.7 - Report readability implementation.
+Phase 6.7 - Report readability implementation complete.
+Phase 6.75 - Report polish and humanization complete.
+Next: Phase 7 - Clean Copy Generation.
 
 ## Purpose
 
@@ -31,7 +33,7 @@ human-written text inside source code repositories.
 
 ## Current Phase
 
-Phase 6.7 - Report Readability Implementation
+Phase 7 - Clean Copy Generation
 
 ## Phase 3 Text Extraction
 
@@ -155,9 +157,15 @@ Approved MVP review behavior:
 
 - zero findings is a successful result
 - TERM_MATCH findings are HIGH confidence by construction
+- detection methods follow the documented contract:
+  - TERM_MATCH = configured sensitive term only
+  - SEMANTIC_ANALYSIS = meaning/tone/implication without configured term match
+  - HYBRID = configured sensitive term plus added semantic risk
 - retry once on malformed structured output
 - send all extracted text and context in one review request
 - suggested replacements stay optional
+- HIGH-confidence findings may include a safe neutral `suggested_replacement`
+  when one is obvious from the source text alone; otherwise `null` is used
 
 Current Phase 5 implementation note:
 
@@ -283,6 +291,50 @@ Approved guardrails for this phase:
 - do not reorder findings
 - do not modify source files
 - use `examples/sample-audit-report.md` as the primary UX reference, but only display data that actually exists in the current pipeline
+
+## Phase 6.7 Report Readability Implementation
+
+The generated Markdown audit report is now easier to scan and closer to the
+blueprint report in structure and presentation.
+
+Current readability improvements:
+
+- a stronger Executive Summary appears near the top
+- the Audit Summary Matrix now appears before detailed findings
+- finding sections use a more narrative review layout
+- suggested replacements render as diff-style blocks when present
+- zero-findings reports now read as complete, successful audit results
+- review philosophy wording is clearer and closer to the blueprint style
+
+Readability guardrails preserved:
+
+- no findings were invented
+- no new metrics or statistics were added
+- severity and confidence were not recalculated
+- findings remain in original `Finding[]` order
+- the report still uses only current pipeline data
+
+## Phase 6.75 Report Polish & Humanization
+
+This small follow-up phase improves presentation quality without changing the
+report structure from Phase 6.7.
+
+Current polish improvements:
+
+- category labels display in human-readable form
+- detection methods display in human-readable form
+- severity displays now include visual indicators
+- confidence displays now include visual indicators
+- location lines now use `line` vs `lines` naturally
+- no-suggestion messaging is more human-friendly
+- explanation presentation feels less like a raw field dump
+
+Guardrails preserved:
+
+- no findings or statistics were invented
+- finding order did not change
+- severity and confidence values did not change
+- report structure remained the same
 
 ## Phase 0.5 Spike
 

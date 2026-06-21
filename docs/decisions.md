@@ -1,15 +1,233 @@
 # Architectural Decisions
 
+This log records the most important product and architecture decisions that
+shape the current project behavior.
+
 ## 2026-06-20
 
-### Decision
+### CLI-First Architecture
 
-CLI-first architecture.
+Decision:
 
-### Reason
+Use a CLI-first architecture for the MVP.
 
-Reduces complexity and allows focus on agent behavior.
+Reason:
 
-### Status
+This keeps the project small, reproducible, and easy to explain during the
+capstone. It also avoids spending time on UI concerns before the core review
+pipeline is stable.
+
+Status:
 
 Accepted
+
+### One File In, One Report Out MVP
+
+Decision:
+
+Keep the first end-to-end workflow limited to one source file in and one
+Markdown audit report out.
+
+Reason:
+
+This establishes a narrow, testable contract and avoids overreaching into
+repository-wide scanning before the core review logic is stable.
+
+Status:
+
+Accepted
+
+### Python-Only Extraction for the Current MVP
+
+Decision:
+
+Limit current extraction support to Python files only.
+
+Reason:
+
+Python comments and docstrings were the fastest path to a working semantic
+review demo with traceable line numbers. Multi-language support remains
+required before final submission but was intentionally deferred to avoid
+diluting Phase 3 quality.
+
+Status:
+
+Accepted for MVP
+
+### ADK Review Boundary as a Swappable Seam
+
+Decision:
+
+Keep review behavior behind the boundary
+`agent_review.review(reviewable_texts, review_context) -> list[Finding]`.
+
+Reason:
+
+The rest of the application should not care whether findings come from Gemini,
+deterministic review, or a future replacement backend. This preserves
+architectural flexibility without forcing broader rewrites.
+
+Status:
+
+Accepted
+
+## 2026-06-21
+
+### Gemini as the Default Backend
+
+Decision:
+
+Use Gemini as the default review backend.
+
+Reason:
+
+The capstone project needs a real semantic review path, not only a stub. Gemini
+provides the model-backed path while still fitting within the current CLI
+architecture.
+
+Status:
+
+Accepted
+
+### Deterministic Backend as Explicit Offline/Test Mode
+
+Decision:
+
+Keep a deterministic backend available as an explicit offline and test mode.
+
+Reason:
+
+This supports local development, documentation verification, and predictable
+manual checks without requiring live credentials on every run.
+
+Status:
+
+Accepted
+
+### No Silent Fallback from Gemini to Deterministic
+
+Decision:
+
+If Gemini is selected and fails, fail clearly instead of silently switching to
+deterministic mode.
+
+Reason:
+
+Silent fallback would hide the real runtime condition and make it unclear
+whether the produced findings came from the live model or a local fallback.
+
+Status:
+
+Accepted
+
+### Fail-Fast Credential Validation
+
+Decision:
+
+Validate Gemini credentials during CLI startup before the rest of the pipeline
+runs.
+
+Reason:
+
+It is better to fail early than to let the user assume a full review occurred
+when the selected backend could not actually run.
+
+Status:
+
+Accepted
+
+### Retry Only Malformed Structured Output
+
+Decision:
+
+Retry once when model output cannot be parsed into the `Finding` schema, but do
+not retry provider or network failures as if they were schema problems.
+
+Reason:
+
+Malformed structured output is a bounded format problem. Provider and network
+failures are different classes of failure and should remain visible to the
+user.
+
+Status:
+
+Accepted
+
+### Suggested Replacements Belong to Agent Review, Not the Report Writer
+
+Decision:
+
+Suggested replacement text must come from the review layer, not be invented by
+the report writer.
+
+Reason:
+
+The report writer should present findings, not generate new review judgments or
+remediation content.
+
+Status:
+
+Accepted
+
+### Report Writer Must Preserve Finding Order
+
+Decision:
+
+Do not reorder findings in the report.
+
+Reason:
+
+Finding order should remain traceable to the review output so the report stays
+faithful to the pipeline rather than becoming a second decision-making layer.
+
+Status:
+
+Accepted
+
+### Report Writer Must Not Invent Findings, Metrics, or Replacements
+
+Decision:
+
+The report writer may format and summarize only data already produced by the
+pipeline.
+
+Reason:
+
+Invented statistics or remediation content would weaken trust, blur component
+boundaries, and create misleading demo artifacts.
+
+Status:
+
+Accepted
+
+### Human-Readable Finding References
+
+Decision:
+
+Use human-readable report references such as `SEC-001`, `PRO-001`, and
+`CDX-001`.
+
+Reason:
+
+These identifiers are easier to discuss in reports, demos, and manual review
+than internal object IDs.
+
+Status:
+
+Accepted
+
+### Multi-Language Extraction Is Required Before Submission
+
+Decision:
+
+Treat broader language support as a submission requirement, but do not claim it
+as implemented now.
+
+Reason:
+
+The current Python-only MVP is real and useful, but it is narrower than the
+planned capstone deliverable. The roadmap must acknowledge that gap honestly.
+
+Status:
+
+Accepted as a roadmap requirement

@@ -632,19 +632,19 @@ Approved report sections:
    - include only available metadata such as target file, generated timestamp,
      backend, model, configured sensitive terms, findings count, and audit
      status
-3. Scan Statistics
-   - include only statistics currently available from the pipeline, such as
-     reviewable text items analyzed and findings generated
-4. Findings
+3. Executive Summary
+   - include only currently available top-level summary values such as audit
+     status, findings count, highest severity present, and detected categories
+4. Audit Summary Matrix
+   - include reference, category, severity, and confidence
+5. Findings
    - one section per finding, preserving input order
    - include reference, category, severity, confidence, detection method,
      line numbers, source text, explanation, recommendation, and suggested
      replacement when present
-5. Zero Findings Section
+6. Zero Findings Section
    - zero findings is a successful report result
    - generate the report anyway and state that no findings were generated
-6. Audit Summary Matrix
-   - include reference, category, severity, and confidence
 7. Finding Reference Guide
    - include category legend for CDX, SEC, PRO, CMP, IPR, and REP
 8. Review Philosophy
@@ -667,8 +667,8 @@ Approved MVP rules:
   - `REPUTATION_RISK -> REP`
 - numbering is per category, starts at `001`, and follows the existing
   `Finding[]` order without reordering
-- when `suggested_replacement` is null, display:
-  - `No automatic suggestion generated.`
+- when `suggested_replacement` is null, display a human-friendly
+  no-suggestion message without inventing remediation content
 - if the report file already exists, overwrite it without prompting or creating
   copy files
 
@@ -704,8 +704,8 @@ Phase 6.6 readability design note:
 - the Audit Summary Matrix should move closer to the top of the report
 - detailed finding sections should become more narrative and easier to scan
 - if `suggested_replacement` exists, it should be shown in a diff-style block
-- if `suggested_replacement` is null, keep:
-  - `No automatic suggestion generated.`
+- if `suggested_replacement` is null, keep a human-friendly no-suggestion
+  message rather than fabricating a replacement
 - zero-findings reports should still feel complete and successful
 - the report must not invent findings, statistics, or new analysis
 - the report must not reorder findings or recalculate severity/confidence

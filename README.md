@@ -1,54 +1,147 @@
 # Semantic Compliance Review Agent
 
-Google x Kaggle AI Agents Capstone Project
+An AI-assisted CLI tool that reviews human-written source code text for
+security, compliance, professionalism, and internal-information risks.
 
-## Status
+The current implementation is intentionally narrow:
 
-Planning complete.
-Repository foundation complete.
-ADK feasibility spike complete.
-MVP workflow/component contracts complete.
-Foundation review complete.
-Phase 2 - File Reader complete.
-Phase 2.5 - Text Extraction design complete.
-Phase 3 - Text Extraction complete for Python comments and docstrings.
-Phase 3.5 - Context Loading design complete.
-Phase 4 - Context Loading complete.
-Phase 4.5 - Agent Review design complete.
-Phase 5 - Agent Review complete.
-Phase 5.1 - Optional Gemini Review Path design complete.
-Phase 5.2 - Gemini Review Path complete.
-Phase 5.25 - Live Gemini verification documented.
-Phase 6 - Report Generation design complete.
-Phase 6.5 - Report Writer implementation complete.
-Phase 6.6 - Report readability design complete.
-Phase 6.7 - Report readability implementation complete.
-Phase 6.75 - Report polish and humanization complete.
-Next: Phase 7 - Clean Copy Generation.
+- one file in
+- one Markdown audit report out
+- human review required
 
-## Purpose
+It is designed for the Google x Kaggle AI Agents capstone as a practical,
+explainable agent workflow rather than an autonomous code-modification system.
 
-An AI-assisted compliance review system that identifies potentially risky
-human-written text inside source code repositories.
+## Project Pitch
 
-## Current Phase
+Developers often leave risky human-written text inside source files:
 
-Phase 7 - Clean Copy Generation
+- TODO notes that mention credentials or shortcuts
+- docstrings that expose internal project names
+- comments that are unprofessional or misleading
+- text that traditional static analysis tools usually ignore
 
-## Phase 3 Text Extraction
+This project extracts reviewable text, adds project context, sends it through
+an ADK-backed review boundary, and produces a structured Markdown audit report
+for human review.
 
-The CLI now accepts a single source file path, reads the file as UTF-8,
-extracts reviewable text from Python files, loads review context from YAML
-config files, runs agent review, writes one Markdown audit report, and prints a
-small summary.
+## What The Tool Does Today
 
-Run it with:
+Current implemented workflow:
+
+1. Read one source file.
+2. Extract reviewable text from supported source types.
+3. Load review context from YAML config files.
+4. Run semantic review through the agent boundary.
+5. Write one audit report to `output/`.
+
+Current supported extraction scope:
+
+- Python files only
+- comments
+- docstrings
+- TODO / FIXME / NOTE comments
+
+Current review outputs:
+
+- structured findings
+- finding severity
+- finding confidence
+- detection method
+- recommendation text
+- optional suggested replacement text
+- Markdown audit report
+
+## Current Limitations
+
+The current implementation does not yet provide:
+
+- repository-wide scanning
+- multi-language extraction
+- automatic source modification
+- clean-copy generation
+- evaluation harness
+- web UI
+- database
+- authentication
+- multi-agent architecture
+
+Important scope truth:
+
+Current extraction support is Python-only.
+
+Required before final submission:
+
+- `.py`
+- `.js`
+- `.ts`
+- `.jsx`
+- `.tsx`
+- `.html`
+- `.md`
+
+Potential later expansion:
+
+- `.yaml` / `.yml`
+- `.json`
+- `Dockerfile`
+- Terraform files
+
+Those broader file types are roadmap items, not current runtime behavior.
+
+## Quickstart
+
+### 1. Install Dependencies
+
+```text
+python -m venv .venv
+.venv\Scripts\activate
+pip install -r requirements.txt
+```
+
+### 2. Configure Gemini for the Default Backend
+
+Set one of these environment variables:
+
+- `GOOGLE_API_KEY`
+- `GEMINI_API_KEY`
+
+Example PowerShell session:
+
+```text
+$env:GOOGLE_API_KEY="your-key-here"
+```
+
+Gemini is the default backend.
+
+If Gemini is selected and no credentials are available, the CLI fails clearly.
+It does not silently fall back to deterministic mode.
+
+### 3. Run the Tool
+
+Default Gemini run:
+
+```text
+python -m src.main examples/sample_input.py
+```
+
+Deterministic offline/test run:
 
 ```text
 python -m src.main examples/sample_input.py --backend deterministic
 ```
 
-Expected output:
+## Example Behavior
+
+Current sample input:
+
+- `examples/sample_input.py`
+
+Generated report location:
+
+- `output/sample_input-audit-report.md`
+
+Typical console flow:
 
 ```text
 File read successfully
@@ -59,292 +152,187 @@ Context loaded successfully
 Sensitive terms loaded: 3
 Findings generated: 1
 Report written to: output/sample_input-audit-report.md
-- DOCSTRING 1-1: Small sample file for Phase 3 manual text-extraction testing.
-- TODO 3-3: TODO: remove the temporary admin password before release
-- NOTE 4-4: NOTE: this sample intentionally contains several reviewable text types
-- DOCSTRING 8-8: Return a friendly greeting for manual extractor testing.
-- COMMENT 9-9: Friendly example content for the extractor.
-- FIXME 14-14: FIXME: replace the hard-coded example value later
-* HIGH SECURITY_RISK line 3: The text references a temporary or administrative secret-like value that should be reviewed before release
 ```
 
-Current Text Extraction scope:
+The exact findings may differ between Gemini and deterministic mode.
 
-- Python comments
-- Python docstrings
-- TODO / FIXME / NOTE comments
-- preserved line numbers, language, and surrounding context
-- returns an empty list when no reviewable text is found
-- raises `ExtractionError` only for unexpected extraction failures
+## Backends
 
-Explicitly deferred from the first implementation:
+### Gemini
 
-- string literal extraction
-- agent review
-- risk classification
-- report generation
+Default backend.
 
-## Phase 4 Context Loading
+Purpose:
+
+- real semantic review path
+- capstone demonstration path
+
+Requirements:
+
+- `GOOGLE_API_KEY` or `GEMINI_API_KEY`
+
+Failure behavior:
+
+- fail clearly on missing credentials
+- fail clearly on provider/runtime errors
+- no silent fallback
 
-The CLI now loads review context after text extraction using:
+### Deterministic
 
-`ReviewableText[] + config files -> Context Loader -> ReviewContext`
+Explicit offline/test backend.
 
-Config inputs:
+Purpose:
 
-- `config/sensitive_terms.yaml`
-- `config/project_context.yaml`
+- predictable local verification
+- documentation and report checks without live credentials
 
-`ReviewContext` fields:
+This backend is useful for development and demos where a stable local output is
+more valuable than live semantic variation.
 
-- `sensitive_terms: list[str]`
-- `project_name: str | None`
-- `project_description: str | None`
-- `review_focus: list[str]`
-- `config_warnings: list[str]`
+## Architecture Overview
 
-Current Context Loading behavior:
+Current runtime flow:
+
+```text
+User
+-> CLI
+-> File Reader
+-> Text Extractor
+-> Context Loader
+-> Agent Review
+-> Report Writer
+-> Markdown Audit Report + Console Summary
+```
 
-- missing config file -> warn and continue with defaults
-- empty config file -> warn and continue with defaults
-- invalid YAML -> raise `ContextLoadError`
-- invalid structure/type -> raise `ContextLoadError`
-- missing optional fields -> allowed
+Current major components:
 
-Current Context Loading scope:
+- `src/file_reader.py`
+- `src/text_extractor.py`
+- `src/context_loader.py`
+- `src/agent_review.py`
+- `src/report_writer.py`
+- `src/main.py`
 
-- safe YAML loading only
-- strict validation of expected config types
-- sample config files included for manual testing
-- no agent review
-- no risk classification
-- no report generation
+## Security and Safety Model
 
-## Phase 5 Agent Review
+The project is intentionally advisory.
 
-The CLI now sends all extracted text plus loaded review context into the Agent
-Review boundary:
+Current guardrails:
 
-`ReviewableText[] + ReviewContext -> Agent Review -> Finding[]`
+- no automatic source modification
+- no automatic commits
+- no silent Gemini fallback
+- human review required
+- suggested replacements are advisory only
+- reports are audit artifacts, not automatic fixes
+- API keys must come from environment variables
 
-Approved review boundary:
+See:
 
-`agent_review.review(reviewable_texts, review_context) -> list[Finding]`
+- `docs/security-guardrails.md`
 
-The rest of the application should not care whether findings come from:
+## Project Structure
 
-- ADK
-- direct Gemini fallback
-- test stub
-- future local model
-
-Approved `Finding` fields:
-
-- `id`
-- `reviewable_text_id`
-- `category`
-- `severity`
-- `confidence`
-- `detection_method`
-- `source_text`
-- `line_start`
-- `line_end`
-- `explanation`
-- `recommendation`
-- `suggested_replacement`
-
-Approved MVP review behavior:
-
-- zero findings is a successful result
-- TERM_MATCH findings are HIGH confidence by construction
-- detection methods follow the documented contract:
-  - TERM_MATCH = configured sensitive term only
-  - SEMANTIC_ANALYSIS = meaning/tone/implication without configured term match
-  - HYBRID = configured sensitive term plus added semantic risk
-- retry once on malformed structured output
-- send all extracted text and context in one review request
-- suggested replacements stay optional
-- HIGH-confidence findings may include a safe neutral `suggested_replacement`
-  when one is obvious from the source text alone; otherwise `null` is used
-
-Current Phase 5 implementation note:
-
-- the review boundary is ADK-backed
-- Gemini is now the default backend
-- the deterministic backend remains available as an explicit offline/test mode
-- both backends stay behind the same review boundary
-
-## Phase 5.2 Gemini Review Path
-
-Agent Review now supports two backends behind the same review boundary:
-
-- Gemini
-- Deterministic
-
-Current backend selection:
-
-- default backend: Gemini
-- explicit offline/test backend: Deterministic
-- CLI flags:
-  - `--backend gemini`
-  - `--backend deterministic`
-
-Current CLI behavior:
-
-- `python -m src.main examples/sample_input.py` uses Gemini
-- `python -m src.main examples/sample_input.py --backend deterministic` uses the deterministic backend
-- the CLI prints which backend was used
-- missing Gemini credentials fail during CLI startup before file reading begins
-- Gemini provider failures fail clearly and do not silently fall back to deterministic
-- supported environment variables are `GOOGLE_API_KEY` and `GEMINI_API_KEY`
-
-Live verification milestone recorded:
-
-- Gemini was successfully exercised as the default backend with a valid local API key
-- the CLI completed successfully through File Reader, Text Extractor, Context Loader, and Agent Review
-- Gemini returned valid findings that parsed into the `Finding` schema
-- the live Gemini output was materially different from the deterministic fallback output
-- the project now has a verified real semantic review path
-
-## Phase 6 Report Generation Design
-
-The next component will convert:
-
-`FileContent + ReviewableText[] + ReviewContext + Finding[] + backend metadata -> Markdown audit report`
-
-Approved Report Writer responsibilities:
-
-- generate a Markdown audit report
-- summarize findings without reordering them
-- preserve line numbers and source text
-- include backend and model metadata when available
-- write the report into the `output/` directory
-
-Approved report sections:
-
-- report header
-- metadata table
-- scan statistics using only pipeline-available values
-- one section per finding
-- zero-findings section when no findings exist
-- audit summary matrix
-- finding reference guide
-- review philosophy
-
-Approved MVP rules:
-
-- use `examples/sample-audit-report.md` as a style guide only
-- do not invent metrics, placeholder findings, or fabricated counts
-- overwrite an existing report file instead of creating copies
-- `Findings > 0` maps to `ISSUES FOUND`
-- `Findings == 0` maps to `NO ISSUES FOUND`
-- suggested replacement should display `No automatic suggestion generated.` when null
-- finding references must follow category prefixes such as `SEC-001`, `PRO-001`, and `CDX-001`
-
-## Phase 6.5 Report Writer Implementation
-
-The CLI now converts:
-
-`FileContent + ReviewableText[] + ReviewContext + Finding[] + backend metadata -> output/<filename>-audit-report.md`
-
-Current Report Writer behavior:
-
-- writes one Markdown audit report into `output/`
-- overwrites an existing report file without prompting
-- includes only data produced by the current pipeline
-- includes backend and model metadata when available
-- generates a report even when findings are empty
-- preserves finding order for both detailed sections and reference numbering
-
-Current report contents:
-
-- report header
-- metadata table
-- scan statistics
-- findings or zero-findings message
-- audit summary matrix
-- finding reference guide
-- review philosophy
-
-## Phase 6.6 Report Experience & Readability Design
-
-The next report improvement phase focuses on presentation only.
-
-Core design rule:
-
-- the Report Writer should become a better presenter of findings, not a second reviewer
-
-Approved readability changes:
-
-- add a stronger executive summary near the top
-- move the audit summary matrix closer to the top
-- make each finding section more narrative and human-readable
-- show diff-style suggested replacements when a suggested replacement exists
-- keep the finding reference guide
-- improve review philosophy wording
-- make zero-findings reports feel complete and successful
-
-Approved guardrails for this phase:
-
-- do not invent findings, metrics, statistics, or analysis
-- do not recalculate severity or confidence
-- do not reorder findings
-- do not modify source files
-- use `examples/sample-audit-report.md` as the primary UX reference, but only display data that actually exists in the current pipeline
-
-## Phase 6.7 Report Readability Implementation
-
-The generated Markdown audit report is now easier to scan and closer to the
-blueprint report in structure and presentation.
-
-Current readability improvements:
-
-- a stronger Executive Summary appears near the top
-- the Audit Summary Matrix now appears before detailed findings
-- finding sections use a more narrative review layout
-- suggested replacements render as diff-style blocks when present
-- zero-findings reports now read as complete, successful audit results
-- review philosophy wording is clearer and closer to the blueprint style
-
-Readability guardrails preserved:
-
-- no findings were invented
-- no new metrics or statistics were added
-- severity and confidence were not recalculated
-- findings remain in original `Finding[]` order
-- the report still uses only current pipeline data
-
-## Phase 6.75 Report Polish & Humanization
-
-This small follow-up phase improves presentation quality without changing the
-report structure from Phase 6.7.
-
-Current polish improvements:
-
-- category labels display in human-readable form
-- detection methods display in human-readable form
-- severity displays now include visual indicators
-- confidence displays now include visual indicators
-- location lines now use `line` vs `lines` naturally
-- no-suggestion messaging is more human-friendly
-- explanation presentation feels less like a raw field dump
-
-Guardrails preserved:
-
-- no findings or statistics were invented
-- finding order did not change
-- severity and confidence values did not change
-- report structure remained the same
-
-## Phase 0.5 Spike
-
-The repository includes a minimal local ADK feasibility spike that proves:
-
-- an ADK agent runs locally
-- review text can be passed into the runner
-- the agent calls a custom `load_sensitive_terms()` tool
-- the tool result is consumed before the final response is produced
-- the final response is structured JSON that parses into a project schema
-
-The spike is intentionally narrow and does not implement file reading, report
-generation, evaluation, scanning, or future project phases.
+```text
+semantic-compliance-review-agent/
+  README.md
+  AGENTS.md
+  requirements.txt
+  specs/
+    project-plan-v4.txt
+  docs/
+    architecture.md
+    build-log.md
+    decisions.md
+    security-guardrails.md
+    evaluation-plan.md
+    course-concepts.md
+    codex-workflow.md
+  config/
+    sensitive_terms.yaml
+    project_context.yaml
+  examples/
+    sample_input.py
+    sample-audit-report.md
+  output/
+    sample_input-audit-report.md
+  evaluation/
+    cases/
+    expected/
+  src/
+    main.py
+    file_reader.py
+    text_extractor.py
+    context_loader.py
+    agent_review.py
+    report_writer.py
+    schemas.py
+    adk_spike.py
+```
+
+## Current Status
+
+Current phase:
+
+- Phase 6.9B - Runtime Cleanup
+
+Most recently completed:
+
+- Phase 6.9A - Documentation & Submission Readiness
+
+Implemented through Phase 6.75:
+
+- repository foundation
+- ADK feasibility spike
+- file reading
+- Python text extraction
+- context loading
+- ADK-backed review boundary
+- Gemini backend
+- deterministic backend
+- Markdown report generation
+- report readability and presentation polish
+
+Not implemented yet:
+
+- clean-copy generation
+- evaluation harness
+- required multi-language extraction for submission
+
+## Roadmap Before Submission
+
+Expected next phases:
+
+1. Phase 6.9B - Runtime Cleanup
+2. Phase 7 - Clean Copy Generation
+3. Phase 8 - Evaluation
+4. Phase 9 - Final Documentation
+5. Phase 10 - Submission Prep
+
+Highest-priority gaps before submission:
+
+- align capstone-facing documentation fully with runtime behavior
+- add broader extraction coverage beyond Python
+- implement evaluation with hand-built cases and expected results
+- keep the end-to-end demo stable and reproducible
+
+## Documentation Guide
+
+Key docs:
+
+- `specs/project-plan-v4.txt`
+- `docs/architecture.md`
+- `docs/build-log.md`
+- `docs/decisions.md`
+- `docs/security-guardrails.md`
+- `docs/evaluation-plan.md`
+- `docs/course-concepts.md`
+- `docs/codex-workflow.md`
+
+## Development Notes
+
+This repository follows a documentation-sync workflow: non-trivial work should
+update relevant docs in the same task.
+
+The goal is a boring, safe, but finished capstone project that can be clearly
+explained and defended.

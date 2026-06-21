@@ -525,3 +525,29 @@ Tested:
 Result:
 - The Gemini review prompt now gives much clearer detection-method boundaries
   without changing schemas, backend selection, or report-writer behavior.
+
+### Phase 6.9A - Documentation & Submission Readiness
+
+Completed:
+- Filled `docs/security-guardrails.md` with the current safety boundaries.
+- Filled `docs/course-concepts.md` with an honest implemented-versus-planned
+  capstone concept mapping.
+- Expanded `docs/decisions.md` with the key MVP and runtime architecture
+  decisions made through Phase 6.75.
+- Rewrote `README.md` as a capstone-facing project front page with honest scope,
+  setup, quickstart, limitations, and roadmap guidance.
+- Filled `docs/evaluation-plan.md` with a Phase 8 plan without claiming
+  evaluation is already implemented.
+- Updated the project plan status so the roadmap reflects the documentation
+  stabilization pass before later implementation phases.
+
+Tested:
+- Documentation-only task; runtime code and generated behavior were not changed.
+- Reviewed README, project plan, architecture, build log, sample output, and
+  capstone-facing docs for scope and status alignment.
+
+Result:
+- The repository now tells a more accurate and professional story about the
+  implemented pipeline.
+- Remaining gaps are now documented more clearly instead of being implied or
+  left blank.

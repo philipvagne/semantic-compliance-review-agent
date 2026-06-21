@@ -30,12 +30,13 @@ Completed:
 [✓] Phase 6.6 Report Experience & Readability Design Approved
 [✓] Phase 6.7 Report Readability Implemented
 [✓] Phase 6.75 Report Polish & Humanization Implemented
+[completed] Phase 6.9A Documentation & Submission Readiness Implemented
 
 Current Phase:
-PHASE 7 - CLEAN COPY GENERATION
+PHASE 6.9B - RUNTIME CLEANUP
 
 Next Milestone:
-PHASE 8 - EVALUATION
+PHASE 7 - CLEAN COPY GENERATION
 
 ================================================================================
 PROJECT OVERVIEW
@@ -1128,10 +1129,10 @@ Approved report sections:
 
 - Report Header
 - Metadata Table
-- Scan Statistics
+- Executive Summary
+- Audit Summary Matrix
 - Findings
 - Zero Findings Section
-- Audit Summary Matrix
 - Finding Reference Guide
 - Review Philosophy
 
@@ -1143,7 +1144,8 @@ Approved MVP rules:
 - `Findings > 0` -> `ISSUES FOUND`
 - `Findings == 0` -> `NO ISSUES FOUND`
 - finding references use per-category numbering such as `SEC-001`, `PRO-001`, and `CDX-001`
-- if `suggested_replacement` is null, display `No automatic suggestion generated.`
+- if `suggested_replacement` is null, display a human-friendly no-suggestion
+  message without inventing remediation content
 - existing report files are overwritten without prompting
 
 Exit Criteria:
@@ -1407,12 +1409,14 @@ Completed:
 - Report readability design approved
 - Report readability implemented
 - Report polish and humanization implemented
+- Documentation and submission-readiness stabilization completed
 
 Next Actions:
 
-1. Begin Phase 7 - Clean Copy Generation
+1. Begin Phase 6.9B - Runtime Cleanup
 2. Keep source modification optional and separate from reporting
 3. Preserve the human-in-the-loop guardrails while keeping repository-wide scanning deferred
+4. Begin Phase 7 - Clean Copy Generation after stabilization
 
 Future Polish:
 - Convert "Why This Was Flagged" explanations into concise audit-style bullet points.

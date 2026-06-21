@@ -167,6 +167,10 @@ def get_backend_display_name() -> str:
     return "Gemini" if _configured_backend == "gemini" else "Deterministic"
 
 
+def get_model_display_name() -> str | None:
+    return GEMINI_MODEL_NAME if _configured_backend == "gemini" else "deterministic-local"
+
+
 def build_agent(backend: BackendName) -> Agent:
     return Agent(
         name="semantic_compliance_review_agent",

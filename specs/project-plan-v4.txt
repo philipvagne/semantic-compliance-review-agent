@@ -26,12 +26,13 @@ Completed:
 [✓] Phase 5.2 Gemini Review Path Implemented
 [✓] Phase 5.25 Live Gemini Verification Documented
 [✓] Phase 6 Report Generation Design Approved
+[✓] Phase 6.5 Report Writer Implemented
 
 Current Phase:
-PHASE 6.5 - REPORT WRITER IMPLEMENTATION
+PHASE 7 - CLEAN COPY GENERATION
 
 Next Milestone:
-PHASE 7 - CLEAN COPY GENERATION
+PHASE 8 - EVALUATION
 
 ================================================================================
 PROJECT OVERVIEW
@@ -1139,6 +1140,14 @@ PHASE 6.5 — REPORT WRITER IMPLEMENTATION
 - Write report into the output directory
 - Keep report contents limited to pipeline-produced data only
 
+Exit Criteria:
+
+[✓] `src/report_writer.py` added
+[✓] `ReportWriteError` added
+[✓] Markdown report written to `output/`
+[✓] Existing report files overwritten without prompting
+[✓] CLI writes report after agent review and prints report path
+
 PHASE 7 — CLEAN COPY GENERATION
 
 - Generate suggested clean copy
@@ -1299,10 +1308,11 @@ Completed:
 - Gemini review path implemented
 - Live Gemini verification documented
 - Report Generation design approved
+- Report Writer implemented
 
 Next Actions:
 
-1. Begin Phase 6.5 - Report Writer implementation
-2. Keep report contents limited to data already produced by the current pipeline
-3. Preserve the human-in-the-loop guardrails while keeping clean copy generation deferred
+1. Begin Phase 7 - Clean Copy Generation
+2. Keep source modifications optional and separate from report generation
+3. Preserve the human-in-the-loop guardrails while keeping repository-wide scanning deferred
 

@@ -14,12 +14,13 @@ The repository now contains:
 - an approved Phase 5.1 Optional Gemini Review Path design
 - a completed Phase 5.2 Gemini Review Path
 - an approved Phase 6 Report Generation design
+- a completed Phase 6.5 Report Writer
 - the documented MVP workflow for later phases
 
 The current runnable CLI path is the File Reader plus Text Extractor plus
-Context Loader plus Agent Review flow.
+Context Loader plus Agent Review plus Report Writer flow.
 
-The next approved implementation step is Phase 6.5: Report Writer implementation.
+The next approved implementation step is Phase 7: Clean Copy Generation.
 
 ## Implemented Flow
 
@@ -29,12 +30,14 @@ User
 -> Text Extractor
 -> Context Loader
 -> Agent Review
+-> Report Writer
 -> Console Summary
 
 The current CLI accepts one source file path, reads it as UTF-8, extracts
 reviewable text from Python files, loads review context from YAML config files,
-reviews the extracted text through the Agent Review boundary, and prints a
-console summary of the extracted items, loaded context, and findings.
+reviews the extracted text through the Agent Review boundary, writes one
+Markdown audit report, and prints a console summary of the extracted items,
+loaded context, findings, and report path.
 
 ## ADK Spike Status
 
@@ -660,6 +663,14 @@ Phase 6 design note:
 
 - the first implementation should keep the MVP intentionally simple:
   one file in, one review, one Markdown report out
+
+Phase 6.5 implementation note:
+
+- `src/report_writer.py` now writes one Markdown report into `output/`
+- the report uses only data already produced by the current pipeline
+- existing report files are overwritten instead of versioned
+- the CLI now fails clearly on `ReportWriteError`
+- the CLI prints the written report path after successful report generation
 
 ## Clean Copy Writer
 

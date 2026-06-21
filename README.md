@@ -20,7 +20,8 @@ Phase 5.1 - Optional Gemini Review Path design complete.
 Phase 5.2 - Gemini Review Path complete.
 Phase 5.25 - Live Gemini verification documented.
 Phase 6 - Report Generation design complete.
-Next: Phase 6.5 - Report Writer implementation.
+Phase 6.5 - Report Writer implementation complete.
+Next: Phase 7 - Clean Copy Generation.
 
 ## Purpose
 
@@ -29,13 +30,14 @@ human-written text inside source code repositories.
 
 ## Current Phase
 
-Phase 6.5 - Report Writer Implementation
+Phase 7 - Clean Copy Generation
 
 ## Phase 3 Text Extraction
 
 The CLI now accepts a single source file path, reads the file as UTF-8,
 extracts reviewable text from Python files, loads review context from YAML
-config files, runs agent review, and prints a small summary.
+config files, runs agent review, writes one Markdown audit report, and prints a
+small summary.
 
 Run it with:
 
@@ -53,6 +55,7 @@ Reviewable text items found: 6
 Context loaded successfully
 Sensitive terms loaded: 3
 Findings generated: 1
+Report written to: output/sample_input-audit-report.md
 - DOCSTRING 1-1: Small sample file for Phase 3 manual text-extraction testing.
 - TODO 3-3: TODO: remove the temporary admin password before release
 - NOTE 4-4: NOTE: this sample intentionally contains several reviewable text types
@@ -228,6 +231,31 @@ Approved MVP rules:
 - `Findings == 0` maps to `NO ISSUES FOUND`
 - suggested replacement should display `No automatic suggestion generated.` when null
 - finding references must follow category prefixes such as `SEC-001`, `PRO-001`, and `CDX-001`
+
+## Phase 6.5 Report Writer Implementation
+
+The CLI now converts:
+
+`FileContent + ReviewableText[] + ReviewContext + Finding[] + backend metadata -> output/<filename>-audit-report.md`
+
+Current Report Writer behavior:
+
+- writes one Markdown audit report into `output/`
+- overwrites an existing report file without prompting
+- includes only data produced by the current pipeline
+- includes backend and model metadata when available
+- generates a report even when findings are empty
+- preserves finding order for both detailed sections and reference numbering
+
+Current report contents:
+
+- report header
+- metadata table
+- scan statistics
+- findings or zero-findings message
+- audit summary matrix
+- finding reference guide
+- review philosophy
 
 ## Phase 0.5 Spike
 

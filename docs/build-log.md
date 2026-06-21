@@ -371,3 +371,33 @@ Result:
 - Phase 6 implementation now has a documented Report Writer boundary and MVP
   output contract before coding begins.
 - Runtime behavior remains unchanged.
+
+### Phase 6.5 - Report Writer Implementation
+
+Completed:
+- Added `src/report_writer.py` with a focused Markdown-only report writer.
+- Added `ReportWriteError` for output-directory, write, invalid-data, and
+  unexpected report-generation failures.
+- Wired the CLI in `src/main.py` so it writes a report after agent review.
+- Added backend and model metadata handoff from Agent Review into Report
+  Writer.
+- Implemented per-category finding references such as `SEC-001` and `PRO-001`
+  while preserving finding order.
+- Implemented zero-findings report generation and the approved audit-status
+  rule.
+- Wrote reports into `output/` and overwrite existing report files without
+  prompting.
+- Updated status and architecture docs to reflect completed Phase 6.5
+  behavior.
+
+Tested:
+- Ran syntax compilation for `src/`.
+- Ran the CLI against `examples/sample_input.py --backend deterministic`.
+- Verified the CLI writes `output/sample_input-audit-report.md`.
+- Verified the generated report includes only currently available pipeline
+  metadata and statistics.
+
+Result:
+- Phase 6.5 now generates one human-readable Markdown audit report from the
+  existing pipeline output.
+- Runtime behavior remains intentionally limited to Markdown output only.

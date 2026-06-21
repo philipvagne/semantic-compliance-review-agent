@@ -3,11 +3,14 @@ import argparse
 from src.agent_review import AgentReviewError
 from src.agent_review import configure_backend
 from src.agent_review import get_backend_display_name
+from src.agent_review import get_model_display_name
 from src.agent_review import review
 from src.context_loader import ContextLoadError
 from src.context_loader import load_review_context
 from src.file_reader import FileReadError
 from src.file_reader import read_file
+from src.report_writer import ReportWriteError
+from src.report_writer import write_audit_report
 from src.text_extractor import ExtractionError
 from src.text_extractor import extract_reviewable_text
 
@@ -62,7 +65,20 @@ def main() -> None:
     except AgentReviewError as exc:
         raise SystemExit(f"Agent review failed: {exc}") from exc
 
+    try:
+        report_path = write_audit_report(
+            file_content=file_content,
+            reviewable_texts=reviewable_items,
+            review_context=review_context,
+            findings=findings,
+            backend=get_backend_display_name(),
+            model=get_model_display_name(),
+        )
+    except ReportWriteError as exc:
+        raise SystemExit(f"Report generation failed: {exc}") from exc
+
     print(f"Findings generated: {len(findings)}")
+    print(f"Report written to: {report_path}")
 
     for item in reviewable_items:
         preview = item.text.replace("\n", " ").strip()

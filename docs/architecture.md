@@ -7,6 +7,7 @@ The repository now contains:
 - a completed Phase 0.5 ADK feasibility spike
 - a completed Phase 2 File Reader
 - a completed Phase 3 Text Extractor for Python comments and docstrings
+- an approved Phase 3.5 Context Loader design
 - the documented MVP workflow for later phases
 
 The current runnable CLI path is the File Reader plus Text Extractor flow.
@@ -247,32 +248,113 @@ Example design output:
 
 Input:
 
-- sensitive_terms.yaml
-- project_context.yaml
+- `config/sensitive_terms.yaml`
+- `config/project_context.yaml`
 
 Output:
 
 ReviewContext
 
 - sensitive_terms
-- project_context
+- project_name
+- project_description
+- review_focus
 - config_warnings
 
 On Failure:
 
-- Missing config -> warn and continue
-- Empty sensitive terms -> semantic-only mode
-- Invalid config -> raise ContextLoadError
+- Missing config file -> warn and continue with empty/default context values
+- Empty config file -> warn and continue with empty/default context values
+- Invalid YAML -> raise ContextLoadError and stop the CLI run
+- Invalid structure/type -> raise ContextLoadError and stop the CLI run
+- Missing optional fields -> allowed; use default values
+
+Validation rules:
+
+For `config/sensitive_terms.yaml`:
+
+- Valid:
+
+```yaml
+sensitive_terms:
+  - Project Titan
+  - Falcon
+  - NovaPay
+```
+
+- Also valid:
+
+```yaml
+[]
+```
+
+- Also valid:
+  - empty file
+
+- Invalid:
+
+```yaml
+sensitive_terms: Project Titan
+```
+
+- Invalid:
+
+```yaml
+sensitive_terms:
+  - name: Project Titan
+```
+
+Expected resolution:
+
+- `sensitive_terms` must resolve to a list of strings
+
+For `config/project_context.yaml`:
+
+- All fields are optional
+
+- Valid partial config:
+
+```yaml
+project_name: Semantic Compliance Review Agent
+```
+
+- Valid partial config:
+
+```yaml
+review_focus:
+  - confidential information
+  - internal project names
+```
+
+- Invalid:
+
+```yaml
+review_focus: confidential information
+```
+
+Expected resolution:
+
+- `review_focus` must resolve to a list of strings
+- error messages for invalid YAML should include file path, config type, the
+  underlying YAML parser error, and line/column when available
+- error messages for invalid structure/type should explain the expected
+  structure
 
 Responsibility:
 
+- Load YAML safely
 - Load project context
 - Load organization-defined sensitive terms
+- Validate expected types
+- Return ReviewContext
+- Collect config warnings
 
 Does NOT:
 
 - Classify findings
+- Call ADK
 - Modify configuration
+- Generate reports
 
 ## Agent Review
 

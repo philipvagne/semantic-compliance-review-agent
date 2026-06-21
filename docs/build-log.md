@@ -154,3 +154,30 @@ Result:
 - Phase 3 now produces `ReviewableText[]` from Python source files within the
   approved MVP scope.
 - String literal extraction, agent review, and later phases remain deferred.
+
+### Phase 3.5 - Context Loading Design
+
+Completed:
+- Recorded the approved Context Loader design before Phase 4 implementation.
+- Documented the `ReviewableText[] + config files -> Context Loader -> ReviewContext`
+  flow.
+- Defined the `ReviewContext` contract fields:
+  `sensitive_terms`, `project_name`, `project_description`, `review_focus`,
+  and `config_warnings`.
+- Documented the approved config inputs:
+  `config/sensitive_terms.yaml` and `config/project_context.yaml`.
+- Documented failure behavior for missing files, empty files, invalid YAML, and
+  invalid structure/type cases.
+- Documented validation rules for `sensitive_terms.yaml` and
+  `project_context.yaml`, including valid and invalid examples.
+- Updated status docs so Phase 3.5 is recorded as a design step and Phase 4
+  remains the next implementation phase.
+
+Tested:
+- Documentation-only task; no runtime code was changed.
+- Reviewed README, project plan, architecture, and workflow alignment.
+
+Result:
+- Phase 4 now has an approved Context Loader contract and failure model before
+  implementation begins.
+- Runtime behavior remains unchanged.

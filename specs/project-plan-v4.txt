@@ -18,12 +18,13 @@ Completed:
 [✓] Phase 2 File Reader Implemented
 [✓] Phase 2.5 Text Extraction Design Approved
 [✓] Phase 3 Text Extraction Implemented
+[✓] Phase 3.5 Context Loading Design Approved
 
 Current Phase:
-PHASE 4 - CONTEXT LOADING
+PHASE 3.5 - CONTEXT LOADING DESIGN
 
 Next Milestone:
-PHASE 5 - ADK AGENT REVIEW
+PHASE 4 - CONTEXT LOADING
 
 ================================================================================
 PROJECT OVERVIEW
@@ -862,6 +863,34 @@ PHASE 3 — TEXT EXTRACTION
 - Preserve line numbers
 - Keep executable code untouched
 
+PHASE 3.5 — CONTEXT LOADING DESIGN
+
+- Document the `ReviewableText[] + config files -> Context Loader -> ReviewContext` flow
+- Document the `ReviewContext` contract
+- Lock config file expectations before Phase 4 coding begins
+- Record failure behavior and non-responsibilities
+
+Approved config inputs:
+
+- `config/sensitive_terms.yaml`
+- `config/project_context.yaml`
+
+Approved `ReviewContext` fields:
+
+- `sensitive_terms: list[str]`
+- `project_name: str | None`
+- `project_description: str | None`
+- `review_focus: list[str]`
+- `config_warnings: list[str]`
+
+Exit Criteria:
+
+[✓] ReviewContext contract documented
+[✓] Config input files documented
+[✓] Failure behavior documented
+[✓] Validation rules documented
+[✓] Phase 4 coding boundary clarified
+
 PHASE 4 — CONTEXT LOADING
 
 - Load sensitive_terms.yaml
@@ -1039,6 +1068,7 @@ Completed:
 - File Reader implemented
 - Text Extraction design approved
 - Text Extraction implemented for Python comments and docstrings
+- Context Loading design approved
 
 Next Actions:
 

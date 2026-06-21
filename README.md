@@ -12,7 +12,8 @@ Foundation review complete.
 Phase 2 - File Reader complete.
 Phase 2.5 - Text Extraction design complete.
 Phase 3 - Text Extraction complete for Python comments and docstrings.
-Next: Phase 4 - Context Loading.
+Phase 3.5 - Context Loading design complete.
+Next: Phase 4 - Context Loading implementation.
 
 ## Purpose
 
@@ -21,7 +22,7 @@ human-written text inside source code repositories.
 
 ## Current Phase
 
-Phase 4 - Context Loading
+Phase 3.5 - Context Loading Design
 
 ## Phase 3 Text Extraction
 
@@ -64,6 +65,33 @@ Explicitly deferred from the first implementation:
 - agent review
 - risk classification
 - report generation
+
+## Phase 3.5 Context Loading Design
+
+The next component has now been documented before implementation:
+
+`ReviewableText[] + config files -> Context Loader -> ReviewContext`
+
+Approved config inputs:
+
+- `config/sensitive_terms.yaml`
+- `config/project_context.yaml`
+
+Approved `ReviewContext` fields:
+
+- `sensitive_terms: list[str]`
+- `project_name: str | None`
+- `project_description: str | None`
+- `review_focus: list[str]`
+- `config_warnings: list[str]`
+
+Approved failure behavior:
+
+- missing config file -> warn and continue with defaults
+- empty config file -> warn and continue with defaults
+- invalid YAML -> raise `ContextLoadError`
+- invalid structure/type -> raise `ContextLoadError`
+- missing optional fields -> allowed
 
 ## Phase 0.5 Spike
 

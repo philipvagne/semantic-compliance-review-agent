@@ -25,6 +25,47 @@ This project extracts reviewable text, adds project context, sends it through
 an ADK-backed review boundary, and produces a structured Markdown audit report
 for human review.
 
+## Architecture Diagram
+
+```mermaid
+flowchart TD
+    A["Supported Inputs<br/>.py .js .ts .jsx .tsx .html .md"] --> B["File Reader"]
+    B --> C["Text Extractor<br/>multi-file human-written text extraction"]
+    C --> D["Context Loader"]
+    E["project_context.yaml"] --> D
+    F["sensitive_terms.yaml"] --> D
+    D --> G["Agent Review"]
+    C --> G
+    G --> H{"Review Backend"}
+    H --> I["Gemini"]
+    H --> J["Deterministic"]
+    I --> K["Structured Finding objects"]
+    J --> K
+    K --> L["Report Writer"]
+    L --> M["Markdown Audit Report<br/>advisory artifact for human review"]
+```
+
+## Key Concepts Demonstrated
+
+### ADK Agent Architecture
+
+The project uses an ADK-backed review boundary to turn extracted human-written
+text plus project context into structured findings. The architecture stays
+narrow and explainable: one file in, one review flow, one report out.
+
+### Security Guardrails
+
+The tool is intentionally advisory. It does not auto-edit files, auto-commit
+changes, or silently switch backends when Gemini fails. Human review remains
+the final decision point for any suggested remediation.
+
+### Agent Skills / CLI Workflow
+
+The project demonstrates a tool-like agent workflow through explicit CLI stages:
+file reading, text extraction, context loading, agent review, and report
+writing. This keeps the system easy to demo, easy to trace, and honest about
+what is and is not automated.
+
 ## What The Agent Does Today
 
 Current implemented workflow:
@@ -334,7 +375,7 @@ Current phase:
 
 Most recently completed:
 
-- Phase 6.96C - Markdown Extraction
+- Phase 6.97 - Submission Readiness Foundation
 
 Implemented through Phase 6.96C:
 
@@ -352,6 +393,7 @@ Implemented through Phase 6.96C:
 - JavaScript-family extraction for `.js`, `.ts`, `.jsx`, and `.tsx`
 - HTML comment extraction for `.html`
 - Markdown prose-block extraction for `.md`
+- submission-readiness documentation and reviewer-facing project framing
 
 Not implemented yet:
 
@@ -372,6 +414,7 @@ Highest-priority gaps before submission:
 - implement clean-copy generation with guardrails
 - implement evaluation with hand-built cases and expected results
 - keep the end-to-end demo stable and reproducible
+- finish the final writeup and short demo video package
 
 ## Documentation Guide
 

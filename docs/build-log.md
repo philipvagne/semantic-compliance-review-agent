@@ -2,6 +2,31 @@
 
 ## 2026-06-22
 
+### Phase 6.97 - Submission Readiness Foundation
+
+Completed:
+- Added a Mermaid architecture diagram to `README.md` showing supported input
+  types, the extraction pipeline, config inputs, backend branching, structured
+  findings, and the advisory Markdown report output.
+- Added a `Key Concepts Demonstrated` section to `README.md` covering ADK agent
+  architecture, security guardrails, and the agent-skills/CLI workflow story.
+- Added `docs/video-writeup-skeleton.md` as planning notes for the capstone
+  writeup and short demo video.
+- Reviewed all current demo example files and confirmed they were already clear
+  enough for submission-oriented documentation.
+- Updated status docs so Phase 6.97 is recorded without claiming new runtime
+  capabilities.
+
+Tested:
+- Documentation-only task; no runtime code or extraction behavior was changed.
+- Re-read the current examples and implementation-facing docs to keep the new
+  presentation material aligned with actual supported behavior.
+
+Result:
+- The repository now explains the architecture and capstone concept mapping
+  more clearly for reviewers without expanding product scope.
+- Phase 7 remains the next implementation step.
+
 ### Phase 6.96C - Markdown Extraction
 
 Completed:

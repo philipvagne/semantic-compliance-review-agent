@@ -23,12 +23,17 @@ The repository now contains:
 - a completed Phase 6.96A JavaScript-family Extraction
 - a completed Phase 6.96B HTML Extraction
 - a completed Phase 6.96C Markdown Extraction
+- a completed Phase 6.97 Submission Readiness Foundation
 - the documented MVP workflow for later phases
 
 The current runnable CLI path is the File Reader plus Text Extractor plus
 Context Loader plus Agent Review plus Report Writer flow.
 
 The next approved implementation step is Phase 7: Clean Copy Generation.
+
+Phase 6.97 did not change runtime behavior. It improved submission readiness by
+adding clearer reviewer-facing architecture explanation, concept framing, and a
+video/writeup planning scaffold.
 
 ## Implemented Flow
 

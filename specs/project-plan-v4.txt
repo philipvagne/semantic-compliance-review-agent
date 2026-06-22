@@ -36,6 +36,7 @@ Completed:
 [completed] Phase 6.96A JavaScript-family Extraction Implemented
 [completed] Phase 6.96B HTML Extraction Implemented
 [completed] Phase 6.96C Markdown Extraction Implemented
+[completed] Phase 6.97 Submission Readiness Foundation Implemented
 
 Current Phase:
 PHASE 7 - CLEAN COPY GENERATION
@@ -1391,6 +1392,21 @@ Exit Criteria:
 [completed] Deterministic CLI run works for `examples/sample_input.md`
 [completed] `README.md` now runs successfully with Markdown support
 
+PHASE 6.97 - SUBMISSION READINESS FOUNDATION
+
+- Add a reviewer-friendly Mermaid architecture diagram to `README.md`
+- Add a concise capstone concept framing section to `README.md`
+- Add planning notes for the video/writeup package
+- Improve submission readiness without changing runtime behavior
+
+Exit Criteria:
+
+[completed] `README.md` includes a Mermaid architecture diagram
+[completed] `README.md` includes a clear key-concepts section
+[completed] `docs/video-writeup-skeleton.md` exists
+[completed] Build log records the submission-readiness pass
+[completed] No runtime behavior changed
+
 PHASE 7 — CLEAN COPY GENERATION
 
 - Generate suggested clean copy
@@ -1561,6 +1577,7 @@ Completed:
 - JavaScript-family extraction implemented
 - HTML extraction implemented
 - Markdown extraction implemented
+- Submission-readiness foundation documented
 
 Next Actions:
 

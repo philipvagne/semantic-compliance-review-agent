@@ -38,10 +38,11 @@ Current implemented workflow:
 
 Current supported extraction scope:
 
-- Python files only
-- comments
-- docstrings
-- TODO / FIXME / NOTE comments
+- Python files:
+  comments, docstrings, TODO / FIXME / NOTE comments
+- JavaScript-family files (`.js`, `.ts`, `.jsx`, `.tsx`):
+  `//` comments, `/* */` block comments, `/** */` JSDoc blocks, and
+  TODO / FIXME / NOTE comments
 
 If the input file type is unsupported, the CLI fails clearly and no audit is
 performed.
@@ -52,8 +53,14 @@ Approved next extraction design for the upcoming implementation phase:
 - `.html` via HTML comments only
 - `.md` via headings, paragraphs, list items, and blockquotes
 
-This approved expansion is documentation-only at this stage. The current
-runtime remains Python-only until the extraction implementation phase lands.
+Implemented now:
+
+- JavaScript-family extraction for `.js`, `.ts`, `.jsx`, and `.tsx`
+
+Still design-only for later Phase 6.96 slices:
+
+- `.html` via HTML comments only
+- `.md` via headings, paragraphs, list items, and blockquotes
 
 Current review outputs:
 
@@ -81,9 +88,9 @@ The current implementation does not yet provide:
 
 Important scope truth:
 
-Current extraction support is Python-only.
+Current extraction support includes Python plus JavaScript-family comments.
 
-The multi-language extraction design is now approved, but not yet implemented.
+The broader multi-language design is only partially implemented so far.
 
 Required before final submission:
 
@@ -146,11 +153,18 @@ Deterministic offline/test run:
 python -m src.main examples/sample_input.py --backend deterministic
 ```
 
+JavaScript-family deterministic test run:
+
+```text
+python -m src.main examples/sample_input.js --backend deterministic
+```
+
 ## Example Behavior
 
 Current sample input:
 
 - `examples/sample_input.py`
+- `examples/sample_input.js`
 
 Generated report location:
 
@@ -174,7 +188,7 @@ The exact findings may differ between Gemini and deterministic mode.
 Unsupported file example:
 
 ```text
-Text extraction failed: Unsupported file type '.md' for semantic review. Current supported file types: .py. No audit was performed.
+Text extraction failed: Unsupported file type '.md' for semantic review. Current supported file types: .py, .js, .ts, .jsx, .tsx. No audit was performed.
 ```
 
 ## Backends
@@ -274,6 +288,7 @@ semantic-compliance-review-agent/
     project_context.yaml
   examples/
     sample_input.py
+    sample_input.js
     sample-audit-report.md
   output/
     sample_input-audit-report.md
@@ -284,6 +299,9 @@ semantic-compliance-review-agent/
     main.py
     file_reader.py
     text_extractor.py
+    extractors/
+      __init__.py
+      javascript_extractor.py
     context_loader.py
     agent_review.py
     report_writer.py
@@ -299,9 +317,9 @@ Current phase:
 
 Most recently completed:
 
-- Phase 6.95 - Multi-language Extraction Design
+- Phase 6.96A - JavaScript-family Extraction
 
-Implemented through Phase 6.9B:
+Implemented through Phase 6.96A:
 
 - repository foundation
 - ADK feasibility spike
@@ -314,6 +332,7 @@ Implemented through Phase 6.9B:
 - Markdown report generation
 - report readability and presentation polish
 - runtime cleanup and fail-clear unsupported-file behavior
+- JavaScript-family extraction for `.js`, `.ts`, `.jsx`, and `.tsx`
 
 Approved next implementation scope:
 
@@ -326,7 +345,8 @@ Approved next implementation scope:
 
 Not implemented yet:
 
-- multi-language extraction runtime support
+- HTML extraction
+- Markdown extraction
 - clean-copy generation
 - evaluation harness
 

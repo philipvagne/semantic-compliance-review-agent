@@ -2,65 +2,40 @@
 
 |                                |                            |
 | ------------------------------ | -------------------------- |
-| **Target File**                | `examples/sample_input.py` |
-| **Generated On**               | 2026-06-21 · 17:55 UTC     |
+| **Target File**                | `examples/sample_input.js` |
+| **Generated On**               | 2026-06-22 · 06:14 UTC     |
 | **Backend**                    | Deterministic              |
 | **Model**                      | `deterministic-local`      |
 | **Configured Sensitive Terms** | 3                          |
-| **Findings Count**             | 1                          |
-| **Audit Status**               | **ISSUES FOUND**           |
+| **Findings Count**             | 0                          |
+| **Audit Status**               | **NO ISSUES FOUND**        |
 
 ---
 
 ## Executive Summary
 
-This audit completed with status **ISSUES FOUND**.
+This audit completed with status **NO ISSUES FOUND**.
 
-- Reviewable text items analyzed: 6
-- Findings generated: 1
-- Highest severity found: 🟠 High
-- Categories detected: Security Risk
+- Reviewable text items analyzed: 5
+- Findings generated: 0
+- Highest severity found: None
+- Categories detected: None
 
 ---
 
 ## Audit Summary Matrix
 
-| Reference | Category      | Severity | Confidence |
-| --------- | ------------- | -------- | ---------- |
-| SEC-001   | Security Risk | 🟠 High   | ● High     |
+| Reference | Category    | Severity | Confidence |
+| --------- | ----------- | -------- | ---------- |
+| -         | No findings | -        | -          |
 
 ---
 
 ## Detailed Findings
 
-### SEC-001: Security Risk
-
-**Severity:** 🟠 High | **Confidence:** ● High
-
-**Detection Method:** Semantic Analysis
-
-`examples/sample_input.py` — line 3
-
-#### Source Text
-
-```text
-TODO: remove the temporary admin password before release
-```
-
-#### Why This Was Flagged
-
-- The text references a temporary or administrative secret-like value that should be reviewed before release.
-
-#### Recommended Action
-
-Remove the sensitive reference or replace it with a neutral, human-reviewed task description.
-
-#### Suggested Replacement
-
-```diff
-- TODO: remove the temporary admin password before release
-+ TODO: remove the temporary admin credential reference before release
-```
+No findings were generated for this file.
+The audit completed successfully.
+Human review is still recommended before publication or release.
 
 ---
 

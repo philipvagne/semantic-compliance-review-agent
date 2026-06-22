@@ -11,6 +11,7 @@ Output:
 
 Responsibilities:
 - Extract Python comments and docstrings.
+- Extract JavaScript-family comments and JSDoc blocks.
 - Classify TODO, FIXME, and NOTE comments into distinct source types.
 - Preserve line numbers, language, and surrounding context.
 
@@ -28,12 +29,15 @@ import io
 import re
 import tokenize
 
+from src.extractors import extract_javascript_family_text
 from src.schemas import FileContent
 from src.schemas import ReviewableText
 
 
 SPECIAL_COMMENT_PATTERN = re.compile(r"^(TODO|FIXME|NOTE)\b[:\-\s]?(.*)$", re.IGNORECASE)
-SUPPORTED_SOURCE_EXTENSIONS = (".py",)
+PYTHON_SOURCE_EXTENSIONS = (".py",)
+JAVASCRIPT_FAMILY_EXTENSIONS = (".js", ".ts", ".jsx", ".tsx")
+SUPPORTED_SOURCE_EXTENSIONS = PYTHON_SOURCE_EXTENSIONS + JAVASCRIPT_FAMILY_EXTENSIONS
 
 
 class ExtractionError(Exception):
@@ -42,6 +46,12 @@ class ExtractionError(Exception):
 
 def extract_reviewable_text(file_content: FileContent) -> list[ReviewableText]:
     _validate_supported_file_type(file_content)
+
+    if file_content.extension.lower() in JAVASCRIPT_FAMILY_EXTENSIONS:
+        extracted_items = extract_javascript_family_text(file_content)
+        for index, item in enumerate(extracted_items, start=1):
+            item.id = _build_item_id(file_content, item, index)
+        return extracted_items
 
     try:
         comments = _extract_comments(file_content)

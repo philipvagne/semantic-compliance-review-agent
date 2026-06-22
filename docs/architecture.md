@@ -20,6 +20,7 @@ The repository now contains:
 - a completed Phase 6.75 Report Polish & Humanization
 - a completed Phase 6.9B Runtime Cleanup
 - an approved Phase 6.95 Multi-language Extraction Design
+- a completed Phase 6.96A JavaScript-family Extraction
 - the documented MVP workflow for later phases
 
 The current runnable CLI path is the File Reader plus Text Extractor plus
@@ -40,10 +41,10 @@ User
 -> Console Summary
 
 The current CLI accepts one source file path, reads it as UTF-8, extracts
-reviewable text from Python files, loads review context from YAML config files,
-reviews the extracted text through the Agent Review boundary, writes one
-Markdown audit report, and prints a console summary of the extracted items,
-loaded context, findings, and report path.
+reviewable text from Python and JavaScript-family source files, loads review
+context from YAML config files, reviews the extracted text through the Agent
+Review boundary, writes one Markdown audit report, and prints a console summary
+of the extracted items, loaded context, findings, and report path.
 
 If the file type is unsupported, the CLI now fails clearly before review and no
 audit report is generated.
@@ -292,6 +293,17 @@ Phase 3 implementation note:
   docstrings so line numbers remain traceable without touching executable code
 - unsupported non-Python inputs now fail clearly with a message that lists the
   current supported file type and states that no audit was performed
+
+Phase 6.96A implementation note:
+
+- `src/text_extractor.py` now dispatches `.js`, `.ts`, `.jsx`, and `.tsx` to
+  `src/extractors/javascript_extractor.py`
+- the JavaScript-family extractor scans only comment surfaces:
+  `//`, `/* */`, and `/** */`
+- `.js` and `.jsx` items use `language="javascript"`
+- `.ts` and `.tsx` items use `language="typescript"`
+- unsupported file types still fail clearly
+- `.html` and `.md` extraction remain unimplemented in this slice
 
 Example design input:
 

@@ -2,6 +2,34 @@
 
 ## 2026-06-22
 
+### Phase 6.96A - JavaScript-family Extraction
+
+Completed:
+- Added `src/extractors/__init__.py` and
+  `src/extractors/javascript_extractor.py`.
+- Expanded `src/text_extractor.py` so `.js`, `.ts`, `.jsx`, and `.tsx` now use
+  a JavaScript-family extractor while `.py` keeps the existing Python path.
+- Implemented extraction for `//` comments, `/* */` block comments, `/** */`
+  JSDoc blocks, and TODO / FIXME / NOTE comment types in JavaScript-family
+  files.
+- Preserved existing metadata fields for extracted items, including line
+  numbers, language, and surrounding context.
+- Added `examples/sample_input.js` for manual end-to-end verification.
+- Kept unsupported-file behavior strict so Markdown still fails clearly in this
+  slice.
+
+Tested:
+- Ran `python -m compileall src`.
+- Ran `python -m src.main examples/sample_input.py --backend deterministic`.
+- Ran `python -m src.main examples/sample_input.js --backend deterministic`.
+- Ran `python -m src.main README.md --backend deterministic`.
+
+Result:
+- Python extraction still works.
+- JavaScript-family files now flow through the existing CLI, context, review,
+  and report pipeline without changing downstream components.
+- HTML and Markdown extraction remain deferred to later Phase 6.96 slices.
+
 ### Phase 6.95 - Multi-language Extraction Design
 
 Completed:

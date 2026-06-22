@@ -48,7 +48,13 @@ def extract_reviewable_text(file_content: FileContent) -> list[ReviewableText]:
     _validate_supported_file_type(file_content)
 
     if file_content.extension.lower() in JAVASCRIPT_FAMILY_EXTENSIONS:
-        extracted_items = extract_javascript_family_text(file_content)
+        try:
+            extracted_items = extract_javascript_family_text(file_content)
+        except (OSError, ValueError) as exc:
+            raise ExtractionError(f"Failed to extract reviewable text from {file_content.path}") from exc
+        except Exception as exc:
+            raise ExtractionError(f"Unexpected extraction failure for {file_content.path}") from exc
+
         for index, item in enumerate(extracted_items, start=1):
             item.id = _build_item_id(file_content, item, index)
         return extracted_items

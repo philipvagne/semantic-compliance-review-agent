@@ -88,6 +88,7 @@ def extract_javascript_family_text(file_content: FileContent) -> list[Reviewable
             comment_start = index
             comment_line_start = line_number
             index += 2
+            comment_closed = False
 
             while index < length - 1:
                 if raw_text[index] == "\n":
@@ -95,9 +96,11 @@ def extract_javascript_family_text(file_content: FileContent) -> list[Reviewable
                 if raw_text[index] == "*" and raw_text[index + 1] == "/":
                     comment_body_end = index
                     index += 2
+                    comment_closed = True
                     break
                 index += 1
-            else:
+
+            if not comment_closed:
                 comment_body_end = length
                 index = length
 

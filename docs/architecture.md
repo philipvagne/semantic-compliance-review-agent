@@ -18,12 +18,15 @@ The repository now contains:
 - an approved Phase 6.6 Report Experience & Readability design
 - a completed Phase 6.7 Report Readability implementation
 - a completed Phase 6.75 Report Polish & Humanization
+- a completed Phase 6.9B Runtime Cleanup
+- an approved Phase 6.95 Multi-language Extraction Design
 - the documented MVP workflow for later phases
 
 The current runnable CLI path is the File Reader plus Text Extractor plus
 Context Loader plus Agent Review plus Report Writer flow.
 
-The next approved implementation step is Phase 7: Clean Copy Generation.
+The next approved implementation step is Phase 6.96: Multi-language
+Extraction Implementation.
 
 ## Implemented Flow
 
@@ -208,6 +211,61 @@ Reason:
 - Comments and docstrings are the core promise
 - String literals add complexity and higher misclassification risk
 - String literal extraction should be added later as a controlled expansion
+
+Phase 6.95 approved expansion design:
+
+- Keep the pipeline architecture unchanged:
+  `File Reader -> Text Extractor -> Context Loader -> Agent Review -> Report Writer`
+- Expand only the Text Extractor component in the next implementation phase
+- Treat the problem as human-written text extraction across common project
+  files, not full language parsing
+- Keep `FileContent`, `ReviewableText`, and `Finding` unchanged
+- Keep Agent Review, Gemini prompt behavior, Report Writer, Context Loader, and
+  File Reader unchanged
+
+Approved extractor families for Phase 6.96:
+
+- Python extractor for `.py`
+  - reviewable text: comments, docstrings, TODO / FIXME / NOTE comments
+  - behavior: keep current extraction behavior
+- JavaScript-family extractor for `.js`, `.ts`, `.jsx`, `.tsx`
+  - reviewable text: `//` comments, `/* */` block comments, `/** */` JSDoc,
+    and TODO / FIXME / NOTE comments
+  - do not parse: strings, imports, object keys, JSX visible text, or
+    executable code
+  - `.jsx` and `.tsx` remain comment-only in the MVP
+- HTML extractor for `.html`
+  - reviewable text: `<!-- -->` comments only
+  - do not parse: visible page text, attributes, script contents, style
+    contents, or meta tags
+- Markdown extractor for `.md`
+  - reviewable text: headings, paragraphs, list items, and blockquotes
+  - granularity: one heading, paragraph, list item, or blockquote becomes one
+    `ReviewableText` item
+  - exclude fenced code blocks from extraction
+  - retain inline code spans inside surrounding prose items
+
+Approved dispatcher design:
+
+- `src/text_extractor.py` remains the public entry point and dispatcher
+- planned extension mapping:
+  - `.py -> Python extractor`
+  - `.js -> JavaScript-family extractor`
+  - `.ts -> JavaScript-family extractor`
+  - `.jsx -> JavaScript-family extractor`
+  - `.tsx -> JavaScript-family extractor`
+  - `.html -> HTML extractor`
+  - `.md -> Markdown extractor`
+- unsupported file types should continue to fail clearly
+
+Recommended module layout for Phase 6.96:
+
+- `src/extractors/__init__.py`
+- `src/extractors/python_extractor.py`
+- `src/extractors/javascript_extractor.py`
+- `src/extractors/html_extractor.py`
+- `src/extractors/markdown_extractor.py`
+- `src/text_extractor.py` as dispatcher
 
 Responsibility:
 
@@ -734,6 +792,14 @@ Phase 6.9B cleanup note:
   required module-level docstrings
 - CLI config warnings now print the warning messages instead of only a count
 - `.gitignore` now blocks common local environment and secret files more safely
+
+Phase 6.95 design note:
+
+- the next extraction expansion remains a documentation-approved design only
+- only the Text Extractor is allowed to expand in Phase 6.96
+- multi-language support is limited to human-written text surfaces, not full
+  parsing of Python, JavaScript, TypeScript, JSX, TSX, HTML, or Markdown
+- unsupported file types should continue to fail clearly after the expansion
 
 Phase 6.75 implementation note:
 

@@ -32,12 +32,13 @@ Completed:
 [✓] Phase 6.75 Report Polish & Humanization Implemented
 [completed] Phase 6.9A Documentation & Submission Readiness Implemented
 [completed] Phase 6.9B Runtime Cleanup Implemented
+[completed] Phase 6.95 Multi-language Extraction Design Approved
 
 Current Phase:
-PHASE 7 - CLEAN COPY GENERATION
+PHASE 6.96 - MULTI-LANGUAGE EXTRACTION IMPLEMENTATION
 
 Next Milestone:
-PHASE 8 - EVALUATION
+PHASE 7 - CLEAN COPY GENERATION
 
 ================================================================================
 PROJECT OVERVIEW
@@ -1246,6 +1247,96 @@ Exit Criteria:
 [✓] No-suggestion messaging improved
 [✓] Report structure preserved
 
+PHASE 6.95 — MULTI-LANGUAGE EXTRACTION DESIGN
+
+- Document the approved expansion of the Text Extractor before implementation
+- Keep the architecture unchanged:
+  File Reader -> Text Extractor -> Context Loader -> Agent Review -> Report Writer
+- Treat the scope as human-written text extraction across common project files,
+  not full language parsing
+- Preserve the existing schemas and downstream review/report boundaries
+
+Approved supported file types for Phase 6.96:
+
+- `.py`
+- `.js`
+- `.ts`
+- `.jsx`
+- `.tsx`
+- `.html`
+- `.md`
+
+Approved extractor families:
+
+1. Python extractor
+   - `.py`
+   - comments
+   - docstrings
+   - TODO / FIXME / NOTE comments
+   - keep current behavior
+
+2. JavaScript-family extractor
+   - `.js`, `.ts`, `.jsx`, `.tsx`
+   - `//` line comments
+   - `/* */` block comments
+   - `/** */` JSDoc blocks
+   - TODO / FIXME / NOTE comments
+   - do not parse strings, imports, object keys, JSX visible text, or executable code
+
+3. HTML extractor
+   - `.html`
+   - `<!-- HTML comments -->`
+   - do not parse visible page text, attributes, script contents, style contents, or meta tags
+
+4. Markdown extractor
+   - `.md`
+   - headings
+   - paragraphs
+   - list items
+   - blockquotes
+   - exclude fenced code blocks
+   - keep inline code spans inside surrounding prose items
+
+Approved dispatcher design:
+
+- `src/text_extractor.py` remains the dispatcher
+- planned mapping:
+  - `.py -> Python extractor`
+  - `.js -> JavaScript-family extractor`
+  - `.ts -> JavaScript-family extractor`
+  - `.jsx -> JavaScript-family extractor`
+  - `.tsx -> JavaScript-family extractor`
+  - `.html -> HTML extractor`
+  - `.md -> Markdown extractor`
+- unsupported file types should continue to fail clearly
+
+Recommended module layout for Phase 6.96:
+
+- `src/extractors/__init__.py`
+- `src/extractors/python_extractor.py`
+- `src/extractors/javascript_extractor.py`
+- `src/extractors/html_extractor.py`
+- `src/extractors/markdown_extractor.py`
+- `src/text_extractor.py` as dispatcher
+
+Exit Criteria:
+
+[✓] Supported file types approved
+[✓] Extractor families documented
+[✓] Dispatcher design documented
+[✓] Non-goals documented
+[✓] Phase 6.96 coding boundary clarified
+
+PHASE 6.96 — MULTI-LANGUAGE EXTRACTION IMPLEMENTATION
+
+- Expand extraction support only
+- Keep schemas unchanged
+- Keep Agent Review unchanged
+- Keep Gemini prompts unchanged
+- Keep Report Writer unchanged
+- Keep Context Loader unchanged
+- Keep File Reader unchanged
+
 PHASE 7 — CLEAN COPY GENERATION
 
 - Generate suggested clean copy
@@ -1412,13 +1503,15 @@ Completed:
 - Report polish and humanization implemented
 - Documentation and submission-readiness stabilization completed
 - Runtime cleanup completed
+- Multi-language extraction design approved
 
 Next Actions:
 
-1. Begin Phase 7 - Clean Copy Generation
-2. Keep source modification optional and separate from reporting
+1. Begin Phase 6.96 - Multi-language Extraction Implementation
+2. Keep the implementation limited to extractor expansion only
 3. Preserve the human-in-the-loop guardrails while keeping repository-wide scanning deferred
-4. Begin Phase 8 - Evaluation after clean-copy generation
+4. Begin Phase 7 - Clean Copy Generation after extraction support is in place
+5. Begin Phase 8 - Evaluation after clean-copy generation
 
 Future Polish:
 - Convert "Why This Was Flagged" explanations into concise audit-style bullet points.

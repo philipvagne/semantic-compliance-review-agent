@@ -1,5 +1,37 @@
 # Build Log
 
+## 2026-06-22
+
+### Phase 6.95 - Multi-language Extraction Design
+
+Completed:
+- Documented the approved expansion of the Text Extractor from Python-only
+  extraction to human-written text extraction across common project files.
+- Recorded the approved supported file set for the next implementation phase:
+  `.py`, `.js`, `.ts`, `.jsx`, `.tsx`, `.html`, and `.md`.
+- Documented four extractor families:
+  Python, JavaScript-family, HTML, and Markdown.
+- Documented the approved dispatcher role for `src/text_extractor.py` and the
+  recommended `src/extractors/` module layout for Phase 6.96.
+- Documented the explicit non-goals for the upcoming implementation:
+  no schema changes, no Agent Review changes, no Gemini prompt changes, no
+  Report Writer changes, no evaluation additions, and no clean-copy generation.
+- Updated status docs so Phase 6.95 is recorded as complete and Phase 6.96
+  becomes the next implementation step.
+
+Tested:
+- Documentation-only task; no runtime code was changed.
+- Re-read the current extractor entry point and shared schemas to confirm the
+  approved design preserves the existing component boundaries.
+- Reviewed README, project plan, architecture, decisions, and workflow-facing
+  docs for consistency with the new extraction design record.
+
+Result:
+- The repository now contains an explicit approved design for multi-language
+  extraction before implementation begins.
+- Phase 6.96 can focus on extraction-only runtime work without reopening the
+  architecture boundary.
+
 ## 2026-06-20
 
 ### Repository Foundation

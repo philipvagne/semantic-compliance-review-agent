@@ -247,3 +247,73 @@ no audit was performed.
 Status:
 
 Accepted
+
+## 2026-06-22
+
+### Expand Only the Text Extractor for Multi-language Support
+
+Decision:
+
+Implement the required multi-language expansion by changing only the Text
+Extractor layer and keeping the rest of the pipeline contract unchanged.
+
+Reason:
+
+This preserves the explainable architecture and avoids dragging schema,
+review-agent, prompt, report, or context-loading changes into an extraction
+scope increase.
+
+Status:
+
+Accepted
+
+### Treat Multi-language Support as Human-Written Text Extraction, Not Full Parsing
+
+Decision:
+
+Support common project files by extracting human-written text surfaces rather
+than attempting full language parsing.
+
+Reason:
+
+The project goal is semantic review of comments and documentation, not general
+purpose source understanding. Narrow extraction rules reduce complexity and
+lower the risk of accidentally reviewing executable code or unrelated syntax.
+
+Status:
+
+Accepted
+
+### Keep JSX and TSX Comment-Only in the MVP
+
+Decision:
+
+For `.jsx` and `.tsx`, extract only JavaScript-style comments in the MVP and
+do not attempt full JSX or TSX text parsing.
+
+Reason:
+
+Visible JSX text, nested markup, and mixed syntax introduce parsing complexity
+that is outside the current extraction-only phase. Comment-only support meets
+the narrow MVP goal more safely.
+
+Status:
+
+Accepted
+
+### Exclude Markdown Fenced Code Blocks from Reviewable Text
+
+Decision:
+
+Treat Markdown prose as reviewable text, but exclude fenced code blocks from
+extraction in the MVP.
+
+Reason:
+
+Fenced code blocks are often examples or copied snippets rather than
+human-written repository guidance. Excluding them keeps Markdown extraction
+focused on headings, paragraphs, lists, and blockquotes.
+
+Status:
+
+Accepted

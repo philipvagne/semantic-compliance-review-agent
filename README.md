@@ -46,6 +46,15 @@ Current supported extraction scope:
 If the input file type is unsupported, the CLI fails clearly and no audit is
 performed.
 
+Approved next extraction design for the upcoming implementation phase:
+
+- `.js`, `.ts`, `.jsx`, and `.tsx` via JavaScript-style comments only
+- `.html` via HTML comments only
+- `.md` via headings, paragraphs, list items, and blockquotes
+
+This approved expansion is documentation-only at this stage. The current
+runtime remains Python-only until the extraction implementation phase lands.
+
 Current review outputs:
 
 - structured findings
@@ -73,6 +82,8 @@ The current implementation does not yet provide:
 Important scope truth:
 
 Current extraction support is Python-only.
+
+The multi-language extraction design is now approved, but not yet implemented.
 
 Required before final submission:
 
@@ -284,13 +295,13 @@ semantic-compliance-review-agent/
 
 Current phase:
 
-- Phase 7 - Clean Copy Generation
+- Phase 6.96 - Multi-language Extraction Implementation
 
 Most recently completed:
 
-- Phase 6.9B - Runtime Cleanup
+- Phase 6.95 - Multi-language Extraction Design
 
-Implemented through Phase 6.75:
+Implemented through Phase 6.9B:
 
 - repository foundation
 - ADK feasibility spike
@@ -302,25 +313,35 @@ Implemented through Phase 6.75:
 - deterministic backend
 - Markdown report generation
 - report readability and presentation polish
+- runtime cleanup and fail-clear unsupported-file behavior
+
+Approved next implementation scope:
+
+- keep the pipeline architecture unchanged
+- expand only `src/text_extractor.py`
+- add extractor support for `.py`, `.js`, `.ts`, `.jsx`, `.tsx`, `.html`, and
+  `.md`
+- keep schemas, Agent Review, Gemini prompts, Context Loader, and Report
+  Writer unchanged
 
 Not implemented yet:
 
+- multi-language extraction runtime support
 - clean-copy generation
 - evaluation harness
-- required multi-language extraction for submission
 
 ## Roadmap Before Submission
 
 Expected next phases:
 
-1. Phase 7 - Clean Copy Generation
-2. Phase 8 - Evaluation
-3. Phase 9 - Final Documentation
-4. Phase 10 - Submission Prep
+1. Phase 6.96 - Multi-language Extraction Implementation
+2. Phase 7 - Clean Copy Generation
+3. Phase 8 - Evaluation
+4. Phase 9 - Final Documentation
+5. Phase 10 - Submission Prep
 
 Highest-priority gaps before submission:
 
-- align capstone-facing documentation fully with runtime behavior
 - add broader extraction coverage beyond Python
 - implement evaluation with hand-built cases and expected results
 - keep the end-to-end demo stable and reproducible

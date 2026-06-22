@@ -13,6 +13,7 @@ Responsibilities:
 - Extract Python comments and docstrings.
 - Extract JavaScript-family comments and JSDoc blocks.
 - Extract HTML comments.
+- Extract Markdown prose blocks.
 - Classify TODO, FIXME, and NOTE comments into distinct source types.
 - Preserve line numbers, language, and surrounding context.
 
@@ -32,6 +33,7 @@ import tokenize
 
 from src.extractors import extract_html_text
 from src.extractors import extract_javascript_family_text
+from src.extractors import extract_markdown_text
 from src.schemas import FileContent
 from src.schemas import ReviewableText
 
@@ -40,10 +42,12 @@ SPECIAL_COMMENT_PATTERN = re.compile(r"^(TODO|FIXME|NOTE)\b[:\-\s]?(.*)$", re.IG
 PYTHON_SOURCE_EXTENSIONS = (".py",)
 JAVASCRIPT_FAMILY_EXTENSIONS = (".js", ".ts", ".jsx", ".tsx")
 HTML_SOURCE_EXTENSIONS = (".html",)
+MARKDOWN_SOURCE_EXTENSIONS = (".md",)
 SUPPORTED_SOURCE_EXTENSIONS = (
     PYTHON_SOURCE_EXTENSIONS
     + JAVASCRIPT_FAMILY_EXTENSIONS
     + HTML_SOURCE_EXTENSIONS
+    + MARKDOWN_SOURCE_EXTENSIONS
 )
 
 
@@ -69,6 +73,18 @@ def extract_reviewable_text(file_content: FileContent) -> list[ReviewableText]:
     if file_content.extension.lower() in HTML_SOURCE_EXTENSIONS:
         try:
             extracted_items = extract_html_text(file_content)
+        except (OSError, ValueError) as exc:
+            raise ExtractionError(f"Failed to extract reviewable text from {file_content.path}") from exc
+        except Exception as exc:
+            raise ExtractionError(f"Unexpected extraction failure for {file_content.path}") from exc
+
+        for index, item in enumerate(extracted_items, start=1):
+            item.id = _build_item_id(file_content, item, index)
+        return extracted_items
+
+    if file_content.extension.lower() in MARKDOWN_SOURCE_EXTENSIONS:
+        try:
+            extracted_items = extract_markdown_text(file_content)
         except (OSError, ValueError) as exc:
             raise ExtractionError(f"Failed to extract reviewable text from {file_content.path}") from exc
         except Exception as exc:

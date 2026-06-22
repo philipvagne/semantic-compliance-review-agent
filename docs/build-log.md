@@ -2,6 +2,38 @@
 
 ## 2026-06-22
 
+### Phase 6.96C - Markdown Extraction
+
+Completed:
+- Added `src/extractors/markdown_extractor.py`.
+- Expanded `src/extractors/__init__.py` and `src/text_extractor.py` so `.md`
+  now uses a dedicated Markdown extractor while `.py`, JavaScript-family, and
+  HTML files keep their existing paths.
+- Implemented extraction for Markdown headings, paragraphs, list items, and
+  blockquotes.
+- Classified TODO / FIXME / NOTE blocks after removing Markdown block syntax.
+- Excluded fenced code blocks entirely for both backtick and tilde fences.
+- Ignored Markdown table rows and separator-only lines in this MVP.
+- Added `examples/sample_input.md` for manual end-to-end verification.
+- Verified that `README.md` now runs successfully because Markdown support is
+  implemented.
+
+Tested:
+- Ran `python -m compileall src`.
+- Ran `python -m src.main examples/sample_input.py --backend deterministic`.
+- Ran `python -m src.main examples/sample_input.js --backend deterministic`.
+- Ran `python -m src.main examples/sample_input.html --backend deterministic`.
+- Ran `python -m src.main examples/sample_input.md --backend deterministic`.
+- Ran `python -m src.main README.md --backend deterministic`.
+
+Result:
+- Python extraction still works.
+- JavaScript-family extraction still works.
+- HTML extraction still works.
+- Markdown files now flow through the existing CLI, context, review, and report
+  pipeline without changing downstream components.
+- The required Phase 6.96 extractor scope is now implemented.
+
 ### Phase 6.96B - HTML Extraction
 
 Completed:

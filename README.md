@@ -45,11 +45,13 @@ Current supported extraction scope:
   TODO / FIXME / NOTE comments
 - HTML files (`.html`):
   `<!-- -->` comments, including TODO / FIXME / NOTE HTML comments
+- Markdown files (`.md`):
+  headings, paragraphs, list items, and blockquotes
 
 If the input file type is unsupported, the CLI fails clearly and no audit is
 performed.
 
-Approved next extraction design for the upcoming implementation phase:
+Approved extraction design for the implemented MVP file types:
 
 - `.js`, `.ts`, `.jsx`, and `.tsx` via JavaScript-style comments only
 - `.html` via HTML comments only
@@ -59,10 +61,7 @@ Implemented now:
 
 - JavaScript-family extraction for `.js`, `.ts`, `.jsx`, and `.tsx`
 - HTML comment extraction for `.html`
-
-Still design-only for later Phase 6.96 slices:
-
-- `.md` via headings, paragraphs, list items, and blockquotes
+- Markdown prose-block extraction for `.md`
 
 Current review outputs:
 
@@ -79,7 +78,6 @@ Current review outputs:
 The current implementation does not yet provide:
 
 - repository-wide scanning
-- multi-language extraction
 - automatic source modification
 - clean-copy generation
 - evaluation harness
@@ -90,10 +88,8 @@ The current implementation does not yet provide:
 
 Important scope truth:
 
-Current extraction support includes Python, JavaScript-family comments, and
-HTML comments.
-
-The broader multi-language design is only partially implemented so far.
+Current extraction support includes Python, JavaScript-family comments, HTML
+comments, and Markdown prose blocks.
 
 Required before final submission:
 
@@ -168,6 +164,12 @@ HTML deterministic test run:
 python -m src.main examples/sample_input.html --backend deterministic
 ```
 
+Markdown deterministic test run:
+
+```text
+python -m src.main examples/sample_input.md --backend deterministic
+```
+
 ## Example Behavior
 
 Current sample input:
@@ -175,6 +177,7 @@ Current sample input:
 - `examples/sample_input.py`
 - `examples/sample_input.js`
 - `examples/sample_input.html`
+- `examples/sample_input.md`
 
 Generated report location:
 
@@ -198,7 +201,7 @@ The exact findings may differ between Gemini and deterministic mode.
 Unsupported file example:
 
 ```text
-Text extraction failed: Unsupported file type '.md' for semantic review. Current supported file types: .py, .js, .ts, .jsx, .tsx, .html. No audit was performed.
+Text extraction failed: Unsupported file type '.json' for semantic review. Current supported file types: .py, .js, .ts, .jsx, .tsx, .html, .md. No audit was performed.
 ```
 
 ## Backends
@@ -300,6 +303,7 @@ semantic-compliance-review-agent/
     sample_input.py
     sample_input.js
     sample_input.html
+    sample_input.md
     sample-audit-report.md
   output/
     sample_input-audit-report.md
@@ -314,6 +318,7 @@ semantic-compliance-review-agent/
       __init__.py
       javascript_extractor.py
       html_extractor.py
+      markdown_extractor.py
     context_loader.py
     agent_review.py
     report_writer.py
@@ -325,13 +330,13 @@ semantic-compliance-review-agent/
 
 Current phase:
 
-- Phase 6.96 - Multi-language Extraction Implementation
+- Phase 7 - Clean Copy Generation
 
 Most recently completed:
 
-- Phase 6.96B - HTML Extraction
+- Phase 6.96C - Markdown Extraction
 
-Implemented through Phase 6.96B:
+Implemented through Phase 6.96C:
 
 - repository foundation
 - ADK feasibility spike
@@ -346,19 +351,10 @@ Implemented through Phase 6.96B:
 - runtime cleanup and fail-clear unsupported-file behavior
 - JavaScript-family extraction for `.js`, `.ts`, `.jsx`, and `.tsx`
 - HTML comment extraction for `.html`
-
-Approved next implementation scope:
-
-- keep the pipeline architecture unchanged
-- expand only `src/text_extractor.py`
-- add extractor support for `.py`, `.js`, `.ts`, `.jsx`, `.tsx`, `.html`, and
-  `.md`
-- keep schemas, Agent Review, Gemini prompts, Context Loader, and Report
-  Writer unchanged
+- Markdown prose-block extraction for `.md`
 
 Not implemented yet:
 
-- Markdown extraction
 - clean-copy generation
 - evaluation harness
 
@@ -366,15 +362,14 @@ Not implemented yet:
 
 Expected next phases:
 
-1. Phase 6.96 - Multi-language Extraction Implementation
-2. Phase 7 - Clean Copy Generation
-3. Phase 8 - Evaluation
-4. Phase 9 - Final Documentation
-5. Phase 10 - Submission Prep
+1. Phase 7 - Clean Copy Generation
+2. Phase 8 - Evaluation
+3. Phase 9 - Final Documentation
+4. Phase 10 - Submission Prep
 
 Highest-priority gaps before submission:
 
-- add broader extraction coverage beyond Python
+- implement clean-copy generation with guardrails
 - implement evaluation with hand-built cases and expected results
 - keep the end-to-end demo stable and reproducible
 

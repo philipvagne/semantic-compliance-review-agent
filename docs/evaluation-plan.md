@@ -52,10 +52,12 @@ Phase 8 should include hand-built evaluation cases covering at least:
 - professionalism-risk case
 - compliance-risk case if a stable example is available
 
-Once broader file support is implemented, evaluation should also include:
+With broader file support now implemented, Phase 8 should also include:
 
 - unsupported file behavior case
-- non-Python supported-file cases
+- JavaScript-family supported-file cases
+- HTML supported-file cases
+- Markdown supported-file cases
 
 ## Planned Evaluation Structure
 

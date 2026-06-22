@@ -22,13 +22,13 @@ The repository now contains:
 - an approved Phase 6.95 Multi-language Extraction Design
 - a completed Phase 6.96A JavaScript-family Extraction
 - a completed Phase 6.96B HTML Extraction
+- a completed Phase 6.96C Markdown Extraction
 - the documented MVP workflow for later phases
 
 The current runnable CLI path is the File Reader plus Text Extractor plus
 Context Loader plus Agent Review plus Report Writer flow.
 
-The next approved implementation step is Phase 6.96: Multi-language
-Extraction Implementation.
+The next approved implementation step is Phase 7: Clean Copy Generation.
 
 ## Implemented Flow
 
@@ -42,10 +42,11 @@ User
 -> Console Summary
 
 The current CLI accepts one source file path, reads it as UTF-8, extracts
-reviewable text from Python, JavaScript-family, and HTML source files, loads
-review context from YAML config files, reviews the extracted text through the
-Agent Review boundary, writes one Markdown audit report, and prints a console
-summary of the extracted items, loaded context, findings, and report path.
+reviewable text from Python, JavaScript-family, HTML, and Markdown source
+files, loads review context from YAML config files, reviews the extracted text
+through the Agent Review boundary, writes one Markdown audit report, and
+prints a console summary of the extracted items, loaded context, findings, and
+report path.
 
 If the file type is unsupported, the CLI now fails clearly before review and no
 audit report is generated.
@@ -315,6 +316,18 @@ Phase 6.96B implementation note:
 - HTML reviewable items use `language="html"`
 - `.md` extraction remains unimplemented in this slice
 - unsupported file types still fail clearly
+
+Phase 6.96C implementation note:
+
+- `src/text_extractor.py` now dispatches `.md` to
+  `src/extractors/markdown_extractor.py`
+- the Markdown extractor scans headings, paragraphs, list items, and
+  blockquotes
+- fenced code blocks are excluded entirely, including triple-backtick and
+  triple-tilde fences
+- Markdown table rows are ignored in this MVP
+- Markdown reviewable items use `language="markdown"`
+- the required Phase 6.96 extractor families are now implemented
 
 Example design input:
 

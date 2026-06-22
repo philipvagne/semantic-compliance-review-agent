@@ -22,5 +22,6 @@ Non-responsibilities:
 
 from src.extractors.javascript_extractor import extract_javascript_family_text
 from src.extractors.html_extractor import extract_html_text
+from src.extractors.markdown_extractor import extract_markdown_text
 
-__all__ = ["extract_html_text", "extract_javascript_family_text"]
+__all__ = ["extract_html_text", "extract_javascript_family_text", "extract_markdown_text"]

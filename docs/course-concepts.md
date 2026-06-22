@@ -148,9 +148,17 @@ This concept should not be claimed as complete yet.
 
 ### 11. Broader Extraction Coverage
 
-Planned, not implemented now.
+Implemented now for the required MVP file types.
 
-Current extraction scope is Python-only.
+Current extraction scope includes:
+
+- `.py`
+- `.js`
+- `.ts`
+- `.jsx`
+- `.tsx`
+- `.html`
+- `.md`
 
 Required before final submission:
 
@@ -169,8 +177,8 @@ Potential later expansion:
 - `Dockerfile`
 - Terraform files
 
-This broader coverage is part of the capstone roadmap, not the current
-runtime reality.
+This required coverage is now implemented. Broader file-family expansion
+remains a roadmap item.
 
 ## Honest Current Summary
 

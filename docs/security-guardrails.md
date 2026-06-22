@@ -139,14 +139,18 @@ The current implementation is intentionally limited.
 
 Current supported extraction scope:
 
-- Python files only
-- comments
-- docstrings
-- TODO / FIXME / NOTE comments
+- Python files:
+  comments, docstrings, TODO / FIXME / NOTE comments
+- JavaScript-family files:
+  `//` comments, `/* */` block comments, `/** */` JSDoc blocks, and
+  TODO / FIXME / NOTE comments
+- HTML files:
+  `<!-- -->` comments only
+- Markdown files:
+  headings, paragraphs, list items, and blockquotes
 
 Not yet implemented:
 
-- multi-language extraction
 - repository-wide scanning
 - automatic clean-copy generation
 - evaluation harness

@@ -2,6 +2,55 @@
 
 ## 2026-06-22
 
+### Phase 8B.4A - Gemini Evaluation Rate-Limit Handling
+
+Completed:
+- Added optional `--delay-seconds` support to `evaluation/run.py`.
+- Kept the default delay at `0` seconds so deterministic runs remain fast by
+  default.
+- Applied the delay only between evaluation cases, never before the first case.
+- Added clear CLI validation so negative delay values fail immediately.
+- Kept evaluation matching, scoring, dataset loading, and result formatting
+  unchanged.
+
+Tested:
+- Ran `python -m compileall src evaluation`.
+- Ran `python -m evaluation.run --backend deterministic`.
+- Ran `python -m evaluation.run --backend deterministic --delay-seconds 0`.
+- Ran `python -m evaluation.run --backend deterministic --delay-seconds -1`
+  and verified that the CLI fails clearly.
+- Ran `python -m evaluation.run --backend gemini --delay-seconds 15` and
+  verified CLI parsing plus existing fail-clear Gemini credential behavior.
+
+Result:
+- Free-tier Gemini users now have a simple pacing control for evaluation runs
+  without changing review behavior, matching rules, or evaluation scoring.
+
+### Phase 8B.4 - Gemini Evaluation Snapshot
+
+Completed:
+- Extended `evaluation/run.py` so the same evaluation runner now accepts both
+  `--backend deterministic` and `--backend gemini`.
+- Kept the expected-output loading rules and matching logic unchanged so the
+  deterministic and Gemini paths remain directly comparable.
+- Added backend-specific result-file generation behavior so Gemini runs target
+  `evaluation/results/gemini-results.md`.
+- Kept Gemini snapshot notes separate from deterministic repeatability notes in
+  the generated evaluation report content.
+
+Tested:
+- Ran `python -m compileall src evaluation`.
+- Ran `python -m evaluation.run --backend deterministic`.
+- Ran `python -m evaluation.run --backend gemini`.
+- Verified that deterministic evaluation still works unchanged.
+- Verified that the Gemini path fails clearly when credentials are not present.
+
+Result:
+- The evaluation runner now supports the Gemini backend without changing agent
+  behavior, prompts, matching rules, or the dataset.
+- A committed Gemini results snapshot could not be generated in this shell
+  session because `GOOGLE_API_KEY` and `GEMINI_API_KEY` were both unavailable.
+
 ### Phase 8B.3 - Deterministic Runner and Metrics
 
 Completed:

@@ -86,6 +86,15 @@ Current deterministic evaluation workflow:
 4. Compare actual findings against expected findings.
 5. Write one Markdown evaluation result artifact to `evaluation/results/`.
 
+Current Gemini evaluation workflow:
+
+1. Load the same files from `evaluation/cases/`.
+2. Load the same matching expected JSON files from `evaluation/expected/`.
+3. Run each case through the existing pipeline with the Gemini backend.
+4. Compare actual findings against expected findings with the same matching rules.
+5. Optionally pause between cases with `--delay-seconds` for rate-limit-friendly pacing.
+6. Write one Markdown evaluation snapshot artifact to `evaluation/results/` when Gemini credentials are available.
+
 Current supported extraction scope:
 
 - Python files:
@@ -138,7 +147,9 @@ The current implementation does not yet provide:
 Evaluation status:
 
 - deterministic evaluation runner and metrics are implemented
-- Gemini evaluation is not implemented yet
+- Gemini evaluation runner support is implemented
+- Gemini snapshot generation still requires configured Gemini credentials
+- Gemini free-tier evaluation may require pacing between cases to avoid RPM limits
 
 Important scope truth:
 
@@ -222,6 +233,18 @@ Markdown deterministic test run:
 
 ```text
 python -m src.main examples/sample_input.md --backend deterministic
+```
+
+Deterministic evaluation run:
+
+```text
+python -m evaluation.run --backend deterministic
+```
+
+Rate-limit-friendly Gemini evaluation run:
+
+```text
+python -m evaluation.run --backend gemini --delay-seconds 15
 ```
 
 ## Example Behavior
@@ -387,7 +410,7 @@ semantic-compliance-review-agent/
 
 Current phase:
 
-- Phase 8B.3 - Deterministic Runner and Metrics
+- Phase 8B.4 - Gemini Evaluation Snapshot
 
 Most recently completed:
 
@@ -414,12 +437,12 @@ Implemented through Phase 8B.3:
 - evaluation package and directory foundation
 - evaluation dataset and matching expected outputs
 - deterministic evaluation runner and committed deterministic metrics report
+- Gemini-capable evaluation runner path
 
 Not implemented yet:
 
 - clean-copy generation
-- Gemini evaluation
-- Gemini evaluation results snapshot
+- committed Gemini evaluation results snapshot
 
 ## Roadmap Before Submission
 
@@ -432,7 +455,7 @@ Expected next phases:
 Highest-priority gaps before submission:
 
 - implement clean-copy generation with guardrails
-- implement evaluation with hand-built cases and expected results
+- capture and commit the Gemini evaluation snapshot
 - keep the end-to-end demo stable and reproducible
 - finish the final writeup and short demo video package
 

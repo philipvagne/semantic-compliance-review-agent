@@ -1,27 +1,28 @@
-"""Run deterministic evaluation cases against the existing review pipeline.
+"""Run committed evaluation cases against the existing review pipeline.
 
 Purpose:
-- Execute the committed evaluation dataset through the deterministic backend.
+- Execute the committed evaluation dataset through the supported evaluation backends.
 
 Input:
 - Evaluation case files from `evaluation/cases/`.
 - Matching expected JSON files from `evaluation/expected/`.
-- One required backend flag for deterministic evaluation.
+- One required backend flag for deterministic or Gemini evaluation.
+- One optional delay value between evaluation cases.
 
 Output:
 - Concise console progress lines and summary metrics.
-- One Markdown results file at `evaluation/results/deterministic-results.md`.
+- One Markdown results file under `evaluation/results/`.
 
 Responsibilities:
 - Validate the supported evaluation CLI mode.
 - Load evaluation cases and matching expected outputs.
-- Run the existing pipeline with the deterministic backend only.
+- Run the existing pipeline with the selected backend.
+- Optionally pause between cases when the user requests pacing.
 - Compare actual findings to expected findings with simple matching rules.
 - Calculate TP, FP, FN, precision, and recall.
 - Write a human-readable committed evaluation artifact.
 
 Non-responsibilities:
-- Run Gemini evaluation.
 - Modify runtime review behavior.
 - Create new evaluation cases automatically.
 - Tune prompts or schemas.
@@ -35,12 +36,14 @@ from datetime import datetime
 from datetime import timezone
 from pathlib import Path
 import json
+import time
 
 from pydantic import BaseModel
 from pydantic import ValidationError
 
 from src.agent_review import AgentReviewError
 from src.agent_review import configure_backend
+from src.agent_review import get_backend_display_name
 from src.agent_review import review
 from src.context_loader import ContextLoadError
 from src.context_loader import load_review_context
@@ -55,7 +58,7 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 CASES_DIR = REPO_ROOT / "evaluation" / "cases"
 EXPECTED_DIR = REPO_ROOT / "evaluation" / "expected"
 RESULTS_DIR = REPO_ROOT / "evaluation" / "results"
-RESULTS_PATH = RESULTS_DIR / "deterministic-results.md"
+SUPPORTED_EVALUATION_BACKENDS = ("deterministic", "gemini")
 
 
 class ExpectedFinding(BaseModel):
@@ -111,32 +114,57 @@ class CaseResult:
     count_in_range: bool
 
 
+def _parse_delay_seconds(value: str) -> float:
+    try:
+        delay_seconds = float(value)
+    except ValueError as exc:
+        raise argparse.ArgumentTypeError(
+            f"Invalid delay value '{value}'. Use a non-negative integer or float."
+        ) from exc
+
+    if delay_seconds < 0:
+        raise argparse.ArgumentTypeError(
+            "Delay seconds must be non-negative."
+        )
+
+    return delay_seconds
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Run committed evaluation cases through the deterministic backend."
+        description="Run committed evaluation cases through a supported backend."
     )
     parser.add_argument(
         "--backend",
         required=True,
-        help="Evaluation backend to use. Phase 8B.3 supports only deterministic.",
+        help="Evaluation backend to use. Supported values: deterministic, gemini.",
+    )
+    parser.add_argument(
+        "--delay-seconds",
+        type=_parse_delay_seconds,
+        default=0.0,
+        help="Optional pause between evaluation cases. Defaults to 0 seconds.",
     )
     return parser.parse_args()
 
 
 def main() -> None:
     args = parse_args()
-    if args.backend != "deterministic":
+    if args.backend not in SUPPORTED_EVALUATION_BACKENDS:
         raise SystemExit(
-            "Unsupported evaluation backend. Phase 8B.3 supports only "
-            "'deterministic'. Gemini evaluation is planned for Phase 8B.4."
+            "Unsupported evaluation backend. Supported values are "
+            "'deterministic' and 'gemini'."
         )
 
     try:
-        configure_backend("deterministic")
+        configure_backend(args.backend)
         review_context = load_review_context()
-        case_results = _run_all_cases(review_context)
-        summary = _build_summary(case_results)
-        _write_results_markdown(case_results, summary)
+        case_results = _run_all_cases(
+            review_context,
+            delay_seconds=args.delay_seconds,
+        )
+        summary = _build_summary(case_results, backend=args.backend)
+        _write_results_markdown(case_results, summary, backend=args.backend)
     except (
         AgentReviewError,
         ContextLoadError,
@@ -154,11 +182,15 @@ def main() -> None:
     )
 
 
-def _run_all_cases(review_context) -> list[CaseResult]:
+def _run_all_cases(review_context, *, delay_seconds: float) -> list[CaseResult]:
     case_paths = sorted(path for path in CASES_DIR.iterdir() if path.is_file())
     results: list[CaseResult] = []
 
-    for case_path in case_paths:
+    for index, case_path in enumerate(case_paths):
+        if index > 0 and delay_seconds > 0:
+            print(f"Waiting {delay_seconds:g} seconds before the next case...")
+            time.sleep(delay_seconds)
+
         result = _run_single_case(case_path, review_context)
         status = "PASS" if result.case_passed else "FAIL"
         print(f"Running {case_path.name}... {status}")
@@ -362,7 +394,11 @@ def _has_suggested_replacement(actual: Finding) -> bool:
     return bool(actual.suggested_replacement and actual.suggested_replacement.strip())
 
 
-def _build_summary(case_results: list[CaseResult]) -> dict[str, float | int | str]:
+def _build_summary(
+    case_results: list[CaseResult],
+    *,
+    backend: str,
+) -> dict[str, float | int | str]:
     tp = sum(result.tp for result in case_results)
     fp = sum(result.fp for result in case_results)
     fn = sum(result.fn for result in case_results)
@@ -372,7 +408,7 @@ def _build_summary(case_results: list[CaseResult]) -> dict[str, float | int | st
 
     return {
         "timestamp": datetime.now(timezone.utc).replace(microsecond=0).isoformat(),
-        "backend": "deterministic",
+        "backend": backend,
         "cases_run": len(case_results),
         "cases_passed": passed_cases,
         "cases_failed": len(case_results) - passed_cases,
@@ -384,11 +420,19 @@ def _build_summary(case_results: list[CaseResult]) -> dict[str, float | int | st
     }
 
 
-def _write_results_markdown(case_results: list[CaseResult], summary: dict[str, float | int | str]) -> None:
+def _write_results_markdown(
+    case_results: list[CaseResult],
+    summary: dict[str, float | int | str],
+    *,
+    backend: str,
+) -> None:
     RESULTS_DIR.mkdir(parents=True, exist_ok=True)
+    results_path = _build_results_path(backend)
+    title = _build_results_title(backend)
+    notes = _build_notes(backend)
 
     lines: list[str] = [
-        "# Deterministic Evaluation Results",
+        title,
         "",
         f"- Backend: `{summary['backend']}`",
         f"- Timestamp: `{summary['timestamp']}`",
@@ -430,23 +474,21 @@ def _write_results_markdown(case_results: list[CaseResult], summary: dict[str, f
     )
 
     for result in case_results:
-        lines.extend(_render_case_result(result))
+        lines.extend(_render_case_result(result, backend=backend))
 
     lines.extend(
         [
             "## Notes",
             "",
-            "- Deterministic results validate repeatable pipeline behavior, not Gemini semantic reasoning.",
-            "- Suggested replacement matching is required only for expected findings that explicitly demand it.",
-            "- Severity is displayed for context but does not determine TP, FP, or FN in this Phase 8B.3 implementation.",
+            *notes,
             "",
         ]
     )
 
-    RESULTS_PATH.write_text("\n".join(lines), encoding="utf-8")
+    results_path.write_text("\n".join(lines), encoding="utf-8")
 
 
-def _render_case_result(result: CaseResult) -> list[str]:
+def _render_case_result(result: CaseResult, *, backend: str) -> list[str]:
     lines = [
         f"### {result.case_filename}",
         "",
@@ -503,7 +545,7 @@ def _render_case_result(result: CaseResult) -> list[str]:
     if not result.actual_outcomes:
         lines.extend(
             [
-                "- No findings returned by the deterministic backend.",
+                f"- No findings returned by the {backend} backend.",
                 "",
             ]
         )
@@ -536,6 +578,34 @@ def _inline_text(value: str | None) -> str:
     if not value:
         return ""
     return " ".join(value.split())
+
+
+def _build_results_path(backend: str) -> Path:
+    return RESULTS_DIR / f"{backend}-results.md"
+
+
+def _build_results_title(backend: str) -> str:
+    display_backend = get_backend_display_name()
+    return f"# {display_backend} Evaluation Results"
+
+
+def _build_notes(backend: str) -> list[str]:
+    common_notes = [
+        "- Suggested replacement matching is required only for expected findings that explicitly demand it.",
+        "- Severity is displayed for context but does not determine TP, FP, or FN in this evaluation implementation.",
+    ]
+
+    if backend == "deterministic":
+        return [
+            "- Deterministic results validate repeatable pipeline behavior, not Gemini semantic reasoning.",
+            *common_notes,
+        ]
+
+    return [
+        "- Gemini evaluation results represent a snapshot captured at a specific point in time. Because LLM outputs may vary between runs, these results should be interpreted as evaluation evidence rather than a perfectly reproducible benchmark.",
+        "- Gemini results validate the current live semantic review path without changing prompts, matching rules, or the dataset.",
+        *common_notes,
+    ]
 
 
 if __name__ == "__main__":

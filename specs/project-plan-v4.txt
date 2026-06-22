@@ -1521,6 +1521,34 @@ PHASE 8B.4 - GEMINI EVALUATION SNAPSHOT
 - Record Gemini results as committed capstone evidence
 - Keep Gemini results framed as a snapshot rather than a perfectly reproducible benchmark
 
+Implementation note:
+
+- `evaluation/run.py` now supports `--backend gemini` using the same dataset
+  and matching rules as the deterministic path
+- committed completion of this phase still requires a successful credentialed
+  Gemini run that generates `evaluation/results/gemini-results.md`
+
+PHASE 8B.4A - GEMINI EVALUATION RATE-LIMIT HANDLING
+
+- Add optional `--delay-seconds` pacing support to `evaluation/run.py`
+- Keep delay optional and default to `0`
+- Apply delay only between cases
+- Keep evaluation scoring, matching, dataset loading, and result formatting unchanged
+
+Exit Criteria:
+
+[completed] `--delay-seconds` exists
+[completed] default delay is `0`
+[completed] deterministic behavior remains unchanged
+[completed] negative delay values fail clearly
+[completed] delay is applied between cases
+[completed] matching logic unchanged
+[completed] dataset unchanged
+[completed] expected JSON unchanged
+[completed] no Agent Review changes
+[completed] no Gemini prompt changes
+[completed] documentation explains free-tier Gemini pacing
+
 Exit Criteria:
 
 [ ] Evaluation dataset exists

@@ -56,6 +56,14 @@ deterministic evaluation runner under `evaluation/run.py`, simple expected
 finding matching, TP / FP / FN and precision / recall calculation, and a
 committed Markdown results artifact under `evaluation/results/`.
 
+Phase 8B.4 extends that separate evaluation runner so it can execute the same
+dataset against the Gemini backend using the same matching logic. This still
+does not change the normal review CLI pipeline.
+
+Phase 8B.4A adds optional pacing between evaluation cases so Gemini free-tier
+users can slow the evaluation runner without changing scoring, matching, or
+dataset behavior.
+
 ## Implemented Flow
 
 User
@@ -920,7 +928,7 @@ Responsibility:
 
 - Evaluate agent quality
 - Compare actual findings against committed expected outputs
-- Report deterministic evaluation metrics and artifacts
+- Report backend-specific evaluation metrics and artifacts
 
 Does NOT:
 

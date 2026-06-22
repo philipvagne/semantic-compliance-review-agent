@@ -1,7 +1,7 @@
 # Deterministic Evaluation Results
 
 - Backend: `deterministic`
-- Timestamp: `2026-06-22T12:52:33+00:00`
+- Timestamp: `2026-06-22T15:04:51+00:00`
 - Cases run: `10`
 
 ## Overall Metrics
@@ -317,4 +317,4 @@
 
 - Deterministic results validate repeatable pipeline behavior, not Gemini semantic reasoning.
 - Suggested replacement matching is required only for expected findings that explicitly demand it.
-- Severity is displayed for context but does not determine TP, FP, or FN in this Phase 8B.3 implementation.
+- Severity is displayed for context but does not determine TP, FP, or FN in this evaluation implementation.

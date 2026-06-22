@@ -26,6 +26,12 @@ The repository now also contains the initial Phase 8B.3 runner output:
 - `evaluation/run.py`
 - `evaluation/results/deterministic-results.md`
 
+The evaluation runner now also supports the Gemini backend path:
+
+- `python -m evaluation.run --backend gemini`
+- `python -m evaluation.run --backend gemini --delay-seconds 15`
+- `evaluation/results/gemini-results.md` is the intended committed snapshot artifact
+
 ## Current Status
 
 Implemented now:
@@ -41,11 +47,11 @@ Implemented now:
 - deterministic expected-output comparison
 - deterministic precision and recall reporting
 - committed deterministic evaluation results artifact
+- Gemini-capable evaluation runner path
 
 Not implemented yet:
 
-- Gemini evaluation execution
-- committed Gemini evaluation snapshot
+- committed Gemini evaluation snapshot in this environment
 
 This document is intentionally honest about that gap.
 
@@ -93,6 +99,13 @@ The deterministic and Gemini backends should be evaluated separately.
 - validate semantic reasoning
 - validate contextual understanding
 - validate category selection
+- provide a committed snapshot of the live model-backed review path
+
+Practical runtime note:
+
+- Gemini free-tier users may hit requests-per-minute limits during evaluation
+- `--delay-seconds 15` is the recommended starting command for paced Gemini runs
+- pacing changes execution speed only; it does not change matching or scoring
 
 Deterministic and Gemini results should not be collapsed into one vague score.
 
@@ -366,6 +379,13 @@ Capstone reviewers should be able to inspect evaluation evidence without
 rerunning the project.
 
 Evaluation artifacts are capstone evidence, not temporary runtime files.
+
+For Gemini specifically, the committed artifact should be interpreted as a
+snapshot captured at a specific point in time rather than as a perfectly
+reproducible benchmark.
+
+That Gemini snapshot may also take longer to generate when pacing is enabled
+for rate-limit handling.
 
 ## Evaluation Constraints
 

@@ -34,6 +34,7 @@ Completed:
 [completed] Phase 6.9B Runtime Cleanup Implemented
 [completed] Phase 6.95 Multi-language Extraction Design Approved
 [completed] Phase 6.96A JavaScript-family Extraction Implemented
+[completed] Phase 6.96B HTML Extraction Implemented
 
 Current Phase:
 PHASE 6.96 - MULTI-LANGUAGE EXTRACTION IMPLEMENTATION
@@ -1354,6 +1355,23 @@ Exit Criteria:
 [completed] Deterministic CLI run works for `examples/sample_input.js`
 [completed] Markdown remains unsupported and fails clearly
 
+PHASE 6.96B - HTML EXTRACTION
+
+- Add support for `.html`
+- Add `src/extractors/html_extractor.py`
+- Keep Python extraction behavior unchanged
+- Keep JavaScript-family extraction behavior unchanged
+- Keep Markdown unsupported until a later slice
+
+Exit Criteria:
+
+[completed] HTML extractor module added
+[completed] Dispatcher routes `.html` correctly
+[completed] Existing Python extraction still works
+[completed] Existing JavaScript-family extraction still works
+[completed] Deterministic CLI run works for `examples/sample_input.html`
+[completed] Markdown remains unsupported and fails clearly
+
 PHASE 7 — CLEAN COPY GENERATION
 
 - Generate suggested clean copy
@@ -1522,10 +1540,11 @@ Completed:
 - Runtime cleanup completed
 - Multi-language extraction design approved
 - JavaScript-family extraction implemented
+- HTML extraction implemented
 
 Next Actions:
 
-1. Continue Phase 6.96 with the remaining extractor slices
+1. Continue Phase 6.96 with the remaining Markdown extractor slice
 2. Keep the implementation limited to extractor expansion only
 3. Preserve the human-in-the-loop guardrails while keeping repository-wide scanning deferred
 4. Begin Phase 7 - Clean Copy Generation after extraction support is in place

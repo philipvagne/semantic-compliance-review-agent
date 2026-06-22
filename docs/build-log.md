@@ -2,6 +2,34 @@
 
 ## 2026-06-22
 
+### Phase 6.96B - HTML Extraction
+
+Completed:
+- Added `src/extractors/html_extractor.py`.
+- Expanded `src/extractors/__init__.py` and `src/text_extractor.py` so `.html`
+  now uses a dedicated HTML extractor while `.py` and JavaScript-family files
+  keep their existing paths.
+- Implemented extraction for `<!-- -->` HTML comments only, including TODO /
+  FIXME / NOTE classification when the comment starts with those markers.
+- Skipped script and style contents while scanning for HTML comments so
+  embedded JavaScript and CSS are not treated as HTML reviewable text.
+- Added `examples/sample_input.html` for manual end-to-end verification.
+- Kept Markdown unsupported so `.md` still fails clearly in this slice.
+
+Tested:
+- Ran `python -m compileall src`.
+- Ran `python -m src.main examples/sample_input.py --backend deterministic`.
+- Ran `python -m src.main examples/sample_input.js --backend deterministic`.
+- Ran `python -m src.main examples/sample_input.html --backend deterministic`.
+- Ran `python -m src.main README.md --backend deterministic`.
+
+Result:
+- Python extraction still works.
+- JavaScript-family extraction still works.
+- HTML files now flow through the existing CLI, context, review, and report
+  pipeline without changing downstream components.
+- Markdown extraction remains deferred to a later Phase 6.96 slice.
+
 ### Phase 6.96A - JavaScript-family Extraction
 
 Completed:

@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>HTML Extractor Sample</title>
+  <!-- Friendly sample HTML comment for extractor testing. -->
+  <style>
+    /* This CSS should not be parsed as reviewable text. */
+  </style>
+</head>
+<body>
+  <!-- TODO: replace the placeholder support text before release. -->
+  <main>
+    <h1>Extractor Sample</h1>
+    <!--
+      NOTE: this multiline comment stays artificial and safe.
+      It exists only for HTML extractor coverage.
+    -->
+    <p>Visible page text should not be extracted.</p>
+  </main>
+  <script>
+    // This JavaScript should not be parsed by the HTML extractor.
+    const exampleMessage = "Hello from a script block.";
+  </script>
+  <!-- FIXME: swap the demo footer label later. -->
+</body>
+</html>

@@ -21,6 +21,7 @@ The repository now contains:
 - a completed Phase 6.9B Runtime Cleanup
 - an approved Phase 6.95 Multi-language Extraction Design
 - a completed Phase 6.96A JavaScript-family Extraction
+- a completed Phase 6.96B HTML Extraction
 - the documented MVP workflow for later phases
 
 The current runnable CLI path is the File Reader plus Text Extractor plus
@@ -41,10 +42,10 @@ User
 -> Console Summary
 
 The current CLI accepts one source file path, reads it as UTF-8, extracts
-reviewable text from Python and JavaScript-family source files, loads review
-context from YAML config files, reviews the extracted text through the Agent
-Review boundary, writes one Markdown audit report, and prints a console summary
-of the extracted items, loaded context, findings, and report path.
+reviewable text from Python, JavaScript-family, and HTML source files, loads
+review context from YAML config files, reviews the extracted text through the
+Agent Review boundary, writes one Markdown audit report, and prints a console
+summary of the extracted items, loaded context, findings, and report path.
 
 If the file type is unsupported, the CLI now fails clearly before review and no
 audit report is generated.
@@ -304,6 +305,16 @@ Phase 6.96A implementation note:
 - `.ts` and `.tsx` items use `language="typescript"`
 - unsupported file types still fail clearly
 - `.html` and `.md` extraction remain unimplemented in this slice
+
+Phase 6.96B implementation note:
+
+- `src/text_extractor.py` now dispatches `.html` to
+  `src/extractors/html_extractor.py`
+- the HTML extractor scans only `<!-- -->` comment surfaces
+- script and style contents are skipped while scanning for HTML comments
+- HTML reviewable items use `language="html"`
+- `.md` extraction remains unimplemented in this slice
+- unsupported file types still fail clearly
 
 Example design input:
 

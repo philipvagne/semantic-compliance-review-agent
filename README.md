@@ -43,6 +43,8 @@ Current supported extraction scope:
 - JavaScript-family files (`.js`, `.ts`, `.jsx`, `.tsx`):
   `//` comments, `/* */` block comments, `/** */` JSDoc blocks, and
   TODO / FIXME / NOTE comments
+- HTML files (`.html`):
+  `<!-- -->` comments, including TODO / FIXME / NOTE HTML comments
 
 If the input file type is unsupported, the CLI fails clearly and no audit is
 performed.
@@ -56,10 +58,10 @@ Approved next extraction design for the upcoming implementation phase:
 Implemented now:
 
 - JavaScript-family extraction for `.js`, `.ts`, `.jsx`, and `.tsx`
+- HTML comment extraction for `.html`
 
 Still design-only for later Phase 6.96 slices:
 
-- `.html` via HTML comments only
 - `.md` via headings, paragraphs, list items, and blockquotes
 
 Current review outputs:
@@ -88,7 +90,8 @@ The current implementation does not yet provide:
 
 Important scope truth:
 
-Current extraction support includes Python plus JavaScript-family comments.
+Current extraction support includes Python, JavaScript-family comments, and
+HTML comments.
 
 The broader multi-language design is only partially implemented so far.
 
@@ -159,12 +162,19 @@ JavaScript-family deterministic test run:
 python -m src.main examples/sample_input.js --backend deterministic
 ```
 
+HTML deterministic test run:
+
+```text
+python -m src.main examples/sample_input.html --backend deterministic
+```
+
 ## Example Behavior
 
 Current sample input:
 
 - `examples/sample_input.py`
 - `examples/sample_input.js`
+- `examples/sample_input.html`
 
 Generated report location:
 
@@ -188,7 +198,7 @@ The exact findings may differ between Gemini and deterministic mode.
 Unsupported file example:
 
 ```text
-Text extraction failed: Unsupported file type '.md' for semantic review. Current supported file types: .py, .js, .ts, .jsx, .tsx. No audit was performed.
+Text extraction failed: Unsupported file type '.md' for semantic review. Current supported file types: .py, .js, .ts, .jsx, .tsx, .html. No audit was performed.
 ```
 
 ## Backends
@@ -289,6 +299,7 @@ semantic-compliance-review-agent/
   examples/
     sample_input.py
     sample_input.js
+    sample_input.html
     sample-audit-report.md
   output/
     sample_input-audit-report.md
@@ -302,6 +313,7 @@ semantic-compliance-review-agent/
     extractors/
       __init__.py
       javascript_extractor.py
+      html_extractor.py
     context_loader.py
     agent_review.py
     report_writer.py
@@ -317,9 +329,9 @@ Current phase:
 
 Most recently completed:
 
-- Phase 6.96A - JavaScript-family Extraction
+- Phase 6.96B - HTML Extraction
 
-Implemented through Phase 6.96A:
+Implemented through Phase 6.96B:
 
 - repository foundation
 - ADK feasibility spike
@@ -333,6 +345,7 @@ Implemented through Phase 6.96A:
 - report readability and presentation polish
 - runtime cleanup and fail-clear unsupported-file behavior
 - JavaScript-family extraction for `.js`, `.ts`, `.jsx`, and `.tsx`
+- HTML comment extraction for `.html`
 
 Approved next implementation scope:
 
@@ -345,7 +358,6 @@ Approved next implementation scope:
 
 Not implemented yet:
 
-- HTML extraction
 - Markdown extraction
 - clean-copy generation
 - evaluation harness

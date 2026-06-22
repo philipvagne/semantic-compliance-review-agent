@@ -38,12 +38,13 @@ Completed:
 [completed] Phase 6.96C Markdown Extraction Implemented
 [completed] Phase 6.97 Submission Readiness Foundation Implemented
 [completed] Phase 8A Evaluation Design Approved
+[completed] Phase 8B.1 Evaluation Foundation Implemented
 
 Current Phase:
-PHASE 8B - EVALUATION IMPLEMENTATION
+PHASE 8B.2 - DATASET AND EXPECTED OUTPUTS
 
 Next Milestone:
-PHASE 9 - FINAL DOCUMENTATION
+PHASE 8B.3 - DETERMINISTIC RUNNER AND METRICS
 
 ================================================================================
 PROJECT OVERVIEW
@@ -1455,6 +1456,45 @@ PHASE 8B - EVALUATION IMPLEMENTATION
 - Implement comparison and reporting flow
 - Generate deterministic and Gemini evaluation results
 
+PHASE 8B.1 - EVALUATION FOUNDATION
+
+- Create the evaluation package foundation
+- Add `evaluation/__init__.py`
+- Add `evaluation/README.md`
+- Ensure `evaluation/cases/`, `evaluation/expected/`, and
+  `evaluation/results/` exist
+- Keep runtime behavior unchanged
+
+Exit Criteria:
+
+[completed] `evaluation/` package exists
+[completed] `evaluation/README.md` exists
+[completed] `evaluation/cases/` exists
+[completed] `evaluation/expected/` exists
+[completed] `evaluation/results/` exists
+[completed] No evaluation cases were added
+[completed] No expected JSON files were added
+[completed] No result files were added
+[completed] No runtime behavior changed
+
+PHASE 8B.2 - DATASET AND EXPECTED OUTPUTS
+
+- Create representative evaluation input cases
+- Create expected outcome JSON files
+- Keep results generation deferred
+
+PHASE 8B.3 - DETERMINISTIC RUNNER AND METRICS
+
+- Implement the deterministic evaluation runner
+- Compare actual findings against expected outputs
+- Report deterministic precision and recall
+
+PHASE 8B.4 - GEMINI EVALUATION SNAPSHOT
+
+- Run Gemini evaluation against the approved dataset
+- Record Gemini results as committed capstone evidence
+- Keep Gemini results framed as a snapshot rather than a perfectly reproducible benchmark
+
 Exit Criteria:
 
 [ ] Evaluation dataset exists
@@ -1614,13 +1654,14 @@ Completed:
 - Markdown extraction implemented
 - Submission-readiness foundation documented
 - Evaluation design documented
+- Evaluation foundation created
 
 Next Actions:
 
-1. Begin Phase 8B - Evaluation Implementation
+1. Begin Phase 8B.2 - Dataset and Expected Outputs
 2. Create representative evaluation cases across supported file types
-3. Preserve the human-in-the-loop guardrails while implementing repeatable metrics
-4. Return to final documentation and submission packaging after evaluation
+3. Implement deterministic comparison and metrics after the dataset is in place
+4. Record a Gemini evaluation snapshot after deterministic evaluation is working
 
 Future Polish:
 - Convert "Why This Was Flagged" explanations into concise audit-style bullet points.

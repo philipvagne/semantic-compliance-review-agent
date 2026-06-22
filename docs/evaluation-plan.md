@@ -9,6 +9,14 @@ Phase 8A documents the design.
 
 Phase 8B should implement the evaluation harness and artifacts described here.
 
+The repository now contains the Phase 8B.1 foundation structure:
+
+- `evaluation/__init__.py`
+- `evaluation/README.md`
+- `evaluation/cases/`
+- `evaluation/expected/`
+- `evaluation/results/`
+
 ## Current Status
 
 Implemented now:

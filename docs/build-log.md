@@ -2,6 +2,27 @@
 
 ## 2026-06-22
 
+### Phase 8B.1 - Evaluation Foundation
+
+Completed:
+- Added `evaluation/__init__.py` to establish the evaluation package root.
+- Added `evaluation/README.md` describing evaluation purpose, directory roles,
+  backend separation, result policy, and the next Phase 8B slices.
+- Ensured `evaluation/results/` exists and confirmed `evaluation/cases/` and
+  `evaluation/expected/` remain present.
+- Updated status docs so the repository now reflects Phase 8B.1 as complete and
+  Phase 8B.2 as the next implementation slice.
+
+Tested:
+- Foundation-only task; no runtime code or evaluation runner behavior was
+  changed.
+- Verified that no evaluation cases, expected JSON files, or result artifacts
+  were added in this slice.
+
+Result:
+- The repository now has the required evaluation directory scaffolding without
+  implementing the evaluation harness or changing runtime behavior.
+
 ### Phase 8A - Evaluation Design
 
 Completed:

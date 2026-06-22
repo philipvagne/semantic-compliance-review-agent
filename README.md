@@ -350,8 +350,11 @@ semantic-compliance-review-agent/
   output/
     sample_input-audit-report.md
   evaluation/
+    __init__.py
+    README.md
     cases/
     expected/
+    results/
   src/
     main.py
     file_reader.py
@@ -372,13 +375,13 @@ semantic-compliance-review-agent/
 
 Current phase:
 
-- Phase 8B - Evaluation Implementation
+- Phase 8B.1 - Evaluation Foundation
 
 Most recently completed:
 
-- Phase 8A - Evaluation Design
+- Phase 8B.1 - Evaluation Foundation
 
-Implemented through Phase 6.96C and documented through Phase 8A:
+Implemented through Phase 6.96C and documented through Phase 8B.1:
 
 - repository foundation
 - ADK feasibility spike
@@ -396,20 +399,23 @@ Implemented through Phase 6.96C and documented through Phase 8A:
 - Markdown prose-block extraction for `.md`
 - submission-readiness documentation and reviewer-facing project framing
 - approved evaluation design for repeatable Phase 8 implementation
+- evaluation package and directory foundation
 
 Not implemented yet:
 
 - clean-copy generation
 - evaluation harness
 - evaluation cases and expected outputs
+- evaluation results
 
 ## Roadmap Before Submission
 
 Expected next phases:
 
-1. Phase 8B - Evaluation Implementation
-2. Phase 9 - Final Documentation
-3. Phase 10 - Submission Prep
+1. Phase 8B.2 - Dataset and Expected Outputs
+2. Phase 8B.3 - Deterministic Runner and Metrics
+3. Phase 8B.4 - Gemini Evaluation Snapshot
+4. Phase 9 - Final Documentation
 
 Highest-priority gaps before submission:
 

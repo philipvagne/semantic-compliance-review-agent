@@ -24,12 +24,15 @@ The repository now contains:
 - a completed Phase 6.96B HTML Extraction
 - a completed Phase 6.96C Markdown Extraction
 - a completed Phase 6.97 Submission Readiness Foundation
+- a completed Phase 8A Evaluation Design
+- a completed Phase 8B.1 Evaluation Foundation
 - the documented MVP workflow for later phases
 
 The current runnable CLI path is the File Reader plus Text Extractor plus
 Context Loader plus Agent Review plus Report Writer flow.
 
-The next approved implementation step is Phase 8B: Evaluation Implementation.
+The next approved implementation step is Phase 8B.2: Dataset and Expected
+Outputs.
 
 Phase 6.97 did not change runtime behavior. It improved submission readiness by
 adding clearer reviewer-facing architecture explanation, concept framing, and a
@@ -38,6 +41,9 @@ video/writeup planning scaffold.
 Phase 8A also did not change runtime behavior. It documented the approved
 evaluation design, expected artifacts, and measurement rules for the next
 implementation step.
+
+Phase 8B.1 also did not change runtime behavior. It added evaluation directory
+scaffolding only, without cases, expected outputs, results, or runner logic.
 
 ## Implemented Flow
 

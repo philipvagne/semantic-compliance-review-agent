@@ -37,12 +37,13 @@ Completed:
 [completed] Phase 6.96B HTML Extraction Implemented
 [completed] Phase 6.96C Markdown Extraction Implemented
 [completed] Phase 6.97 Submission Readiness Foundation Implemented
+[completed] Phase 8A Evaluation Design Approved
 
 Current Phase:
-PHASE 7 - CLEAN COPY GENERATION
+PHASE 8B - EVALUATION IMPLEMENTATION
 
 Next Milestone:
-PHASE 8 - EVALUATION
+PHASE 9 - FINAL DOCUMENTATION
 
 ================================================================================
 PROJECT OVERVIEW
@@ -1420,6 +1421,40 @@ PHASE 8 — EVALUATION
 - Run evaluation command
 - Report precision and recall
 
+PHASE 8A - EVALUATION DESIGN
+
+- Document the approved evaluation design before implementation
+- Keep runtime behavior unchanged
+- Define backend-specific evaluation purposes for Deterministic and Gemini
+- Define representative supported-file coverage and case-count targets
+- Define matching rules, metrics, expected JSON format, and result-artifact policy
+
+Approved evaluation design:
+
+- evaluation focuses on semantic correctness, not exact wording matches
+- deterministic and Gemini backends are evaluated separately
+- supported evaluation coverage includes `.py`, `.js`, `.ts` / `.tsx`,
+  `.html`, and `.md`
+- representative coverage is required; equal coverage is not required
+- target case count is 10 to 14 total cases
+- result artifacts should be committed to the repository as capstone evidence
+
+Exit Criteria:
+
+[completed] Evaluation philosophy documented
+[completed] Backend strategy documented
+[completed] Representative file coverage documented
+[completed] Metrics documented
+[completed] Expected JSON structure documented
+[completed] Result artifact policy documented
+
+PHASE 8B - EVALUATION IMPLEMENTATION
+
+- Create evaluation input cases
+- Create expected output JSON files
+- Implement comparison and reporting flow
+- Generate deterministic and Gemini evaluation results
+
 Exit Criteria:
 
 [ ] Evaluation dataset exists
@@ -1578,13 +1613,14 @@ Completed:
 - HTML extraction implemented
 - Markdown extraction implemented
 - Submission-readiness foundation documented
+- Evaluation design documented
 
 Next Actions:
 
-1. Begin Phase 7 - Clean Copy Generation
-2. Keep source modification optional and tightly guardrailed
-3. Preserve the human-in-the-loop guardrails while keeping repository-wide scanning deferred
-4. Begin Phase 8 - Evaluation after clean-copy generation
+1. Begin Phase 8B - Evaluation Implementation
+2. Create representative evaluation cases across supported file types
+3. Preserve the human-in-the-loop guardrails while implementing repeatable metrics
+4. Return to final documentation and submission packaging after evaluation
 
 Future Polish:
 - Convert "Why This Was Flagged" explanations into concise audit-style bullet points.

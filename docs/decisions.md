@@ -317,3 +317,54 @@ focused on headings, paragraphs, lists, and blockquotes.
 Status:
 
 Accepted
+
+### Evaluate Semantic Correctness Rather Than Exact Wording
+
+Decision:
+
+Judge evaluation matches based on whether the correct text or line range,
+category, and concern were identified, rather than requiring exact explanation
+or recommendation wording.
+
+Reason:
+
+The project evaluates semantic review quality, not exact sentence generation.
+Strict wording equality would under-measure correct behavior and over-penalize
+reasonable phrasing differences, especially for Gemini.
+
+Status:
+
+Accepted
+
+### Evaluate Deterministic and Gemini Backends Separately
+
+Decision:
+
+Report deterministic and Gemini evaluation results separately instead of
+combining them into one blended score.
+
+Reason:
+
+The two backends serve different goals. Deterministic evaluation validates
+pipeline correctness and repeatability, while Gemini evaluation validates
+semantic reasoning and contextual judgment.
+
+Status:
+
+Accepted
+
+### Commit Evaluation Results as Capstone Evidence
+
+Decision:
+
+Commit evaluation result artifacts to the repository.
+
+Reason:
+
+Reviewers should be able to inspect evaluation evidence without rerunning the
+project. In this project, evaluation outputs are part of the capstone evidence
+package rather than disposable local runtime files.
+
+Status:
+
+Accepted

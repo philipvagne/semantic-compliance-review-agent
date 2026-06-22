@@ -1,11 +1,13 @@
 # Evaluation Plan
 
-This document describes the planned evaluation approach for the Semantic
+This document describes the approved evaluation design for the Semantic
 Compliance Review Agent.
 
 Evaluation is not implemented yet.
 
-Formal evaluation is planned for Phase 8.
+Phase 8A documents the design.
+
+Phase 8B should implement the evaluation harness and artifacts described here.
 
 ## Current Status
 
@@ -15,51 +17,300 @@ Implemented now:
 - manual sample output
 - deterministic backend for stable local checks
 - live Gemini verification documented in the build log
+- approved evaluation design for the next implementation step
 
 Not implemented yet:
 
 - evaluation harness
 - evaluation CLI command
 - expected-output comparison
-- precision/recall reporting
+- precision and recall reporting
 - committed evaluation cases
+- committed expected-output JSON files
+- committed evaluation result artifacts
 
-This plan is intentionally honest about that gap.
+This document is intentionally honest about that gap.
 
 ## Evaluation Goal
 
-The evaluation phase should demonstrate that the agent produces useful,
-traceable findings on a hand-built set of review cases.
+The evaluation phase should provide credible, repeatable evidence that:
 
-The primary goal is not benchmark scale.
+- the extraction pipeline works correctly
+- the review pipeline works correctly
+- the agent can identify expected risks
+- the agent can avoid obvious false positives
+- the results can be measured and reported
 
-The primary goal is submission-quality evidence that:
+The goal is not benchmark scale.
 
-- the system catches obvious risky text
-- the system can return zero findings when appropriate
-- structured findings are inspectable
-- the review behavior is explainable
+The goal is submission-quality evidence for a small, explainable capstone
+project.
 
-## Planned Evaluation Scope
+## Evaluation Philosophy
 
-Phase 8 should include hand-built evaluation cases covering at least:
+The evaluation should measure whether the agent understood the risk, not
+whether it produced exact expected wording.
 
-- clean zero-finding case
+Exact explanation and recommendation text matches should not be required.
+
+Evaluation should focus on semantic correctness:
+
+- whether the right text or line range was targeted
+- whether the right category was identified
+- whether the explanation is meaningfully related to the expected concern
+
+## Backend Strategy
+
+The deterministic and Gemini backends should be evaluated separately.
+
+### Deterministic Backend Purpose
+
+- validate pipeline correctness
+- validate extraction behavior
+- validate repeatable rule-based findings
+
+### Gemini Backend Purpose
+
+- validate semantic reasoning
+- validate contextual understanding
+- validate category selection
+
+Deterministic and Gemini results should not be collapsed into one vague score.
+
+## Supported Evaluation Coverage
+
+The evaluation should cover the currently supported file types:
+
+- `.py`
+- `.js`
+- `.ts` / `.tsx` through JavaScript-family coverage
+- `.html`
+- `.md`
+
+Coverage does not need to be equal.
+
+Coverage does need to be representative.
+
+The target size is 10 to 14 total evaluation cases.
+
+The goal is credible coverage, not a large benchmark suite.
+
+## Evaluation Case Types
+
+### 1. Clean File
+
+Purpose:
+
+Verify that safe content produces zero findings.
+
+Expected:
+
+`0` findings.
+
+### 2. Security Risk
+
+Examples:
+
+- temporary password
+- hard-coded secret
+- sensitive credential reference
+
+Expected:
+
+`SECURITY_RISK` finding.
+
+### 3. Internal Naming Risk
+
+Examples:
+
+- confidential project names
+- internal codenames
+- restricted initiatives
+
+Expected:
+
+`INTERNAL_CODENAME_EXPOSURE` finding.
+
+### 4. Professionalism Risk
+
+Examples:
+
+- unfinished TODO comments
+- placeholder release notes
+- unprofessional language
+
+Expected:
+
+`PROFESSIONALISM_RISK` finding.
+
+### 5. Suggested Replacement Case
+
+Purpose:
+
+Verify recommendation quality for obvious high-confidence cases.
+
+Expected:
+
+The finding includes a reasonable `suggested_replacement`.
+
+### 6. Documentation False-Positive Case
+
+Purpose:
+
+Measure whether the agent incorrectly flags safe documentation.
+
+Example:
+
+README-style documentation containing:
+
+- `GOOGLE_API_KEY`
+- `GEMINI_API_KEY`
+- API endpoint references
+- credential setup instructions
+
+in safe instructional context.
+
+Expected:
+
+Zero findings or near-zero findings.
+
+This case is important because README self-review during development exposed
+possible over-flagging of safe instructional credential examples.
+
+### 7. Multi-Language Coverage Cases
+
+Purpose:
+
+Verify extraction and review behavior across supported file types.
+
+Include:
+
+- Python
+- JavaScript-family
+- HTML
+- Markdown
+
+Expected:
+
+Expected findings are produced consistently regardless of file type.
+
+### Optional Additional Cases
+
+If time allows and examples remain stable:
+
 - configured sensitive-term match case
-- semantic security-risk case
 - hybrid case combining term match and semantic risk
-- suggested-replacement case
-- professionalism-risk case
-- compliance-risk case if a stable example is available
+- compliance-risk case
 
-With broader file support now implemented, Phase 8 should also include:
+## Matching Rules
 
-- unsupported file behavior case
-- JavaScript-family supported-file cases
-- HTML supported-file cases
-- Markdown supported-file cases
+Evaluation should not require exact wording matches.
 
-## Planned Evaluation Structure
+A finding should count as a match when:
+
+1. The expected reviewable text was identified, or the correct line range was
+   targeted.
+2. The expected category was identified.
+3. The explanation is meaningfully related to the expected concern.
+
+## Severity Rules
+
+Severity is secondary.
+
+Example:
+
+- expected: `HIGH`
+- actual: `MEDIUM`
+
+This may still count as a successful detection.
+
+Primary concern:
+
+Was the correct risk detected?
+
+Secondary concern:
+
+Was the severity reasonable?
+
+## Evaluation Metrics
+
+The evaluation should report at least:
+
+- True Positive (TP): expected finding exists and the agent correctly
+  identifies it
+- False Positive (FP): agent reports a finding that should not exist
+- False Negative (FN): expected finding exists and the agent fails to identify
+  it
+- Precision: `TP / (TP + FP)`
+- Recall: `TP / (TP + FN)`
+
+Metric purpose:
+
+- Precision answers: how trustworthy are reported findings?
+- Recall answers: how many expected findings were detected?
+
+If time allows, the final evaluation writeup may also include supporting counts
+such as:
+
+- total cases run
+- total findings expected
+- total findings produced
+
+These metrics should be treated as small-project evaluation signals, not as
+formal scientific claims.
+
+## Expected Output Schema
+
+Phase 8B should implement expected-case JSON files against a small, explicit
+schema.
+
+Example risky case:
+
+```json
+{
+  "case_id": "security_python",
+  "expected_findings": [
+    {
+      "category": "SECURITY_RISK",
+      "target_text_contains": "temporary password",
+      "line_start": 3,
+      "line_end": 3,
+      "line_range_approximate": true,
+      "requires_suggested_replacement": false
+    }
+  ],
+  "expected_finding_count_min": 1,
+  "expected_finding_count_max": 2
+}
+```
+
+Example clean or false-positive case:
+
+```json
+{
+  "case_id": "documentation_false_positive",
+  "expected_findings": [],
+  "expected_finding_count_min": 0,
+  "expected_finding_count_max": 0
+}
+```
+
+Field meanings:
+
+- `case_id`: stable identifier for the evaluation case
+- `expected_findings`: expected matched findings for the case
+- `category`: expected finding category
+- `target_text_contains`: short anchor text that should appear in the matched
+  source text
+- `line_start`: expected start line for the matched finding
+- `line_end`: expected end line for the matched finding
+- `line_range_approximate`: whether near-line matching is acceptable
+- `requires_suggested_replacement`: whether the finding should include a
+  reasonable suggested replacement
+- `expected_finding_count_min`: lower bound for acceptable finding count
+- `expected_finding_count_max`: upper bound for acceptable finding count
+
+## Evaluation Artifact Structure
 
 Planned repository structure:
 
@@ -67,73 +318,35 @@ Planned repository structure:
 evaluation/
   cases/
   expected/
+  results/
 ```
 
-Planned approach:
+Examples:
 
-1. Create a small set of hand-written inputs.
-2. Define expected findings or expected no-finding outcomes.
-3. Run the pipeline against each case.
-4. Compare actual findings with expected results.
-5. Record a simple evaluation summary.
+- `evaluation/cases/security_python.py`
+- `evaluation/cases/security_javascript.js`
+- `evaluation/cases/internal_codename_markdown.md`
+- `evaluation/cases/clean_html.html`
+- `evaluation/cases/documentation_false_positive.md`
 
-## Expected Case Types
+- `evaluation/expected/security_python.json`
+- `evaluation/expected/security_javascript.json`
+- `evaluation/expected/clean_html.json`
+- `evaluation/expected/documentation_false_positive.json`
 
-### Zero-Finding Clean Case
+- `evaluation/results/deterministic-results.md`
+- `evaluation/results/gemini-results.md`
 
-Purpose:
+## Result Policy
 
-Show that obviously safe comments and docstrings do not automatically produce
-findings.
+Evaluation results should be committed to the repository.
 
-### Sensitive Term Match Case
+Reason:
 
-Purpose:
+Capstone reviewers should be able to inspect evaluation evidence without
+rerunning the project.
 
-Verify that configured sensitive terms can trigger a high-confidence
-term-driven finding.
-
-### Semantic Risk Case
-
-Purpose:
-
-Verify that risky wording can be flagged even when no configured sensitive term
-is present.
-
-### Hybrid Case
-
-Purpose:
-
-Verify that the system can distinguish a plain term match from a term match
-plus added semantic risk.
-
-### Suggested Replacement Case
-
-Purpose:
-
-Verify that obvious high-confidence cases may include a safe suggested
-replacement and that the report displays it clearly.
-
-### Unsupported File Behavior Case
-
-Purpose:
-
-Once broader extraction support is added, verify that unsupported file types
-fail or skip in the documented way rather than behaving ambiguously.
-
-## Planned Metrics
-
-If feasible within capstone scope, Phase 8 should report simple review metrics
-such as:
-
-- correct detections
-- false positives
-- false negatives
-- approximate precision
-- approximate recall
-
-These should be treated as small-project evaluation signals, not as formal
-scientific claims.
+Evaluation artifacts are capstone evidence, not temporary runtime files.
 
 ## Evaluation Constraints
 
@@ -143,6 +356,22 @@ The evaluation phase should remain aligned with the rest of the project:
 - findings remain advisory
 - deterministic mode may be used for stable local checks
 - Gemini may be used for live-path verification where appropriate
+- no prompt tuning as part of the baseline evaluation implementation
+- no extraction-behavior changes as part of the baseline evaluation implementation
+
+## Explicit Non-Goals for Phase 8A
+
+Phase 8A does not:
+
+- implement the evaluation harness
+- create evaluation cases
+- create expected JSON files
+- generate metrics
+- tune prompts
+- modify Gemini behavior
+- modify extraction behavior
+- modify report generation
+- modify runtime architecture
 
 ## What This Document Does Not Claim
 
@@ -153,4 +382,4 @@ It does not claim that metrics are already available.
 It does not claim that the current repository contains a finished benchmark
 suite.
 
-Those items belong to Phase 8 work.
+Those items belong to later Phase 8 implementation work.

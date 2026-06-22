@@ -51,7 +51,8 @@ flowchart TD
 
 The project uses an ADK-backed review boundary to turn extracted human-written
 text plus project context into structured findings. The architecture stays
-narrow and explainable: one file in, one review flow, one report out.
+narrow and explainable: one file in, one structured review, one report out,
+across Python, JavaScript-family, HTML, and Markdown files.
 
 ### Security Guardrails
 
@@ -371,13 +372,13 @@ semantic-compliance-review-agent/
 
 Current phase:
 
-- Phase 7 - Clean Copy Generation
+- Phase 8B - Evaluation Implementation
 
 Most recently completed:
 
-- Phase 6.97 - Submission Readiness Foundation
+- Phase 8A - Evaluation Design
 
-Implemented through Phase 6.96C:
+Implemented through Phase 6.96C and documented through Phase 8A:
 
 - repository foundation
 - ADK feasibility spike
@@ -394,20 +395,21 @@ Implemented through Phase 6.96C:
 - HTML comment extraction for `.html`
 - Markdown prose-block extraction for `.md`
 - submission-readiness documentation and reviewer-facing project framing
+- approved evaluation design for repeatable Phase 8 implementation
 
 Not implemented yet:
 
 - clean-copy generation
 - evaluation harness
+- evaluation cases and expected outputs
 
 ## Roadmap Before Submission
 
 Expected next phases:
 
-1. Phase 7 - Clean Copy Generation
-2. Phase 8 - Evaluation
-3. Phase 9 - Final Documentation
-4. Phase 10 - Submission Prep
+1. Phase 8B - Evaluation Implementation
+2. Phase 9 - Final Documentation
+3. Phase 10 - Submission Prep
 
 Highest-priority gaps before submission:
 

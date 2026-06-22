@@ -2,6 +2,54 @@
 
 ## 2026-06-22
 
+### Phase 8A - Evaluation Design
+
+Completed:
+- Replaced the earlier lightweight evaluation notes with a fuller approved
+  Phase 8 evaluation design.
+- Documented the evaluation philosophy that semantic correctness matters more
+  than exact wording matches.
+- Documented separate evaluation purposes for the deterministic and Gemini
+  backends instead of combining them into one score.
+- Documented representative supported-file coverage, case-type targets,
+  matching rules, severity handling, metrics, and expected JSON structure.
+- Documented the proposed `evaluation/cases`, `evaluation/expected`, and
+  `evaluation/results` artifact layout.
+- Recorded the policy that evaluation result artifacts should be committed as
+  capstone evidence.
+- Updated project status docs so Phase 8A is recorded as complete and Phase 8B
+  can begin as the next implementation step.
+
+Tested:
+- Documentation-only task; no runtime code or evaluation harness behavior was
+  changed.
+- Re-read README, architecture, decisions, guardrails, evaluation, course
+  concepts, workflow guidance, and the project plan to keep the evaluation
+  design aligned with the current pipeline boundaries.
+
+Result:
+- The repository now contains a credible, repeatable evaluation design without
+  claiming that evaluation runtime support already exists.
+
+### Phase 6.97 - Submission Readiness Refinement
+
+Completed:
+- Updated the README concept framing so the ADK architecture section now
+  explicitly acknowledges supported multi-language extraction coverage without
+  overstating the MVP scope.
+- Updated the video writeup skeleton so the demo plan explicitly includes one
+  non-Python review example and report generation.
+- Added a brief future-improvements note to the video writeup skeleton.
+
+Tested:
+- Documentation-only refinement; no runtime code or behavior was changed.
+- Re-checked the surrounding docs to keep the wording aligned with the current
+  implemented file support and roadmap.
+
+Result:
+- Submission-facing docs now present the implemented multi-language support
+  more clearly while preserving the same architecture and scope boundaries.
+
 ### Phase 6.97 - Submission Readiness Foundation
 
 Completed:

@@ -29,11 +29,15 @@ The repository now contains:
 The current runnable CLI path is the File Reader plus Text Extractor plus
 Context Loader plus Agent Review plus Report Writer flow.
 
-The next approved implementation step is Phase 7: Clean Copy Generation.
+The next approved implementation step is Phase 8B: Evaluation Implementation.
 
 Phase 6.97 did not change runtime behavior. It improved submission readiness by
 adding clearer reviewer-facing architecture explanation, concept framing, and a
 video/writeup planning scaffold.
+
+Phase 8A also did not change runtime behavior. It documented the approved
+evaluation design, expected artifacts, and measurement rules for the next
+implementation step.
 
 ## Implemented Flow
 

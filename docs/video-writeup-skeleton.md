@@ -54,12 +54,12 @@ Points to highlight:
 
 ## Demo Plan
 
-- Show one supported input file.
+- Demonstrate a Python file review.
+- Demonstrate a JavaScript or Markdown file review.
 - Run the CLI in deterministic mode for a stable demo path.
-- Point out the extracted reviewable text count.
+- Show report generation and point out the extracted reviewable text count.
 - Show that project context and sensitive terms are loaded.
-- Open the generated Markdown audit report.
-- Highlight one finding, its explanation, and the human-review disclaimer.
+- Highlight one finding and the human-review disclaimer in the generated report.
 
 Optional backup demo notes:
 
@@ -75,3 +75,10 @@ Optional backup demo notes:
   slices.
 - Expanding extraction carefully was safer than trying to parse every language
   deeply.
+
+Future improvements could include:
+
+- repository-wide scanning
+- clean-copy generation with controlled diff output
+- additional supported file types
+- expanded evaluation coverage

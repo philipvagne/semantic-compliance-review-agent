@@ -9,8 +9,12 @@ Review Agent.
 - `expected/` contains expected outcome JSON files.
 - `results/` contains committed evaluation result artifacts.
 
-The repository now includes an initial 10-case dataset and 10 matching
-expected JSON files for Phase 8B.2.
+The repository now includes:
+
+- an initial 10-case dataset and 10 matching expected JSON files from Phase 8B.2
+- a deterministic evaluation runner at `evaluation/run.py`
+- a committed deterministic results artifact at
+  `evaluation/results/deterministic-results.md`
 
 ## Backend Separation
 
@@ -18,6 +22,11 @@ Evaluation will treat deterministic and Gemini results separately.
 
 - The deterministic backend validates repeatable pipeline behavior.
 - The Gemini backend validates semantic reasoning.
+
+Current Phase 8B status:
+
+- `8B.3` deterministic runner and metrics are implemented
+- `8B.4` Gemini evaluation snapshot remains pending
 
 ## Result Policy
 
@@ -28,5 +37,4 @@ reproducible benchmark.
 
 ## Future Phase 8B Steps
 
-- `8B.3` deterministic runner and metrics
 - `8B.4` Gemini evaluation snapshot

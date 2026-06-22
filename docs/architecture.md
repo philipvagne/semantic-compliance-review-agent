@@ -27,13 +27,14 @@ The repository now contains:
 - a completed Phase 8A Evaluation Design
 - a completed Phase 8B.1 Evaluation Foundation
 - a completed Phase 8B.2 Evaluation Dataset
+- a completed Phase 8B.3 Deterministic Runner and Metrics
 - the documented MVP workflow for later phases
 
 The current runnable CLI path is the File Reader plus Text Extractor plus
 Context Loader plus Agent Review plus Report Writer flow.
 
-The next approved implementation step is Phase 8B.3: Deterministic Runner and
-Metrics.
+The next approved implementation step is Phase 8B.4: Gemini Evaluation
+Snapshot.
 
 Phase 6.97 did not change runtime behavior. It improved submission readiness by
 adding clearer reviewer-facing architecture explanation, concept framing, and a
@@ -49,6 +50,11 @@ scaffolding only, without cases, expected outputs, results, or runner logic.
 Phase 8B.2 also did not change runtime behavior. It added the initial
 evaluation cases and matching expected-output JSON files without implementing
 the runner, metrics, or results generation.
+
+Phase 8B.3 did not change the normal review CLI pipeline. It added a separate
+deterministic evaluation runner under `evaluation/run.py`, simple expected
+finding matching, TP / FP / FN and precision / recall calculation, and a
+committed Markdown results artifact under `evaluation/results/`.
 
 ## Implemented Flow
 
@@ -913,8 +919,11 @@ Raises EvaluationError
 Responsibility:
 
 - Evaluate agent quality
+- Compare actual findings against committed expected outputs
+- Report deterministic evaluation metrics and artifacts
 
 Does NOT:
 
 - Modify source files
 - Affect normal scans
+- Change review behavior for the main CLI pipeline

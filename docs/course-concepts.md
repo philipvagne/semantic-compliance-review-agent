@@ -136,18 +136,13 @@ Evaluation now has:
 - an approved design
 - committed evaluation cases
 - committed expected-output JSON files
+- a deterministic runner
+- committed deterministic metrics output
 
-It is not yet implemented in runtime execution code.
+It is not yet complete across both backends.
 
 Planned scope includes:
 
-- deterministic runner
-- expected findings comparison
-- clean zero-finding cases
-- sensitive-term match cases
-- semantic-risk cases
-- hybrid cases
-- basic precision/recall-style review if feasible
 - Gemini evaluation snapshot recording
 
 This concept should still not be claimed as complete yet.
@@ -198,7 +193,7 @@ The strongest course-concept coverage today is:
 - CLI orchestration
 - prompt/instruction design
 
-The weakest still-missing concept area is formal evaluation.
+The weakest still-missing concept area is full two-backend evaluation coverage.
 
-That gap is already recognized in the project plan and should be addressed in
-Phase 8 rather than being overstated now.
+That remaining gap is already recognized in the project plan and is now limited
+mainly to the Phase 8B.4 Gemini snapshot work.

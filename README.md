@@ -78,6 +78,14 @@ Current implemented workflow:
 5. Run semantic review through the agent boundary.
 6. Write one audit report to `output/`.
 
+Current deterministic evaluation workflow:
+
+1. Load all files from `evaluation/cases/`.
+2. Load matching expected JSON files from `evaluation/expected/`.
+3. Run each case through the existing pipeline with the deterministic backend.
+4. Compare actual findings against expected findings.
+5. Write one Markdown evaluation result artifact to `evaluation/results/`.
+
 Current supported extraction scope:
 
 - Python files:
@@ -122,11 +130,15 @@ The current implementation does not yet provide:
 - repository-wide scanning
 - automatic source modification
 - clean-copy generation
-- evaluation harness
 - web UI
 - database
 - authentication
 - multi-agent architecture
+
+Evaluation status:
+
+- deterministic evaluation runner and metrics are implemented
+- Gemini evaluation is not implemented yet
 
 Important scope truth:
 
@@ -375,13 +387,13 @@ semantic-compliance-review-agent/
 
 Current phase:
 
-- Phase 8B.2 - Evaluation Dataset
+- Phase 8B.3 - Deterministic Runner and Metrics
 
 Most recently completed:
 
-- Phase 8B.2 - Evaluation Dataset
+- Phase 8B.3 - Deterministic Runner and Metrics
 
-Implemented through Phase 6.96C and documented through Phase 8B.2:
+Implemented through Phase 8B.3:
 
 - repository foundation
 - ADK feasibility spike
@@ -401,21 +413,21 @@ Implemented through Phase 6.96C and documented through Phase 8B.2:
 - approved evaluation design for repeatable Phase 8 implementation
 - evaluation package and directory foundation
 - evaluation dataset and matching expected outputs
+- deterministic evaluation runner and committed deterministic metrics report
 
 Not implemented yet:
 
 - clean-copy generation
-- evaluation harness
-- evaluation results
-- evaluation runner and metrics
+- Gemini evaluation
+- Gemini evaluation results snapshot
 
 ## Roadmap Before Submission
 
 Expected next phases:
 
-1. Phase 8B.3 - Deterministic Runner and Metrics
-2. Phase 8B.4 - Gemini Evaluation Snapshot
-3. Phase 9 - Final Documentation
+1. Phase 8B.4 - Gemini Evaluation Snapshot
+2. Phase 9 - Final Documentation
+3. Phase 10 - Submission Prep
 
 Highest-priority gaps before submission:
 

@@ -3,11 +3,10 @@
 This document describes the approved evaluation design for the Semantic
 Compliance Review Agent.
 
-Evaluation is not implemented yet.
+Phase 8A documented the design.
 
-Phase 8A documents the design.
-
-Phase 8B should implement the evaluation harness and artifacts described here.
+Phase 8B is implementing the evaluation harness and artifacts described here in
+small slices.
 
 The repository now contains the Phase 8B.1 foundation structure:
 
@@ -22,6 +21,11 @@ The repository now also contains the initial Phase 8B.2 dataset:
 - 10 evaluation case files in `evaluation/cases/`
 - 10 matching expected-output JSON files in `evaluation/expected/`
 
+The repository now also contains the initial Phase 8B.3 runner output:
+
+- `evaluation/run.py`
+- `evaluation/results/deterministic-results.md`
+
 ## Current Status
 
 Implemented now:
@@ -33,15 +37,15 @@ Implemented now:
 - approved evaluation design for the next implementation step
 - committed initial evaluation cases
 - committed initial expected-output JSON files
+- deterministic evaluation runner
+- deterministic expected-output comparison
+- deterministic precision and recall reporting
+- committed deterministic evaluation results artifact
 
 Not implemented yet:
 
-- evaluation harness
-- evaluation CLI command
-- expected-output comparison
-- precision and recall reporting
-- committed evaluation result artifacts
-- evaluation runner implementation
+- Gemini evaluation execution
+- committed Gemini evaluation snapshot
 
 This document is intentionally honest about that gap.
 
@@ -82,6 +86,7 @@ The deterministic and Gemini backends should be evaluated separately.
 - validate pipeline correctness
 - validate extraction behavior
 - validate repeatable rule-based findings
+- provide committed precision and recall evidence
 
 ### Gemini Backend Purpose
 

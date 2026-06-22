@@ -40,12 +40,13 @@ Completed:
 [completed] Phase 8A Evaluation Design Approved
 [completed] Phase 8B.1 Evaluation Foundation Implemented
 [completed] Phase 8B.2 Evaluation Dataset Implemented
+[completed] Phase 8B.3 Deterministic Runner and Metrics Implemented
 
 Current Phase:
-PHASE 8B.3 - DETERMINISTIC RUNNER AND METRICS
+PHASE 8B.4 - GEMINI EVALUATION SNAPSHOT
 
 Next Milestone:
-PHASE 8B.4 - GEMINI EVALUATION SNAPSHOT
+PHASE 9 - FINAL DOCUMENTATION
 
 ================================================================================
 PROJECT OVERVIEW
@@ -1500,6 +1501,20 @@ PHASE 8B.3 - DETERMINISTIC RUNNER AND METRICS
 - Compare actual findings against expected outputs
 - Report deterministic precision and recall
 
+Exit Criteria:
+
+[completed] `evaluation/run.py` exists
+[completed] `python -m evaluation.run --backend deterministic` works
+[completed] `evaluation/results/deterministic-results.md` exists
+[completed] TP / FP / FN are calculated
+[completed] precision / recall are calculated
+[completed] console output is concise
+[completed] result file is detailed and human-readable
+[completed] missing expected files fail clearly
+[completed] invalid expected JSON fails clearly
+[completed] no Gemini behavior is implemented
+[completed] no runtime application behavior changes
+
 PHASE 8B.4 - GEMINI EVALUATION SNAPSHOT
 
 - Run Gemini evaluation against the approved dataset
@@ -1667,13 +1682,15 @@ Completed:
 - Evaluation design documented
 - Evaluation foundation created
 - Evaluation dataset created
+- Deterministic evaluation runner implemented
+- Deterministic evaluation results generated
 
 Next Actions:
 
-1. Begin Phase 8B.3 - Deterministic Runner and Metrics
-2. Compare actual findings against the committed expected outputs
-3. Report deterministic precision and recall
-4. Record a Gemini evaluation snapshot after deterministic evaluation is working
+1. Begin Phase 8B.4 - Gemini Evaluation Snapshot
+2. Record Gemini results as committed capstone evidence
+3. Frame Gemini results as a review snapshot rather than a perfectly reproducible benchmark
+4. Begin final documentation cleanup after both evaluation paths are recorded
 
 Future Polish:
 - Convert "Why This Was Flagged" explanations into concise audit-style bullet points.

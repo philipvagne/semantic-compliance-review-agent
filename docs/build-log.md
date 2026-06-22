@@ -2,6 +2,35 @@
 
 ## 2026-06-22
 
+### Phase 8B.3 - Deterministic Runner and Metrics
+
+Completed:
+- Added `evaluation/run.py` as the first working evaluation execution path for
+  the deterministic backend only.
+- Implemented strict loading of all files from `evaluation/cases/` and matching
+  expected JSON files from `evaluation/expected/`.
+- Implemented simple and explainable expected-to-actual matching using category
+  plus target-text or line-range checks, with optional suggested-replacement
+  requirements.
+- Calculated TP, FP, FN, precision, and recall across the committed dataset.
+- Generated `evaluation/results/deterministic-results.md` as a human-readable
+  committed evaluation artifact.
+- Updated status docs so Phase 8B.3 is recorded as complete and Phase 8B.4 is
+  the next implementation slice.
+
+Tested:
+- Ran `python -m compileall src evaluation`.
+- Ran `python -m evaluation.run --backend deterministic`.
+- Verified that all 10 evaluation cases were processed.
+- Verified that concise per-case progress and final precision/recall summary
+  were printed to the console.
+- Verified that `evaluation/results/deterministic-results.md` was generated.
+
+Result:
+- The repository now has a deterministic evaluation runner and metrics output
+  without changing the normal runtime review pipeline or adding Gemini
+  evaluation behavior.
+
 ### Phase 8B.2 - Evaluation Dataset
 
 Completed:

@@ -26,13 +26,14 @@ The repository now contains:
 - a completed Phase 6.97 Submission Readiness Foundation
 - a completed Phase 8A Evaluation Design
 - a completed Phase 8B.1 Evaluation Foundation
+- a completed Phase 8B.2 Evaluation Dataset
 - the documented MVP workflow for later phases
 
 The current runnable CLI path is the File Reader plus Text Extractor plus
 Context Loader plus Agent Review plus Report Writer flow.
 
-The next approved implementation step is Phase 8B.2: Dataset and Expected
-Outputs.
+The next approved implementation step is Phase 8B.3: Deterministic Runner and
+Metrics.
 
 Phase 6.97 did not change runtime behavior. It improved submission readiness by
 adding clearer reviewer-facing architecture explanation, concept framing, and a
@@ -44,6 +45,10 @@ implementation step.
 
 Phase 8B.1 also did not change runtime behavior. It added evaluation directory
 scaffolding only, without cases, expected outputs, results, or runner logic.
+
+Phase 8B.2 also did not change runtime behavior. It added the initial
+evaluation cases and matching expected-output JSON files without implementing
+the runner, metrics, or results generation.
 
 ## Implemented Flow
 

@@ -2,6 +2,30 @@
 
 ## 2026-06-22
 
+### Phase 8B.2 - Evaluation Dataset
+
+Completed:
+- Added 10 small evaluation input files under `evaluation/cases/`.
+- Added 10 matching expected-output JSON files under `evaluation/expected/`
+  using the approved Phase 8A schema.
+- Covered clean behavior, documentation false-positive handling, security
+  risks, internal codename exposure, professionalism risks, and suggested
+  replacement coverage.
+- Included representative supported-file coverage across Python,
+  JavaScript-family, HTML, Markdown, and TypeScript.
+- Updated status docs so Phase 8B.2 is recorded as complete and Phase 8B.3 is
+  the next implementation slice.
+
+Tested:
+- Dataset-only task; no runtime code, evaluation runner, or results generation
+  behavior was changed.
+- Verified that `evaluation/results/` remains empty and that no runner or
+  metrics implementation was added in this slice.
+
+Result:
+- The repository now contains a small, credible evaluation dataset and
+  matching expectations without implementing execution or scoring logic.
+
 ### Phase 8B.1 - Evaluation Foundation
 
 Completed:

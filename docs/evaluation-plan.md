@@ -17,6 +17,11 @@ The repository now contains the Phase 8B.1 foundation structure:
 - `evaluation/expected/`
 - `evaluation/results/`
 
+The repository now also contains the initial Phase 8B.2 dataset:
+
+- 10 evaluation case files in `evaluation/cases/`
+- 10 matching expected-output JSON files in `evaluation/expected/`
+
 ## Current Status
 
 Implemented now:
@@ -26,6 +31,8 @@ Implemented now:
 - deterministic backend for stable local checks
 - live Gemini verification documented in the build log
 - approved evaluation design for the next implementation step
+- committed initial evaluation cases
+- committed initial expected-output JSON files
 
 Not implemented yet:
 
@@ -33,9 +40,8 @@ Not implemented yet:
 - evaluation CLI command
 - expected-output comparison
 - precision and recall reporting
-- committed evaluation cases
-- committed expected-output JSON files
 - committed evaluation result artifacts
+- evaluation runner implementation
 
 This document is intentionally honest about that gap.
 

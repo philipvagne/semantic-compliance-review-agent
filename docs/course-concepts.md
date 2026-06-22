@@ -129,22 +129,28 @@ could still improve later.
 
 ### 10. Evaluation
 
-Planned for Phase 8.
+Partially implemented now.
 
-Evaluation is documented as a required project capability, but it is not yet
-implemented in runtime code.
+Evaluation now has:
+
+- an approved design
+- committed evaluation cases
+- committed expected-output JSON files
+
+It is not yet implemented in runtime execution code.
 
 Planned scope includes:
 
-- hand-built cases
-- expected findings
+- deterministic runner
+- expected findings comparison
 - clean zero-finding cases
 - sensitive-term match cases
 - semantic-risk cases
 - hybrid cases
 - basic precision/recall-style review if feasible
+- Gemini evaluation snapshot recording
 
-This concept should not be claimed as complete yet.
+This concept should still not be claimed as complete yet.
 
 ### 11. Broader Extraction Coverage
 

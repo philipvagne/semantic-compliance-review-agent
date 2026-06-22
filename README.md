@@ -375,13 +375,13 @@ semantic-compliance-review-agent/
 
 Current phase:
 
-- Phase 8B.1 - Evaluation Foundation
+- Phase 8B.2 - Evaluation Dataset
 
 Most recently completed:
 
-- Phase 8B.1 - Evaluation Foundation
+- Phase 8B.2 - Evaluation Dataset
 
-Implemented through Phase 6.96C and documented through Phase 8B.1:
+Implemented through Phase 6.96C and documented through Phase 8B.2:
 
 - repository foundation
 - ADK feasibility spike
@@ -400,22 +400,22 @@ Implemented through Phase 6.96C and documented through Phase 8B.1:
 - submission-readiness documentation and reviewer-facing project framing
 - approved evaluation design for repeatable Phase 8 implementation
 - evaluation package and directory foundation
+- evaluation dataset and matching expected outputs
 
 Not implemented yet:
 
 - clean-copy generation
 - evaluation harness
-- evaluation cases and expected outputs
 - evaluation results
+- evaluation runner and metrics
 
 ## Roadmap Before Submission
 
 Expected next phases:
 
-1. Phase 8B.2 - Dataset and Expected Outputs
-2. Phase 8B.3 - Deterministic Runner and Metrics
-3. Phase 8B.4 - Gemini Evaluation Snapshot
-4. Phase 9 - Final Documentation
+1. Phase 8B.3 - Deterministic Runner and Metrics
+2. Phase 8B.4 - Gemini Evaluation Snapshot
+3. Phase 9 - Final Documentation
 
 Highest-priority gaps before submission:
 

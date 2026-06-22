@@ -1,0 +1,15 @@
+{
+  "case_id": "suggested_replacement_javascript",
+  "expected_findings": [
+    {
+      "category": "SECURITY_RISK",
+      "target_text_contains": "temporary admin password",
+      "line_start": 1,
+      "line_end": 1,
+      "line_range_approximate": true,
+      "requires_suggested_replacement": true
+    }
+  ],
+  "expected_finding_count_min": 1,
+  "expected_finding_count_max": 1
+}

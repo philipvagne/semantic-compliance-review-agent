@@ -39,12 +39,13 @@ Completed:
 [completed] Phase 6.97 Submission Readiness Foundation Implemented
 [completed] Phase 8A Evaluation Design Approved
 [completed] Phase 8B.1 Evaluation Foundation Implemented
+[completed] Phase 8B.2 Evaluation Dataset Implemented
 
 Current Phase:
-PHASE 8B.2 - DATASET AND EXPECTED OUTPUTS
+PHASE 8B.3 - DETERMINISTIC RUNNER AND METRICS
 
 Next Milestone:
-PHASE 8B.3 - DETERMINISTIC RUNNER AND METRICS
+PHASE 8B.4 - GEMINI EVALUATION SNAPSHOT
 
 ================================================================================
 PROJECT OVERVIEW
@@ -1483,6 +1484,16 @@ PHASE 8B.2 - DATASET AND EXPECTED OUTPUTS
 - Create expected outcome JSON files
 - Keep results generation deferred
 
+Exit Criteria:
+
+[completed] 10 evaluation case files exist
+[completed] 10 expected JSON files exist
+[completed] expected JSON schema matches Phase 8A
+[completed] no evaluation runner exists yet
+[completed] no metrics implementation exists yet
+[completed] no results files exist yet
+[completed] no runtime behavior changed
+
 PHASE 8B.3 - DETERMINISTIC RUNNER AND METRICS
 
 - Implement the deterministic evaluation runner
@@ -1655,12 +1666,13 @@ Completed:
 - Submission-readiness foundation documented
 - Evaluation design documented
 - Evaluation foundation created
+- Evaluation dataset created
 
 Next Actions:
 
-1. Begin Phase 8B.2 - Dataset and Expected Outputs
-2. Create representative evaluation cases across supported file types
-3. Implement deterministic comparison and metrics after the dataset is in place
+1. Begin Phase 8B.3 - Deterministic Runner and Metrics
+2. Compare actual findings against the committed expected outputs
+3. Report deterministic precision and recall
 4. Record a Gemini evaluation snapshot after deterministic evaluation is working
 
 Future Polish:

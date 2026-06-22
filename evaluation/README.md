@@ -9,6 +9,9 @@ Review Agent.
 - `expected/` contains expected outcome JSON files.
 - `results/` contains committed evaluation result artifacts.
 
+The repository now includes an initial 10-case dataset and 10 matching
+expected JSON files for Phase 8B.2.
+
 ## Backend Separation
 
 Evaluation will treat deterministic and Gemini results separately.
@@ -25,6 +28,5 @@ reproducible benchmark.
 
 ## Future Phase 8B Steps
 
-- `8B.2` dataset and expected outputs
 - `8B.3` deterministic runner and metrics
 - `8B.4` Gemini evaluation snapshot

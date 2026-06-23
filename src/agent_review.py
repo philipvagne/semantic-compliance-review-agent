@@ -14,7 +14,7 @@ Responsibilities:
 - Run the review behind a clean ADK-backed boundary.
 - Apply the configured Gemini model selection when the Gemini backend is used.
 - Validate structured findings.
-- Retry once on malformed structured output.
+- Retry transient Gemini provider failures with bounded backoff.
 
 Non-responsibilities:
 - Read files.
@@ -578,6 +578,12 @@ def _build_safe_suggested_replacement(
         replacement = re.sub(
             r"\btoken\b",
             "token reference",
+            replacement,
+            flags=re.IGNORECASE,
+        )
+        replacement = re.sub(
+            r"\bcredential reference reference\b",
+            "credential reference",
             replacement,
             flags=re.IGNORECASE,
         )

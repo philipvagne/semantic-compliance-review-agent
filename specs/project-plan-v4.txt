@@ -50,12 +50,13 @@ Completed:
 [completed] Phase 8B.4J Realistic File Validation Implemented
 [completed] Phase 7A Clean Copy Generation Implemented
 [completed] Phase 8C.1 Source Code Quality Audit Implemented
+[completed] Phase 8C.2 Low-Risk Submission Polish Implemented
 
 Current Phase:
-PHASE 8C.1 - SOURCE CODE QUALITY AUDIT
+PHASE 8C.2 - LOW-RISK SUBMISSION POLISH
 
 Next Milestone:
-PHASE 8C.2 - LOW-RISK SUBMISSION POLISH
+PHASE 9 - FINAL DOCUMENTATION
 
 ================================================================================
 PROJECT OVERVIEW
@@ -1763,6 +1764,25 @@ Exit Criteria:
 [completed] audit identifies low-risk polish opportunities
 [completed] audit identifies high-risk refactors to avoid
 [completed] `python -m compileall src evaluation` passes
+
+PHASE 8C.2 - LOW-RISK SUBMISSION POLISH
+
+- Apply only the approved low-risk polish items identified in Phase 8C.1
+- Keep the work narrowly scoped to wording, helper clarity, and reviewer
+  documentation alignment
+- Preserve existing architecture, evaluation behavior, extraction behavior, and
+  clean-copy safety boundaries
+
+Exit Criteria:
+
+[completed] stale documentation drift fixed
+[completed] helper clarity improved
+[completed] duplicate deterministic wording issue improved
+[completed] ADK spike reviewer clarity improved
+[completed] `python -m compileall src evaluation` passes
+[completed] realistic sample clean-copy still works
+[completed] no architecture changes
+[completed] no behavior regressions
 
 Exit Criteria:
 

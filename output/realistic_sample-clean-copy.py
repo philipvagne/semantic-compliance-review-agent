@@ -33,8 +33,8 @@ def build_release_summary(version: str, owner: str) -> ReleaseSummary:
     """Build a small release summary for internal release coordination."""
     safe_owner = _clean_owner_name(owner)
 
-    # TODO: remove the temporary credential reference before the launch review.
-    # Pilot project notes still need a public-safe label before external sharing.
+    # TODO: remove the temporary admin credential reference before the launch review.
+    # the internal project pilot notes still need a public-safe label before external sharing.
     notes = [
         "Customer-facing wording reviewed by the docs team.",
         "Keep rollout messaging aligned with the current support article.",
@@ -70,7 +70,7 @@ def render_summary(summary: ReleaseSummary) -> str:
 
 def main() -> None:
     """Run a simple local preview for manual validation."""
-    # This temporary placeholder comment should be rewritten before sharing.
+    # This hacky placeholder comment should be rewritten before sharing.
     summary = build_release_summary("1.4.0", "release ops")
     print(render_summary(summary))
 

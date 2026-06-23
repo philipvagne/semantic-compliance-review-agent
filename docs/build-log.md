@@ -2,6 +2,31 @@
 
 ## 2026-06-23
 
+### Phase 8C.2 - Minimal Code Polish
+
+Completed:
+- Updated `src/agent_review.py` module documentation so it reflects the
+  current bounded transient Gemini retry behavior instead of stale malformed
+  structured-output retry wording.
+- Tightened `evaluation/run.py` helper clarity by removing an unused backend
+  parameter from the evaluation-results title helper.
+- Smoothed deterministic suggested-replacement wording so duplicated phrases
+  such as `credential reference reference` are collapsed without changing the
+  safety model or replacement scope.
+- Added a clearer reviewer-facing note in `src/adk_spike.py` that the file is
+  a retained feasibility spike artifact, not part of the active runtime path.
+
+Tested:
+- Ran `python -m compileall src evaluation`.
+- Ran `python -m src.main examples/realistic_sample.py --backend deterministic --clean-copy`.
+
+Result:
+- The approved low-risk polish items were completed without changing
+  architecture, evaluation rules, extraction behavior, model selection, or
+  clean-copy safety boundaries.
+- Deterministic clean-copy generation still works and the original input file
+  remains unchanged.
+
 ### Phase 8C.1 - Source Code Quality Audit
 
 Completed:

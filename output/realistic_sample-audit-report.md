@@ -3,9 +3,9 @@
 |                                |                                |
 | ------------------------------ | ------------------------------ |
 | **Target File**                | `examples/realistic_sample.py` |
-| **Generated On**               | 2026-06-23 · 15:17 UTC         |
-| **Backend**                    | Gemini                         |
-| **Model**                      | `gemini-2.5-pro`               |
+| **Generated On**               | 2026-06-23 · 17:21 UTC         |
+| **Backend**                    | Deterministic                  |
+| **Model**                      | `deterministic-local`          |
 | **Configured Sensitive Terms** | 3                              |
 | **Findings Count**             | 3                              |
 | **Audit Status**               | **ISSUES FOUND**               |
@@ -18,18 +18,18 @@ This audit completed with status **ISSUES FOUND**.
 
 - Reviewable text items analyzed: 11
 - Findings generated: 3
-- Highest severity found: 🔴 Critical
+- Highest severity found: 🟠 High
 - Categories detected: Security Risk, Internal Codename Exposure, Professionalism Risk
 
 ---
 
 ## Audit Summary Matrix
 
-| Reference | Category                   | Severity   | Confidence |
-| --------- | -------------------------- | ---------- | ---------- |
-| SEC-001   | Security Risk              | 🔴 Critical | ● High     |
-| CDX-001   | Internal Codename Exposure | 🟡 Medium   | ● High     |
-| PRO-001   | Professionalism Risk       | 🟢 Low      | ● High     |
+| Reference | Category                   | Severity | Confidence |
+| --------- | -------------------------- | -------- | ---------- |
+| SEC-001   | Security Risk              | 🟠 High   | ● High     |
+| CDX-001   | Internal Codename Exposure | 🟡 Medium | ● High     |
+| PRO-001   | Professionalism Risk       | 🟢 Low    | ◐ Medium   |
 
 ---
 
@@ -37,7 +37,7 @@ This audit completed with status **ISSUES FOUND**.
 
 ### SEC-001: Security Risk
 
-**Severity:** 🔴 Critical | **Confidence:** ● High
+**Severity:** 🟠 High | **Confidence:** ● High
 
 **Detection Method:** Semantic Analysis
 
@@ -51,25 +51,24 @@ TODO: remove the temporary admin password reference before the launch review.
 
 #### Why This Was Flagged
 
-- The comment refers to an 'admin password', which poses a significant security risk.
-- Such credentials should never be mentioned in source code, as it could lead to unauthorized access if the code is ever exposed.
+- The text references a temporary or administrative secret-like value that should be reviewed before release.
 
 #### Recommended Action
 
-Immediately remove any hardcoded credential references from the code and version history. Use a secure secret management system to handle all credentials.
+Remove the sensitive reference or replace it with a neutral, human-reviewed task description.
 
 #### Suggested Replacement
 
 ```diff
 - TODO: remove the temporary admin password reference before the launch review.
-+ TODO: remove the temporary credential reference before the launch review.
++ TODO: remove the temporary admin credential reference before the launch review.
 ```
 
 ### CDX-001: Internal Codename Exposure
 
 **Severity:** 🟡 Medium | **Confidence:** ● High
 
-**Detection Method:** Hybrid
+**Detection Method:** Term Match
 
 `examples/realistic_sample.py` — line 37
 
@@ -81,23 +80,22 @@ Project Atlas pilot notes still need a public-safe label before external sharing
 
 #### Why This Was Flagged
 
-- The comment contains the internal codename 'Project Atlas'.
-- Exposing internal project names in source code can leak confidential information about unreleased products or strategic initiatives.
+- The text references configured sensitive term(s): Project Atlas.
 
 #### Recommended Action
 
-Replace internal codenames with generic, public-safe descriptors, especially in code that may be shared externally.
+Review whether the internal project reference should be removed, generalized, or kept internal.
 
 #### Suggested Replacement
 
 ```diff
 - Project Atlas pilot notes still need a public-safe label before external sharing.
-+ Pilot project notes still need a public-safe label before external sharing.
++ the internal project pilot notes still need a public-safe label before external sharing.
 ```
 
 ### PRO-001: Professionalism Risk
 
-**Severity:** 🟢 Low | **Confidence:** ● High
+**Severity:** 🟢 Low | **Confidence:** ◐ Medium
 
 **Detection Method:** Semantic Analysis
 
@@ -111,28 +109,25 @@ This hacky placeholder comment should be rewritten before sharing.
 
 #### Why This Was Flagged
 
-- The term 'hacky' is unprofessional and can negatively affect code quality perception.
-- It suggests a temporary or subpar solution that may not be suitable for production or external sharing.
+- The text appears to use unprofessional or dismissive wording that may not be suitable to keep.
 
 #### Recommended Action
 
-Replace unprofessional language with a more formal and descriptive explanation of the code's purpose or limitations.
+Replace the wording with a neutral, professional explanation.
 
 #### Suggested Replacement
 
-```diff
-- This hacky placeholder comment should be rewritten before sharing.
-+ This temporary placeholder comment should be rewritten before sharing.
-```
+No automatic suggestion generated — confidence was not high enough for automated remediation.
 
 ---
 
 ## Clean Copy Summary
 
 - Clean copy generated: `output/realistic_sample-clean-copy.py`
-- Replacements applied: `3`
-- Replacements skipped: `0`
-- Skipped replacement reasons: none
+- Replacements applied: `2`
+- Replacements skipped: `1`
+- Skipped replacement reasons:
+  - `finding:realistic_sample.py:comment:73:11:professionalism_risk` (line 73): Suggested replacement is missing.
 
 ---
 

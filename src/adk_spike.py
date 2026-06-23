@@ -3,6 +3,8 @@
 Purpose:
 - Prove that ADK tool use and structured output worked locally before the main
   review pipeline was built.
+- Preserve that early feasibility artifact for reviewer context without making
+  it part of the active runtime path.
 
 Input:
 - One review text string for the spike path.

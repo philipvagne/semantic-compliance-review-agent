@@ -523,7 +523,7 @@ def _write_results_markdown(
 ) -> None:
     RESULTS_DIR.mkdir(parents=True, exist_ok=True)
     results_path = _build_results_path(backend)
-    title = _build_results_title(backend)
+    title = _build_results_title()
     notes = _build_notes(backend)
 
     lines: list[str] = [
@@ -700,7 +700,7 @@ def _build_results_path(backend: str) -> Path:
     return RESULTS_DIR / f"{backend}-results.md"
 
 
-def _build_results_title(backend: str) -> str:
+def _build_results_title() -> str:
     display_backend = get_backend_display_name()
     return f"# {display_backend} Evaluation Results"
 

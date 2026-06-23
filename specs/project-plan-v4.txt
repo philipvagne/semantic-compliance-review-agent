@@ -49,12 +49,13 @@ Completed:
 [completed] Phase 8B.4I Production Model Validation Implemented
 [completed] Phase 8B.4J Realistic File Validation Implemented
 [completed] Phase 7A Clean Copy Generation Implemented
+[completed] Phase 8C.1 Source Code Quality Audit Implemented
 
 Current Phase:
-PHASE 7A - CLEAN COPY GENERATION
+PHASE 8C.1 - SOURCE CODE QUALITY AUDIT
 
 Next Milestone:
-PHASE 9 - FINAL DOCUMENTATION
+PHASE 8C.2 - LOW-RISK SUBMISSION POLISH
 
 ================================================================================
 PROJECT OVERVIEW
@@ -1745,6 +1746,23 @@ Exit Criteria:
 [completed] report includes clean-copy summary
 [completed] realistic sample validates clean-copy behavior
 [completed] no prompt, extractor, or evaluation matching changes
+
+PHASE 8C.1 - SOURCE CODE QUALITY AUDIT
+
+- Audit the implemented source code and evaluation tooling against the capstone
+  technical implementation criteria
+- Keep the phase audit-only with no source or behavior changes
+- Produce a written audit report plus low-risk follow-up guidance
+
+Exit Criteria:
+
+[completed] `docs/source-code-quality-audit.md` exists
+[completed] source code was not modified
+[completed] audit covers `src/` and evaluation tooling
+[completed] audit directly addresses the technical implementation rubric
+[completed] audit identifies low-risk polish opportunities
+[completed] audit identifies high-risk refactors to avoid
+[completed] `python -m compileall src evaluation` passes
 
 Exit Criteria:
 

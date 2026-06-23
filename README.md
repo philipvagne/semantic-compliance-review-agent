@@ -82,18 +82,20 @@ Current deterministic evaluation workflow:
 
 1. Load all files from `evaluation/cases/`.
 2. Load matching expected JSON files from `evaluation/expected/`.
-3. Run each case through the existing pipeline with the deterministic backend.
-4. Compare actual findings against expected findings.
-5. Write one Markdown evaluation result artifact to `evaluation/results/`.
+3. Optionally narrow the run to one case or a selected subset.
+4. Run each case through the existing pipeline with the deterministic backend.
+5. Compare actual findings against expected findings.
+6. Write one Markdown evaluation result artifact to `evaluation/results/`.
 
 Current Gemini evaluation workflow:
 
 1. Load the same files from `evaluation/cases/`.
 2. Load the same matching expected JSON files from `evaluation/expected/`.
-3. Run each case through the existing pipeline with the Gemini backend.
-4. Compare actual findings against expected findings with the same matching rules.
-5. Optionally pause between cases with `--delay-seconds` for rate-limit-friendly pacing.
-6. Write one Markdown evaluation snapshot artifact to `evaluation/results/` when Gemini credentials are available.
+3. Optionally narrow the run to one case or a selected subset.
+4. Run each case through the existing pipeline with the Gemini backend.
+5. Compare actual findings against expected findings with the same matching rules.
+6. Optionally pause between cases with `--delay-seconds` for rate-limit-friendly pacing.
+7. Write one Markdown evaluation snapshot artifact to `evaluation/results/` when Gemini credentials are available.
 
 Current supported extraction scope:
 
@@ -241,10 +243,28 @@ Deterministic evaluation run:
 python -m evaluation.run --backend deterministic
 ```
 
+Deterministic single-case evaluation run:
+
+```text
+python -m evaluation.run --backend deterministic --case security_python
+```
+
+Deterministic selected-case evaluation run:
+
+```text
+python -m evaluation.run --backend deterministic --cases security_python,security_javascript
+```
+
 Rate-limit-friendly Gemini evaluation run:
 
 ```text
 python -m evaluation.run --backend gemini --delay-seconds 15
+```
+
+Rate-limit-friendly Gemini single-case evaluation run:
+
+```text
+python -m evaluation.run --backend gemini --case security_python --delay-seconds 15
 ```
 
 ## Example Behavior

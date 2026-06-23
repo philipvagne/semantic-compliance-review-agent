@@ -30,6 +30,7 @@ The evaluation runner now also supports the Gemini backend path:
 
 - `python -m evaluation.run --backend gemini`
 - `python -m evaluation.run --backend gemini --delay-seconds 15`
+- `python -m evaluation.run --backend gemini --case security_python --delay-seconds 15`
 - `evaluation/results/gemini-results.md` is the intended committed snapshot artifact
 
 ## Current Status
@@ -105,6 +106,7 @@ Practical runtime note:
 
 - Gemini free-tier users may hit requests-per-minute limits during evaluation
 - `--delay-seconds 15` is the recommended starting command for paced Gemini runs
+- one-case or small-subset runs are supported through `--case` and `--cases`
 - pacing changes execution speed only; it does not change matching or scoring
 
 Deterministic and Gemini results should not be collapsed into one vague score.
@@ -368,6 +370,10 @@ Examples:
 
 - `evaluation/results/deterministic-results.md`
 - `evaluation/results/gemini-results.md`
+
+If only a subset of cases is run, the backend-specific result file should
+state that it is a partial evaluation run and report metrics only for the
+selected cases.
 
 ## Result Policy
 

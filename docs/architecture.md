@@ -64,6 +64,10 @@ Phase 8B.4A adds optional pacing between evaluation cases so Gemini free-tier
 users can slow the evaluation runner without changing scoring, matching, or
 dataset behavior.
 
+Phase 8B.4B adds optional case selection so the same evaluation runner can
+execute one case or a small subset without changing scoring, matching, or
+dataset behavior.
+
 ## Implemented Flow
 
 User

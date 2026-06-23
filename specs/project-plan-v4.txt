@@ -1549,6 +1549,30 @@ Exit Criteria:
 [completed] no Gemini prompt changes
 [completed] documentation explains free-tier Gemini pacing
 
+PHASE 8B.4B - EVALUATION CASE SELECTION
+
+- Add `--case` support for one selected evaluation case
+- Add `--cases` support for multiple selected evaluation cases
+- Keep case selection optional so full runs remain unchanged
+- Mark subset runs clearly as partial evaluations
+- Keep evaluation scoring, matching, dataset loading, and result formatting otherwise unchanged
+
+Exit Criteria:
+
+[completed] `--case` works for one case
+[completed] `--cases` works for multiple cases
+[completed] `--case` and `--cases` cannot be used together
+[completed] missing selected case fails clearly
+[completed] expected JSON validation still works
+[completed] deterministic full run still works
+[completed] deterministic selected run works
+[completed] selected-run result files clearly state partial evaluation when applicable
+[completed] metrics are calculated only for selected cases
+[completed] no matching logic changed
+[completed] no dataset changes
+[completed] no expected JSON changes
+[completed] no Agent Review or Gemini prompt changes
+
 Exit Criteria:
 
 [ ] Evaluation dataset exists

@@ -8,6 +8,7 @@ Input:
 - Matching expected JSON files from `evaluation/expected/`.
 - One required backend flag for deterministic or Gemini evaluation.
 - One optional delay value between evaluation cases.
+- Optional selection of one case or multiple cases by case ID.
 
 Output:
 - Concise console progress lines and summary metrics.
@@ -18,6 +19,7 @@ Responsibilities:
 - Load evaluation cases and matching expected outputs.
 - Run the existing pipeline with the selected backend.
 - Optionally pause between cases when the user requests pacing.
+- Optionally limit the run to selected cases.
 - Compare actual findings to expected findings with simple matching rules.
 - Calculate TP, FP, FN, precision, and recall.
 - Write a human-readable committed evaluation artifact.
@@ -130,6 +132,16 @@ def _parse_delay_seconds(value: str) -> float:
     return delay_seconds
 
 
+def _parse_case_list(value: str) -> list[str]:
+    case_ids = [item.strip() for item in value.split(",")]
+    normalized_case_ids = [item for item in case_ids if item]
+    if not normalized_case_ids:
+        raise argparse.ArgumentTypeError(
+            "Cases list must include at least one non-empty case ID."
+        )
+    return normalized_case_ids
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Run committed evaluation cases through a supported backend."
@@ -138,6 +150,16 @@ def parse_args() -> argparse.Namespace:
         "--backend",
         required=True,
         help="Evaluation backend to use. Supported values: deterministic, gemini.",
+    )
+    selection_group = parser.add_mutually_exclusive_group()
+    selection_group.add_argument(
+        "--case",
+        help="Run exactly one evaluation case by case ID or file stem.",
+    )
+    selection_group.add_argument(
+        "--cases",
+        type=_parse_case_list,
+        help="Run multiple evaluation cases by comma-separated case IDs or file stems.",
     )
     parser.add_argument(
         "--delay-seconds",
@@ -159,11 +181,17 @@ def main() -> None:
     try:
         configure_backend(args.backend)
         review_context = load_review_context()
+        selected_case_ids = _resolve_selected_case_ids(args)
         case_results = _run_all_cases(
             review_context,
             delay_seconds=args.delay_seconds,
+            selected_case_ids=selected_case_ids,
         )
-        summary = _build_summary(case_results, backend=args.backend)
+        summary = _build_summary(
+            case_results,
+            backend=args.backend,
+            selected_case_ids=selected_case_ids,
+        )
         _write_results_markdown(case_results, summary, backend=args.backend)
     except (
         AgentReviewError,
@@ -177,14 +205,30 @@ def main() -> None:
         raise SystemExit(f"Evaluation failed: {exc}") from exc
 
     print(
-        f"{summary['cases_run']} cases run - Precision: "
+        f"{summary['cases_run']} {_pluralize_case(summary['cases_run'])} run - Precision: "
         f"{summary['precision']:.2f}, Recall: {summary['recall']:.2f}"
     )
 
 
-def _run_all_cases(review_context, *, delay_seconds: float) -> list[CaseResult]:
-    case_paths = sorted(path for path in CASES_DIR.iterdir() if path.is_file())
+def _resolve_selected_case_ids(args: argparse.Namespace) -> list[str] | None:
+    if args.case:
+        return [args.case.strip()]
+    if args.cases:
+        return args.cases
+    return None
+
+
+def _run_all_cases(
+    review_context,
+    *,
+    delay_seconds: float,
+    selected_case_ids: list[str] | None,
+) -> list[CaseResult]:
+    all_case_paths = sorted(path for path in CASES_DIR.iterdir() if path.is_file())
+    case_paths = _select_case_paths(all_case_paths, selected_case_ids)
     results: list[CaseResult] = []
+
+    _print_selection_summary(case_paths, selected_case_ids)
 
     for index, case_path in enumerate(case_paths):
         if index > 0 and delay_seconds > 0:
@@ -197,6 +241,50 @@ def _run_all_cases(review_context, *, delay_seconds: float) -> list[CaseResult]:
         results.append(result)
 
     return results
+
+
+def _select_case_paths(
+    all_case_paths: list[Path],
+    selected_case_ids: list[str] | None,
+) -> list[Path]:
+    if not selected_case_ids:
+        return all_case_paths
+
+    path_by_stem = {path.stem: path for path in all_case_paths}
+    selected_paths: list[Path] = []
+    missing_case_ids: list[str] = []
+
+    for case_id in selected_case_ids:
+        case_path = path_by_stem.get(case_id)
+        if case_path is None:
+            missing_case_ids.append(case_id)
+            continue
+        selected_paths.append(case_path)
+
+    if missing_case_ids:
+        available_case_ids = ", ".join(sorted(path_by_stem))
+        missing_label = ", ".join(missing_case_ids)
+        raise ValueError(
+            f"Selected evaluation case(s) not found: {missing_label}. "
+            f"Available case IDs: {available_case_ids}"
+        )
+
+    return selected_paths
+
+
+def _print_selection_summary(
+    case_paths: list[Path],
+    selected_case_ids: list[str] | None,
+) -> None:
+    if not selected_case_ids:
+        return
+
+    if len(case_paths) == 1:
+        print(f"Running selected case: {case_paths[0].stem}")
+        return
+
+    selected_summary = ", ".join(path.stem for path in case_paths)
+    print(f"Running {len(case_paths)} selected cases: {selected_summary}")
 
 
 def _run_single_case(case_path: Path, review_context) -> CaseResult:
@@ -398,6 +486,7 @@ def _build_summary(
     case_results: list[CaseResult],
     *,
     backend: str,
+    selected_case_ids: list[str] | None,
 ) -> dict[str, float | int | str]:
     tp = sum(result.tp for result in case_results)
     fp = sum(result.fp for result in case_results)
@@ -412,6 +501,8 @@ def _build_summary(
         "cases_run": len(case_results),
         "cases_passed": passed_cases,
         "cases_failed": len(case_results) - passed_cases,
+        "partial_run": bool(selected_case_ids),
+        "selected_cases": ", ".join(Path(result.case_filename).stem for result in case_results),
         "tp": tp,
         "fp": fp,
         "fn": fn,
@@ -437,22 +528,38 @@ def _write_results_markdown(
         f"- Backend: `{summary['backend']}`",
         f"- Timestamp: `{summary['timestamp']}`",
         f"- Cases run: `{summary['cases_run']}`",
-        "",
-        "## Overall Metrics",
-        "",
-        f"- True Positives (TP): `{summary['tp']}`",
-        f"- False Positives (FP): `{summary['fp']}`",
-        f"- False Negatives (FN): `{summary['fn']}`",
-        f"- Precision: `{summary['precision']:.2f}`",
-        f"- Recall: `{summary['recall']:.2f}`",
-        f"- Cases passed: `{summary['cases_passed']}`",
-        f"- Cases failed: `{summary['cases_failed']}`",
-        "",
-        "## Per-Case Summary",
-        "",
-        "| Case | Status | TP | FP | FN | Actual Count | Expected Count Range |",
-        "| --- | --- | ---: | ---: | ---: | ---: | --- |",
     ]
+
+    if summary["partial_run"]:
+        lines.extend(
+            [
+                "- Run type: `partial evaluation`",
+                f"- Selected cases: `{summary['selected_cases']}`",
+                f"- Selected case count: `{summary['cases_run']}`",
+            ]
+        )
+    else:
+        lines.append("- Run type: `full evaluation`")
+
+    lines.extend(
+        [
+            "",
+            "## Overall Metrics",
+            "",
+            f"- True Positives (TP): `{summary['tp']}`",
+            f"- False Positives (FP): `{summary['fp']}`",
+            f"- False Negatives (FN): `{summary['fn']}`",
+            f"- Precision: `{summary['precision']:.2f}`",
+            f"- Recall: `{summary['recall']:.2f}`",
+            f"- Cases passed: `{summary['cases_passed']}`",
+            f"- Cases failed: `{summary['cases_failed']}`",
+            "",
+            "## Per-Case Summary",
+            "",
+            "| Case | Status | TP | FP | FN | Actual Count | Expected Count Range |",
+            "| --- | --- | ---: | ---: | ---: | ---: | --- |",
+        ]
+    )
 
     for result in case_results:
         lines.append(
@@ -578,6 +685,10 @@ def _inline_text(value: str | None) -> str:
     if not value:
         return ""
     return " ".join(value.split())
+
+
+def _pluralize_case(case_count: int) -> str:
+    return "case" if case_count == 1 else "cases"
 
 
 def _build_results_path(backend: str) -> Path:

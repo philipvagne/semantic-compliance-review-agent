@@ -2,6 +2,35 @@
 
 ## 2026-06-22
 
+### Phase 8B.4B - Evaluation Case Selection
+
+Completed:
+- Added `--case` support to run exactly one evaluation case by case ID or file
+  stem.
+- Added `--cases` support to run multiple evaluation cases by comma-separated
+  case IDs or file stems.
+- Made `--case` and `--cases` mutually exclusive.
+- Kept backend-specific result files while marking selected-case runs as
+  partial evaluation runs in the generated report.
+- Kept matching, scoring, dataset loading, and expected-output validation
+  unchanged.
+
+Tested:
+- Ran `python -m compileall src evaluation`.
+- Ran `python -m evaluation.run --backend deterministic`.
+- Ran `python -m evaluation.run --backend deterministic --case security_python`.
+- Ran `python -m evaluation.run --backend deterministic --cases security_python,security_javascript`.
+- Ran `python -m evaluation.run --backend deterministic --case does_not_exist`
+  and verified clear failure behavior.
+- Ran `python -m evaluation.run --backend deterministic --case security_python --cases security_javascript`
+  and verified mutual-exclusion validation.
+- Did not require a full Gemini run in this environment.
+
+Result:
+- The evaluation runner now supports targeted single-case and selected-case
+  runs for both deterministic and Gemini backends without changing scoring or
+  the dataset.
+
 ### Phase 8B.4A - Gemini Evaluation Rate-Limit Handling
 
 Completed:

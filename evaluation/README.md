@@ -17,6 +17,7 @@ The repository now includes:
   `evaluation/results/deterministic-results.md`
 - Gemini evaluation runner support in `evaluation/run.py`
 - optional pacing support through `--delay-seconds`
+- optional case-selection support through `--case` and `--cases`
 
 ## Backend Separation
 
@@ -42,6 +43,12 @@ reproducible benchmark.
 Free-tier Gemini users may hit requests-per-minute limits during evaluation.
 When that happens, running with `--delay-seconds 15` is the recommended
 starting point.
+
+When a full Gemini run is too fragile or too slow, targeted selection is also
+supported:
+
+- `--case security_python`
+- `--cases security_python,security_javascript`
 
 ## Future Phase 8B Steps
 

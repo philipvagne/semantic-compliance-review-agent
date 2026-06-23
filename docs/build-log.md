@@ -2,6 +2,56 @@
 
 ## 2026-06-23
 
+### Phase 8B.4F - ADK Event Loop Lifecycle Fix
+
+Completed:
+- Updated `src/agent_review.py` so the ADK `InMemoryRunner` is created inside
+  each active review call instead of being cached across repeated
+  `asyncio.run(...)` event loops.
+- Kept backend selection, credential validation, prompts, extraction behavior,
+  and evaluation matching unchanged.
+- Removed the unsafe cross-loop runner reuse introduced in the earlier
+  optimization pass.
+
+Tested:
+- Ran `python -m compileall src evaluation`.
+- Ran `python -m src.main examples/sample_input.py --backend deterministic`.
+- Ran `python -m evaluation.run --backend deterministic --case security_python`.
+
+Result:
+- The review path now avoids reusing a loop-bound ADK runner across closed
+  event loops.
+- Provider-side Gemini `503 UNAVAILABLE` behavior remains out of scope for this
+  phase and unchanged.
+
+### Phase 8B.4E - Gemini Reliability Investigation
+
+Completed:
+- Expanded `evaluation/diagnose_gemini.py` with safe API-key configuration
+  reporting that shows whether `GOOGLE_API_KEY` and `GEMINI_API_KEY` are set
+  and which variable would be used without printing the key value.
+- Added a reminder that the selected API key should be restricted to the
+  Gemini API / `generativelanguage.googleapis.com`.
+- Added per-test elapsed-duration reporting plus concise PASS / FAIL, preview,
+  error type, and short error message output.
+- Added `--repeat` support so the same diagnostic set can be observed across
+  multiple fresh cycles without adding retries.
+- Added `--delay-seconds` support so repeated diagnostic cycles can be paced
+  without delaying before the first cycle.
+- Added per-test PASS / FAIL summary counts across repeated cycles.
+
+Tested:
+- Ran `python -m compileall src evaluation`.
+- Ran `python -m evaluation.diagnose_gemini --repeat 1`.
+- Ran `python -m evaluation.diagnose_gemini --repeat 2 --delay-seconds 1`.
+- Ran `python -m evaluation.diagnose_gemini --repeat 0`.
+- Ran `python -m evaluation.diagnose_gemini --repeat 1 --delay-seconds -1`.
+
+Result:
+- The repository now has a more useful Gemini reliability-investigation tool
+  without changing production prompts, ADK usage, evaluation matching, or
+  runtime review behavior.
+
 ### Phase 8B.4D - ADK Runner Reuse Optimization
 
 Completed:

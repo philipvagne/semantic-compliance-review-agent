@@ -19,6 +19,7 @@ The repository now includes:
 - optional pacing support through `--delay-seconds`
 - optional case-selection support through `--case` and `--cases`
 - a Gemini backend diagnosis helper at `evaluation/diagnose_gemini.py`
+- repeated Gemini diagnosis support through `--repeat` and `--delay-seconds`
 
 ## Backend Separation
 
@@ -54,6 +55,18 @@ supported:
 When Gemini evaluation failures need path diagnosis, run:
 
 - `python -m evaluation.diagnose_gemini`
+- `python -m evaluation.diagnose_gemini --repeat 5 --delay-seconds 15`
+
+The diagnosis command reports:
+
+- whether `GOOGLE_API_KEY` is set
+- whether `GEMINI_API_KEY` is set
+- which variable would be used without printing the key value
+- per-test elapsed duration plus PASS / FAIL details
+- per-test success and failure counts across repeated cycles
+
+It also reminds users that the selected key should be restricted to the Gemini
+API / `generativelanguage.googleapis.com`.
 
 ## Future Phase 8B Steps
 

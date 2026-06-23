@@ -273,6 +273,12 @@ Gemini backend diagnosis command:
 python -m evaluation.diagnose_gemini
 ```
 
+Repeated Gemini diagnosis command:
+
+```text
+python -m evaluation.diagnose_gemini --repeat 5 --delay-seconds 15
+```
+
 ## Example Behavior
 
 Current sample input:
@@ -436,13 +442,13 @@ semantic-compliance-review-agent/
 
 Current phase:
 
-- Phase 8B.4D - ADK Runner Reuse Optimization
+- Phase 8B.4F - ADK Event Loop Lifecycle Fix
 
 Most recently completed:
 
-- Phase 8B.4C - Gemini Backend Path Diagnosis
+- Phase 8B.4E - Gemini Reliability Investigation
 
-Implemented through Phase 8B.4D:
+Implemented through Phase 8B.4F:
 
 - repository foundation
 - ADK feasibility spike
@@ -464,7 +470,8 @@ Implemented through Phase 8B.4D:
 - evaluation dataset and matching expected outputs
 - deterministic evaluation runner and committed deterministic metrics report
 - Gemini-capable evaluation runner path
-- backend-aware ADK runner reuse for repeated review calls
+- repeated Gemini diagnostic instrumentation for reliability investigation
+- safer per-call ADK runner lifecycle across repeated review invocations
 
 Not implemented yet:
 

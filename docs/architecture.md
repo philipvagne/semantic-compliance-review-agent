@@ -28,14 +28,15 @@ The repository now contains:
 - a completed Phase 8B.1 Evaluation Foundation
 - a completed Phase 8B.2 Evaluation Dataset
 - a completed Phase 8B.3 Deterministic Runner and Metrics
-- a completed Phase 8B.4D ADK Runner Reuse Optimization
+- a completed Phase 8B.4E Gemini Reliability Investigation
+- a completed Phase 8B.4F ADK Event Loop Lifecycle Fix
 - the documented MVP workflow for later phases
 
 The current runnable CLI path is the File Reader plus Text Extractor plus
 Context Loader plus Agent Review plus Report Writer flow.
 
-The current implementation focus is Phase 8B.4D: ADK Runner Reuse
-Optimization inside the broader Gemini Evaluation Snapshot track.
+The current implementation focus is Phase 8B.4F: ADK Event Loop Lifecycle Fix
+inside the broader Gemini Evaluation Snapshot track.
 
 Phase 6.97 did not change runtime behavior. It improved submission readiness by
 adding clearer reviewer-facing architecture explanation, concept framing, and a
@@ -73,10 +74,16 @@ Phase 8B.4C adds a separate Gemini diagnosis utility under `evaluation/` that
 compares direct `google.genai` calls against the existing ADK-backed review
 path without changing the production backend.
 
-Phase 8B.4D keeps the same review boundary and prompt behavior but reuses a
-backend-aware cached ADK `InMemoryRunner` instead of rebuilding it for every
-review call. This reduces repeated runner initialization overhead while still
-invalidating the cached runner when the configured backend changes.
+Phase 8B.4E keeps production review behavior unchanged and expands only the
+diagnostic utility under `evaluation/` with safe API-key configuration
+reporting, per-test timing, repeated observation cycles, and optional delay
+between cycles for Gemini reliability investigation.
+
+Phase 8B.4F corrects the ADK runner lifecycle by creating the
+`InMemoryRunner` inside the active review call instead of reusing a cached
+runner across separate `asyncio.run(...)` event loops. This keeps backend
+selection and credential validation unchanged while avoiding unsafe reuse of
+loop-bound runner state.
 
 ## Implemented Flow
 

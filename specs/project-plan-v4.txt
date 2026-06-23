@@ -42,9 +42,11 @@ Completed:
 [completed] Phase 8B.2 Evaluation Dataset Implemented
 [completed] Phase 8B.3 Deterministic Runner and Metrics Implemented
 [completed] Phase 8B.4D ADK Runner Reuse Optimization Implemented
+[completed] Phase 8B.4E Gemini Reliability Investigation Implemented
+[completed] Phase 8B.4F ADK Event Loop Lifecycle Fix Implemented
 
 Current Phase:
-PHASE 8B.4D - ADK RUNNER REUSE OPTIMIZATION
+PHASE 8B.4F - ADK EVENT LOOP LIFECYCLE FIX
 
 Next Milestone:
 PHASE 9 - FINAL DOCUMENTATION
@@ -1609,6 +1611,42 @@ Exit Criteria:
 [completed] deterministic backend still works
 [completed] deterministic selected evaluation run still works
 [completed] no prompt, matching, dataset, or schema changes
+
+PHASE 8B.4E - GEMINI RELIABILITY INVESTIGATION
+
+- Improve diagnostic visibility for intermittent Gemini `503 UNAVAILABLE`
+  failures
+- Keep the scope limited to instrumentation and observation only
+- Preserve production review behavior, prompts, matching, and dataset content
+
+Exit Criteria:
+
+[completed] diagnostic reports key environment configuration safely
+[completed] diagnostic reminds users about Gemini API key restriction guidance
+[completed] diagnostic reports elapsed duration per test
+[completed] `--repeat` works
+[completed] `--delay-seconds` works
+[completed] invalid repeat values fail clearly
+[completed] invalid delay values fail clearly
+[completed] direct smoke, direct realistic, and ADK-backed tests remain included
+[completed] no production review behavior changed
+[completed] no prompt, model, matching, or dataset changes
+
+PHASE 8B.4F - ADK EVENT LOOP LIFECYCLE FIX
+
+- Address the local `Event loop is closed` failure mode in the ADK-backed
+  review path
+- Do not attempt to solve provider-side Gemini `503 UNAVAILABLE` behavior
+- Prefer per-call runner creation over unsafe reuse of loop-bound runner state
+
+Exit Criteria:
+
+[completed] local `Event loop is closed` issue is addressed in implementation
+[completed] `InMemoryRunner` is not reused unsafely across event loops
+[completed] deterministic backend still works
+[completed] deterministic selected evaluation run still works
+[completed] no prompt, model, matching, or dataset changes
+[completed] `503` handling remains unchanged
 
 Exit Criteria:
 

@@ -61,8 +61,6 @@ DEFAULT_BACKEND: BackendName = "gemini"
 GEMINI_MODEL_NAME = "gemini-2.5-flash"
 _configured_backend: BackendName = DEFAULT_BACKEND
 _configured_api_key: str | None = None
-_cached_runner: InMemoryRunner | None = None
-_cached_runner_backend: BackendName | None = None
 
 AGENT_REVIEW_INSTRUCTION = """
 Review all extracted text and return only structured Finding JSON that matches
@@ -202,13 +200,10 @@ def review(reviewable_texts: list[ReviewableText], review_context: ReviewContext
 def configure_backend(backend: BackendName) -> None:
     global _configured_backend
     global _configured_api_key
-    global _cached_runner
-    global _cached_runner_backend
 
     if backend not in ("gemini", "deterministic"):
         raise AgentReviewError(f"Unsupported agent review backend: {backend}")
 
-    previous_backend = _configured_backend
     _configured_backend = backend
     _configured_api_key = None
 
@@ -220,16 +215,6 @@ def configure_backend(backend: BackendName) -> None:
                 "Set one of these environment variables before running the CLI."
             )
         _configured_api_key = api_key
-
-    if _cached_runner is not None and _cached_runner_backend == backend:
-        return
-
-    if previous_backend != backend:
-        _cached_runner = None
-        _cached_runner_backend = None
-
-    _cached_runner = InMemoryRunner(agent=build_agent(backend))
-    _cached_runner_backend = backend
 
 
 def get_backend_display_name() -> str:
@@ -255,7 +240,7 @@ async def _run_review(
     review_context: ReviewContext,
     backend: BackendName,
 ) -> list[Finding]:
-    runner = _get_cached_runner(backend)
+    runner = InMemoryRunner(agent=build_agent(backend))
     prompt = json.dumps(
         {
             "reviewable_texts": [item.model_dump() for item in reviewable_texts],
@@ -288,15 +273,6 @@ def _build_model(backend: BackendName) -> BaseLlm:
     if backend == "gemini":
         return ConfiguredGeminiModel(model=GEMINI_MODEL_NAME)
     return DeterministicAgentReviewModel()
-
-
-def _get_cached_runner(backend: BackendName) -> InMemoryRunner:
-    if _cached_runner is None or _cached_runner_backend != backend:
-        raise AgentReviewError(
-            f"{backend.capitalize()} backend runner is not configured. "
-            "Call configure_backend() before review()."
-        )
-    return _cached_runner
 
 
 def _resolve_gemini_api_key() -> str | None:

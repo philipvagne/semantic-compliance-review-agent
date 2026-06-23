@@ -36,6 +36,7 @@ The evaluation runner now also supports the Gemini backend path:
 The repository now also includes a Gemini path diagnosis helper:
 
 - `python -m evaluation.diagnose_gemini`
+- `python -m evaluation.diagnose_gemini --repeat 5 --delay-seconds 15`
 
 ## Current Status
 
@@ -114,6 +115,11 @@ Practical runtime note:
 - pacing changes execution speed only; it does not change matching or scoring
 - a separate diagnosis command exists to compare direct `google.genai` calls
   with the ADK-backed project path when repeated 503 errors occur
+- the diagnosis command now reports safe API-key configuration status, per-test
+  elapsed time, and repeated observation summaries without printing secret
+  values
+- the diagnosis command also reminds users that their API key should be
+  restricted to the Gemini API / `generativelanguage.googleapis.com`
 
 Deterministic and Gemini results should not be collapsed into one vague score.
 

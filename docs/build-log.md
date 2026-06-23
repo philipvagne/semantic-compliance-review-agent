@@ -1,5 +1,29 @@
 # Build Log
 
+## 2026-06-23
+
+### Phase 8B.4D - ADK Runner Reuse Optimization
+
+Completed:
+- Updated `src/agent_review.py` to cache the ADK `InMemoryRunner` by active
+  backend instead of rebuilding it on every review call.
+- Reused the cached runner when `configure_backend()` is called again with the
+  same backend.
+- Invalidated and rebuilt the cached runner when switching between Gemini and
+  deterministic backends.
+- Added a fail-clear guard so review raises an explicit error if no configured
+  cached runner is available.
+
+Tested:
+- Ran `python -m compileall src evaluation`.
+- Ran `python -m src.main examples/sample_input.py --backend deterministic`.
+- Ran `python -m evaluation.run --backend deterministic --case security_python`.
+
+Result:
+- The Agent Review runtime now avoids unnecessary ADK runner reconstruction for
+  repeated reviews while preserving the same prompts, schemas, extraction
+  behavior, evaluation matching, and backend boundaries.
+
 ## 2026-06-22
 
 ### Phase 8B.4C - Gemini Backend Path Diagnosis

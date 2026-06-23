@@ -436,13 +436,13 @@ semantic-compliance-review-agent/
 
 Current phase:
 
-- Phase 8B.4 - Gemini Evaluation Snapshot
+- Phase 8B.4D - ADK Runner Reuse Optimization
 
 Most recently completed:
 
-- Phase 8B.3 - Deterministic Runner and Metrics
+- Phase 8B.4C - Gemini Backend Path Diagnosis
 
-Implemented through Phase 8B.3:
+Implemented through Phase 8B.4D:
 
 - repository foundation
 - ADK feasibility spike
@@ -464,6 +464,7 @@ Implemented through Phase 8B.3:
 - evaluation dataset and matching expected outputs
 - deterministic evaluation runner and committed deterministic metrics report
 - Gemini-capable evaluation runner path
+- backend-aware ADK runner reuse for repeated review calls
 
 Not implemented yet:
 
@@ -474,7 +475,7 @@ Not implemented yet:
 
 Expected next phases:
 
-1. Phase 8B.4 - Gemini Evaluation Snapshot
+1. Complete the credentialed Gemini evaluation snapshot run
 2. Phase 9 - Final Documentation
 3. Phase 10 - Submission Prep
 

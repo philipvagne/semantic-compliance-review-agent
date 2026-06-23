@@ -41,9 +41,10 @@ Completed:
 [completed] Phase 8B.1 Evaluation Foundation Implemented
 [completed] Phase 8B.2 Evaluation Dataset Implemented
 [completed] Phase 8B.3 Deterministic Runner and Metrics Implemented
+[completed] Phase 8B.4D ADK Runner Reuse Optimization Implemented
 
 Current Phase:
-PHASE 8B.4 - GEMINI EVALUATION SNAPSHOT
+PHASE 8B.4D - ADK RUNNER REUSE OPTIMIZATION
 
 Next Milestone:
 PHASE 9 - FINAL DOCUMENTATION
@@ -1591,6 +1592,23 @@ Exit Criteria:
 [completed] no production behavior changed
 [completed] no Agent Review prompt changes
 [completed] no dataset / expected JSON changes
+
+PHASE 8B.4D - ADK RUNNER REUSE OPTIMIZATION
+
+- Reuse the ADK `InMemoryRunner` per configured backend instead of rebuilding
+  it on every review call
+- Keep the review boundary, prompts, schemas, extraction behavior, and
+  evaluation matching unchanged
+- Invalidate and rebuild the cached runner when the configured backend changes
+
+Exit Criteria:
+
+[completed] `InMemoryRunner` is not rebuilt on every review call
+[completed] cached runner is backend-aware
+[completed] backend switching cannot reuse a stale runner
+[completed] deterministic backend still works
+[completed] deterministic selected evaluation run still works
+[completed] no prompt, matching, dataset, or schema changes
 
 Exit Criteria:
 

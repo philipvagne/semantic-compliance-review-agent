@@ -28,13 +28,14 @@ The repository now contains:
 - a completed Phase 8B.1 Evaluation Foundation
 - a completed Phase 8B.2 Evaluation Dataset
 - a completed Phase 8B.3 Deterministic Runner and Metrics
+- a completed Phase 8B.4D ADK Runner Reuse Optimization
 - the documented MVP workflow for later phases
 
 The current runnable CLI path is the File Reader plus Text Extractor plus
 Context Loader plus Agent Review plus Report Writer flow.
 
-The next approved implementation step is Phase 8B.4: Gemini Evaluation
-Snapshot.
+The current implementation focus is Phase 8B.4D: ADK Runner Reuse
+Optimization inside the broader Gemini Evaluation Snapshot track.
 
 Phase 6.97 did not change runtime behavior. It improved submission readiness by
 adding clearer reviewer-facing architecture explanation, concept framing, and a
@@ -71,6 +72,11 @@ dataset behavior.
 Phase 8B.4C adds a separate Gemini diagnosis utility under `evaluation/` that
 compares direct `google.genai` calls against the existing ADK-backed review
 path without changing the production backend.
+
+Phase 8B.4D keeps the same review boundary and prompt behavior but reuses a
+backend-aware cached ADK `InMemoryRunner` instead of rebuilding it for every
+review call. This reduces repeated runner initialization overhead while still
+invalidating the cached runner when the configured backend changes.
 
 ## Implemented Flow
 

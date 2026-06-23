@@ -51,12 +51,13 @@ Completed:
 [completed] Phase 7A Clean Copy Generation Implemented
 [completed] Phase 8C.1 Source Code Quality Audit Implemented
 [completed] Phase 8C.2 Low-Risk Submission Polish Implemented
+[completed] Phase 9A Documentation Audit Implemented
 
 Current Phase:
-PHASE 8C.2 - LOW-RISK SUBMISSION POLISH
+PHASE 9A - DOCUMENTATION AUDIT
 
 Next Milestone:
-PHASE 9 - FINAL DOCUMENTATION
+PHASE 9B - DOCUMENTATION CLEAN COPY DRAFTING
 
 ================================================================================
 PROJECT OVERVIEW
@@ -1783,6 +1784,25 @@ Exit Criteria:
 [completed] realistic sample clean-copy still works
 [completed] no architecture changes
 [completed] no behavior regressions
+
+PHASE 9A - DOCUMENTATION AUDIT
+
+- Audit the documentation set for accuracy, consistency, readability, and
+  submission readiness
+- Identify stale statements, duplicated explanations, and condensation targets
+- Produce Phase 9B and Phase 9C recommendations without rewriting the audited
+  docs in this phase
+
+Exit Criteria:
+
+[completed] `docs/documentation-audit.md` exists
+[completed] all major project documentation reviewed
+[completed] no documentation rewritten during the audit
+[completed] duplicated explanations identified
+[completed] outdated content identified
+[completed] readability issues identified
+[completed] Phase 9B recommendations produced
+[completed] Phase 9C recommendations produced
 
 Exit Criteria:
 

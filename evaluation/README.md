@@ -40,6 +40,14 @@ Current Phase 8B status:
 - `8B.4I` production model validation support is implemented
 - committed Gemini snapshot results remain pending until a credentialed run is completed
 
+Benchmark boundary note:
+
+- the committed 10-case dataset in `evaluation/cases/` remains the formal,
+  measured benchmark
+- realistic sample files under `examples/` may be used for usability and
+  demo-style validation, but they are not part of the scored benchmark suite
+  unless a future phase explicitly promotes them into `evaluation/cases/`
+
 ## Result Policy
 
 Evaluation results are committed as capstone evidence.

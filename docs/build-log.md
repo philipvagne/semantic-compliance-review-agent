@@ -2,6 +2,33 @@
 
 ## 2026-06-23
 
+### Phase 8B.4J - Realistic File Validation
+
+Completed:
+- Added `examples/realistic_sample.py` as a more natural user-style review
+  target with mostly normal code and comments plus three intentional reviewable
+  issues across security, internal codename exposure, and professionalism.
+- Kept the realistic sample outside `evaluation/cases/` so the committed
+  10-case evaluation dataset remains the formal benchmark.
+- Documented the realistic sample as usability and demo-style validation
+  rather than a scored benchmark artifact.
+- Kept the recommended live Gemini command aligned with the project's
+  reliability-sensitive model choice: `gemini-2.5-pro`.
+
+Tested:
+- Ran `python -m compileall src evaluation`.
+- Ran `python -m src.main examples/realistic_sample.py --backend deterministic`.
+- Attempted `python -m src.main examples/realistic_sample.py --backend gemini`
+  with `GEMINI_MODEL=gemini-2.5-pro`.
+
+Result:
+- The deterministic review completed and produced
+  `output/realistic_sample-audit-report.md`.
+- The deterministic run surfaced three findings on the realistic sample:
+  security risk, internal codename exposure, and professionalism risk.
+- The Gemini Pro run could not proceed in this environment because no
+  `GOOGLE_API_KEY` or `GEMINI_API_KEY` was configured.
+
 ### Phase 8B.4I - Production Model Validation
 
 Completed:

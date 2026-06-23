@@ -98,6 +98,13 @@ Current Gemini evaluation workflow:
 6. Optionally pause between cases with `--delay-seconds` for rate-limit-friendly pacing.
 7. Write one Markdown evaluation snapshot artifact to `evaluation/results/` when Gemini credentials are available.
 
+Current realistic validation workflow:
+
+1. Run one realistic sample file from `examples/`.
+2. Review the generated audit report as a usability and demo-style validation.
+3. Treat the result as complementary evidence, not as part of the measured
+   10-case benchmark suite.
+
 Current supported extraction scope:
 
 - Python files:
@@ -267,6 +274,12 @@ Markdown deterministic test run:
 python -m src.main examples/sample_input.md --backend deterministic
 ```
 
+Realistic deterministic validation run:
+
+```text
+python -m src.main examples/realistic_sample.py --backend deterministic
+```
+
 Deterministic evaluation run:
 
 ```text
@@ -329,6 +342,13 @@ export GEMINI_MODEL="gemini-2.5-pro"
 python -m evaluation.run --backend gemini --delay-seconds 15
 ```
 
+Recommended Gemini Pro realistic validation run:
+
+```text
+$env:GEMINI_MODEL="gemini-2.5-pro"
+python -m src.main examples/realistic_sample.py --backend gemini
+```
+
 ## Example Behavior
 
 Current sample input:
@@ -337,10 +357,20 @@ Current sample input:
 - `examples/sample_input.js`
 - `examples/sample_input.html`
 - `examples/sample_input.md`
+- `examples/realistic_sample.py`
 
 Generated report location:
 
 - `output/sample_input-audit-report.md`
+- `output/realistic_sample-audit-report.md`
+
+Validation note:
+
+- the committed 10-case evaluation dataset remains the measured benchmark
+- `examples/realistic_sample.py` is a usability and demo-style validation file,
+  not a formal benchmark case
+- the recommended Gemini model for this realistic validation is
+  `gemini-2.5-pro` because it is the project's reliability-sensitive model
 
 Typical console flow:
 

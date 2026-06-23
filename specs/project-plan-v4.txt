@@ -47,9 +47,10 @@ Completed:
 [completed] Phase 8B.4G Gemini Transient Retry Handling Implemented
 [completed] Phase 8B.4H Gemini Model Stability Comparison Implemented
 [completed] Phase 8B.4I Production Model Validation Implemented
+[completed] Phase 8B.4J Realistic File Validation Implemented
 
 Current Phase:
-PHASE 8B.4I - PRODUCTION MODEL VALIDATION
+PHASE 8B.4J - REALISTIC FILE VALIDATION
 
 Next Milestone:
 PHASE 9 - FINAL DOCUMENTATION
@@ -1706,6 +1707,24 @@ Exit Criteria:
 [completed] deterministic backend still works
 [completed] decision status is clear: Flash remains default, Pro is recommended
             for reliability-sensitive validation and demo use
+
+PHASE 8B.4J - REALISTIC FILE VALIDATION
+
+- Add one realistic sample file under `examples/` that feels closer to a
+  natural user review target
+- Validate the existing pipeline on that file without changing prompts,
+  extractors, evaluation rules, or benchmark cases
+- Keep the 10-case evaluation dataset as the formal measured benchmark and
+  treat the realistic sample as usability/demo validation only
+
+Exit Criteria:
+
+[completed] realistic sample file exists
+[completed] deterministic review runs
+[completed] Gemini Pro command is documented and attempted
+[completed] generated report is saved when available
+[completed] no prompts, extractors, or evaluation rules changed
+[completed] docs explain the realistic validation as non-benchmark evidence
 
 Exit Criteria:
 

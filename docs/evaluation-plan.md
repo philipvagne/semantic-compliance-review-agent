@@ -76,6 +76,8 @@ Documented investigation evidence now includes:
   review-path checks
 - prior manual Gemini evaluation evidence showing the 10 evaluation cases
   passed when collected one by one
+- one realistic sample-file validation path under `examples/` for demo-style
+  usability checks outside the formal benchmark suite
 
 ## Evaluation Goal
 
@@ -91,6 +93,12 @@ The goal is not benchmark scale.
 
 The goal is submission-quality evidence for a small, explainable capstone
 project.
+
+The committed 10-case evaluation dataset remains the measured benchmark.
+
+Separate realistic sample-file runs may be used to show the agent on more
+natural user-style input, but those runs are not part of the scored benchmark
+unless they are explicitly promoted into `evaluation/cases/` in a future phase.
 
 ## Evaluation Philosophy
 
@@ -136,6 +144,8 @@ Practical runtime note:
 - `gemini-2.5-pro` is the current recommended production candidate for
   reliability-sensitive Gemini evaluation and demo use, based on the
   documented investigation evidence
+- the same Pro recommendation also applies to realistic sample-file validation
+  runs when a live Gemini review is desired
 - the recommendation does not make Pro the default model; model choice remains
   a tradeoff between reliability and quality, latency, and likely cost
 - a separate diagnosis command exists to compare direct `google.genai` calls

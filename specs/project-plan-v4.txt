@@ -44,9 +44,10 @@ Completed:
 [completed] Phase 8B.4D ADK Runner Reuse Optimization Implemented
 [completed] Phase 8B.4E Gemini Reliability Investigation Implemented
 [completed] Phase 8B.4F ADK Event Loop Lifecycle Fix Implemented
+[completed] Phase 8B.4G Gemini Transient Retry Handling Implemented
 
 Current Phase:
-PHASE 8B.4F - ADK EVENT LOOP LIFECYCLE FIX
+PHASE 8B.4G - GEMINI TRANSIENT RETRY HANDLING
 
 Next Milestone:
 PHASE 9 - FINAL DOCUMENTATION
@@ -1647,6 +1648,25 @@ Exit Criteria:
 [completed] deterministic selected evaluation run still works
 [completed] no prompt, model, matching, or dataset changes
 [completed] `503` handling remains unchanged
+
+PHASE 8B.4G - GEMINI TRANSIENT RETRY HANDLING
+
+- Add bounded retry and exponential backoff for transient Gemini provider
+  failures
+- Retry only clearly transient Gemini-backed review failures such as `503`,
+  `UNAVAILABLE`, or `high demand`
+- Keep prompts, extraction, matching, dataset content, and deterministic
+  behavior unchanged
+
+Exit Criteria:
+
+[completed] Gemini-backed review retries transient `503` / high-demand failures
+[completed] retry attempts are bounded
+[completed] retry delays are small and clear
+[completed] non-transient errors are not retried
+[completed] deterministic backend unchanged
+[completed] no prompt, model, matching, dataset, or schema changes
+[completed] final failures remain visible
 
 Exit Criteria:
 

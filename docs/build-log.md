@@ -2,6 +2,31 @@
 
 ## 2026-06-23
 
+### Phase 8B.4G - Gemini Transient Retry Handling
+
+Completed:
+- Added bounded retry handling in `src/agent_review.py` for transient
+  Gemini-backed provider failures only.
+- Configured the retry path for up to three total attempts with short
+  exponential backoff delays of 1 second and 2 seconds.
+- Limited retries to clearly transient Gemini errors such as `503`,
+  `UNAVAILABLE`, and `high demand` messages.
+- Kept deterministic review behavior unchanged.
+- Kept validation/schema failures out of the transient provider retry path so
+  non-transient failures still fail clearly.
+
+Tested:
+- Ran `python -m compileall src evaluation`.
+- Ran `python -m src.main examples/sample_input.py --backend deterministic`.
+- Ran `python -m evaluation.run --backend deterministic --case security_python`.
+
+Result:
+- The Gemini-backed review path now has small, bounded transient retry
+  handling without changing prompts, extraction behavior, evaluation matching,
+  or dataset content.
+- Provider-side failures may still remain visible after all retry attempts,
+  which is expected for this phase.
+
 ### Phase 8B.4F - ADK Event Loop Lifecycle Fix
 
 Completed:

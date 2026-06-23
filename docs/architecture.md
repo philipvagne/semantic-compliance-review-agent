@@ -30,12 +30,13 @@ The repository now contains:
 - a completed Phase 8B.3 Deterministic Runner and Metrics
 - a completed Phase 8B.4E Gemini Reliability Investigation
 - a completed Phase 8B.4F ADK Event Loop Lifecycle Fix
+- a completed Phase 8B.4G Gemini Transient Retry Handling
 - the documented MVP workflow for later phases
 
 The current runnable CLI path is the File Reader plus Text Extractor plus
 Context Loader plus Agent Review plus Report Writer flow.
 
-The current implementation focus is Phase 8B.4F: ADK Event Loop Lifecycle Fix
+The current implementation focus is Phase 8B.4G: Gemini Transient Retry Handling
 inside the broader Gemini Evaluation Snapshot track.
 
 Phase 6.97 did not change runtime behavior. It improved submission readiness by
@@ -84,6 +85,12 @@ Phase 8B.4F corrects the ADK runner lifecycle by creating the
 runner across separate `asyncio.run(...)` event loops. This keeps backend
 selection and credential validation unchanged while avoiding unsafe reuse of
 loop-bound runner state.
+
+Phase 8B.4G adds bounded retry handling for transient Gemini provider failures
+only. When the Gemini-backed review path fails with a clearly transient
+`503 UNAVAILABLE` or similar high-demand error, the review call retries up to
+three total attempts with short exponential backoff. Deterministic review and
+non-transient failures do not use this retry path.
 
 ## Implemented Flow
 
@@ -658,8 +665,8 @@ MVP behavior:
 
 Structured output retry rule:
 
-- Retry once if the first agent response cannot be parsed into the `Finding` schema
-- Raise AgentReviewError if the second attempt also fails
+- Do not retry provider calls for validation or schema-parsing failures
+- Raise `AgentReviewError` if the returned structured output cannot be parsed
 
 Suggested replacement rule:
 
@@ -732,7 +739,9 @@ Phase 5.2 implementation note:
 - supported environment variables are `GOOGLE_API_KEY` and `GEMINI_API_KEY`
 - Gemini model selection is currently `gemini-2.5-flash`
 - one review request is still used per file
-- malformed structured output still retries once
+- malformed structured output now fails clearly without a provider retry
+- transient Gemini `503` / `UNAVAILABLE` / `high demand` provider failures now
+  retry with small bounded backoff
 - provider failures do not silently fall back to Deterministic
 - Gemini is now explicitly instructed to include `suggested_replacement` only
   when a safe neutral rewrite is obvious; otherwise it should return `null`

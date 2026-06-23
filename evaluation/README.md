@@ -68,6 +68,11 @@ The diagnosis command reports:
 It also reminds users that the selected key should be restricted to the Gemini
 API / `generativelanguage.googleapis.com`.
 
+The project Gemini-backed review path now retries small transient provider
+failures such as `503 UNAVAILABLE` with short bounded backoff. Deterministic
+evaluation behavior is unchanged, and final Gemini failures still remain
+visible after all retry attempts.
+
 ## Future Phase 8B Steps
 
 - `8B.4` Gemini evaluation snapshot

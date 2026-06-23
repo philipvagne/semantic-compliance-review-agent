@@ -115,6 +115,10 @@ Practical runtime note:
 - pacing changes execution speed only; it does not change matching or scoring
 - a separate diagnosis command exists to compare direct `google.genai` calls
   with the ADK-backed project path when repeated 503 errors occur
+- the ADK-backed Gemini review path now retries small transient provider
+  failures such as `503 UNAVAILABLE` with bounded backoff before failing
+  clearly
+- non-transient failures such as validation/schema errors are not retried
 - the diagnosis command now reports safe API-key configuration status, per-test
   elapsed time, and repeated observation summaries without printing secret
   values

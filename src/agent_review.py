@@ -32,6 +32,7 @@ import json
 import logging
 import os
 import re
+import time
 from typing import AsyncGenerator
 from typing import Literal
 
@@ -61,6 +62,8 @@ DEFAULT_BACKEND: BackendName = "gemini"
 GEMINI_MODEL_NAME = "gemini-2.5-flash"
 _configured_backend: BackendName = DEFAULT_BACKEND
 _configured_api_key: str | None = None
+GEMINI_TRANSIENT_MAX_ATTEMPTS = 3
+GEMINI_TRANSIENT_RETRY_DELAYS_SECONDS = (1, 2)
 
 AGENT_REVIEW_INSTRUCTION = """
 Review all extracted text and return only structured Finding JSON that matches
@@ -240,7 +243,6 @@ async def _run_review(
     review_context: ReviewContext,
     backend: BackendName,
 ) -> list[Finding]:
-    runner = InMemoryRunner(agent=build_agent(backend))
     prompt = json.dumps(
         {
             "reviewable_texts": [item.model_dump() for item in reviewable_texts],
@@ -248,24 +250,65 @@ async def _run_review(
         }
     )
 
+    attempt_count = (
+        GEMINI_TRANSIENT_MAX_ATTEMPTS
+        if backend == "gemini"
+        else 1
+    )
     last_error: Exception | None = None
-    for _attempt in range(2):
+
+    for attempt_number in range(1, attempt_count + 1):
+        runner = InMemoryRunner(agent=build_agent(backend))
         try:
-            with contextlib.redirect_stderr(io.StringIO()):
-                events = await runner.run_debug(prompt, quiet=True)
-            response_text = _extract_final_response_text(events)
-            return FINDINGS_ADAPTER.validate_json(response_text)
+            return await _run_single_review_attempt(runner, prompt)
         except ValidationError as exc:
             last_error = exc
-        except AgentReviewError:
+            break
+        except AgentReviewError as exc:
+            last_error = exc
+            if (
+                backend == "gemini"
+                and attempt_number < attempt_count
+                and _is_transient_gemini_error(exc)
+            ):
+                delay_seconds = GEMINI_TRANSIENT_RETRY_DELAYS_SECONDS[attempt_number - 1]
+                print(f"Gemini transient error, retrying in {delay_seconds}s...")
+                time.sleep(delay_seconds)
+                continue
             raise
         except (ClientError, ServerError, APIError, TimeoutError) as exc:
-            raise AgentReviewError(f"{get_backend_display_name()} backend failed: {exc}") from exc
+            wrapped_error = AgentReviewError(
+                f"{get_backend_display_name()} backend failed: {exc}"
+            )
+            last_error = wrapped_error
+            if (
+                backend == "gemini"
+                and attempt_number < attempt_count
+                and _is_transient_gemini_error(exc)
+            ):
+                delay_seconds = GEMINI_TRANSIENT_RETRY_DELAYS_SECONDS[attempt_number - 1]
+                print(f"Gemini transient error, retrying in {delay_seconds}s...")
+                time.sleep(delay_seconds)
+                continue
+            raise wrapped_error from exc
         except Exception as exc:
-            raise AgentReviewError(f"{get_backend_display_name()} backend failed: {exc}") from exc
+            wrapped_error = AgentReviewError(
+                f"{get_backend_display_name()} backend failed: {exc}"
+            )
+            last_error = wrapped_error
+            if (
+                backend == "gemini"
+                and attempt_number < attempt_count
+                and _is_transient_gemini_error(exc)
+            ):
+                delay_seconds = GEMINI_TRANSIENT_RETRY_DELAYS_SECONDS[attempt_number - 1]
+                print(f"Gemini transient error, retrying in {delay_seconds}s...")
+                time.sleep(delay_seconds)
+                continue
+            raise wrapped_error from exc
 
     raise AgentReviewError(
-        "Structured output could not be parsed into the Finding schema after one retry."
+        "Structured output could not be parsed into the Finding schema."
     ) from last_error
 
 
@@ -275,8 +318,27 @@ def _build_model(backend: BackendName) -> BaseLlm:
     return DeterministicAgentReviewModel()
 
 
+async def _run_single_review_attempt(
+    runner: InMemoryRunner,
+    prompt: str,
+) -> list[Finding]:
+    with contextlib.redirect_stderr(io.StringIO()):
+        events = await runner.run_debug(prompt, quiet=True)
+    response_text = _extract_final_response_text(events)
+    return FINDINGS_ADAPTER.validate_json(response_text)
+
+
 def _resolve_gemini_api_key() -> str | None:
     return os.environ.get("GOOGLE_API_KEY") or os.environ.get("GEMINI_API_KEY")
+
+
+def _is_transient_gemini_error(error: Exception) -> bool:
+    error_text = str(error).upper()
+    return (
+        "503" in error_text
+        or "UNAVAILABLE" in error_text
+        or "HIGH DEMAND" in error_text
+    )
 
 
 def _extract_prompt_text(llm_request: LlmRequest) -> str:

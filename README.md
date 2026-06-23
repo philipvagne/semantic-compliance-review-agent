@@ -442,13 +442,13 @@ semantic-compliance-review-agent/
 
 Current phase:
 
-- Phase 8B.4F - ADK Event Loop Lifecycle Fix
+- Phase 8B.4G - Gemini Transient Retry Handling
 
 Most recently completed:
 
-- Phase 8B.4E - Gemini Reliability Investigation
+- Phase 8B.4F - ADK Event Loop Lifecycle Fix
 
-Implemented through Phase 8B.4F:
+Implemented through Phase 8B.4G:
 
 - repository foundation
 - ADK feasibility spike
@@ -472,6 +472,7 @@ Implemented through Phase 8B.4F:
 - Gemini-capable evaluation runner path
 - repeated Gemini diagnostic instrumentation for reliability investigation
 - safer per-call ADK runner lifecycle across repeated review invocations
+- bounded transient Gemini retry handling for provider-side `503` failures
 
 Not implemented yet:
 

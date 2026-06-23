@@ -35,6 +35,7 @@ The project is organized as a CLI workflow with focused components:
 - Text Extractor
 - Context Loader
 - Agent Review
+- optional Clean Copy Writer
 - Report Writer
 
 These components behave like explicit tools or stages in a controlled agent
@@ -72,6 +73,9 @@ Implemented now.
 The current product outcome is a Markdown audit report for developer review.
 
 The system does not auto-apply suggestions or make release decisions.
+
+When clean-copy generation is requested, it produces a separate advisory file
+under `output/` rather than modifying the original source file in place.
 
 ### 6. Prompting and Instruction Design
 

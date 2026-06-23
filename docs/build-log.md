@@ -2,6 +2,32 @@
 
 ## 2026-06-23
 
+### Phase 7A - Clean Copy Generation
+
+Completed:
+- Added `src/clean_copy_writer.py` to generate separate clean-copy artifacts
+  under `output/` without modifying the original input file.
+- Added `--clean-copy` to `src/main.py` so clean-copy generation is explicit
+  and opt-in.
+- Limited clean-copy application to conservative exact replacements only when
+  source text, suggested replacement, and uniqueness checks all pass.
+- Skipped ambiguous or missing replacements safely and surfaced the skipped
+  reasons in the audit report.
+- Updated `src/report_writer.py` so clean-copy runs include a summary with the
+  generated path, applied count, skipped count, and skipped reasons.
+
+Tested:
+- Ran `python -m compileall src evaluation`.
+- Ran `python -m src.main examples/realistic_sample.py --backend deterministic --clean-copy`.
+- Ran `python -m src.main examples/realistic_sample.py --backend deterministic`.
+
+Result:
+- `output/realistic_sample-clean-copy.py` was generated as a separate artifact.
+- The deterministic clean-copy run applied 2 conservative replacements and
+  skipped 1 ambiguous or missing replacement safely.
+- The original `examples/realistic_sample.py` file remained unchanged.
+- Default deterministic behavior without `--clean-copy` still worked.
+
 ### Phase 8B.4J - Realistic File Validation
 
 Completed:

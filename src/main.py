@@ -7,14 +7,17 @@ Purpose:
 Input:
 - One source file path.
 - One optional backend selection flag.
+- One optional clean-copy generation flag.
 
 Output:
 - Console status output.
 - One Markdown audit report on success.
+- One optional clean-copy file on request.
 
 Responsibilities:
 - Validate CLI arguments.
 - Coordinate the current pipeline in order.
+- Optionally generate a separate clean-copy artifact under `output/`.
 - Fail clearly when a required step cannot complete.
 
 Non-responsibilities:
@@ -31,6 +34,9 @@ from src.agent_review import configure_backend
 from src.agent_review import get_backend_display_name
 from src.agent_review import get_model_display_name
 from src.agent_review import review
+from src.clean_copy_writer import CleanCopyWriteError
+from src.clean_copy_writer import CleanCopyResult
+from src.clean_copy_writer import generate_clean_copy
 from src.context_loader import ContextLoadError
 from src.context_loader import load_review_context
 from src.file_reader import FileReadError
@@ -51,6 +57,11 @@ def parse_args() -> argparse.Namespace:
         choices=("gemini", "deterministic"),
         default="gemini",
         help="Agent review backend to use. Defaults to Gemini.",
+    )
+    parser.add_argument(
+        "--clean-copy",
+        action="store_true",
+        help="Generate a separate clean-copy file under output/ using safe suggested replacements.",
     )
     return parser.parse_args()
 
@@ -93,6 +104,17 @@ def main() -> None:
     except AgentReviewError as exc:
         raise SystemExit(f"Agent review failed: {exc}") from exc
 
+    clean_copy_result: CleanCopyResult | None = None
+    if args.clean_copy:
+        try:
+            clean_copy_result = generate_clean_copy(
+                file_content=file_content,
+                reviewable_texts=reviewable_items,
+                findings=findings,
+            )
+        except CleanCopyWriteError as exc:
+            raise SystemExit(f"Clean-copy generation failed: {exc}") from exc
+
     try:
         report_path = write_audit_report(
             file_content=file_content,
@@ -101,12 +123,17 @@ def main() -> None:
             findings=findings,
             backend=get_backend_display_name(),
             model=get_model_display_name(),
+            clean_copy_result=clean_copy_result,
         )
     except ReportWriteError as exc:
         raise SystemExit(f"Report generation failed: {exc}") from exc
 
     print(f"Findings generated: {len(findings)}")
     print(f"Report written to: {report_path}")
+    if clean_copy_result:
+        print(f"Clean copy written to: {clean_copy_result.output_path}")
+        print(f"Clean-copy replacements applied: {clean_copy_result.applied_count}")
+        print(f"Clean-copy replacements skipped: {clean_copy_result.skipped_count}")
 
     for item in reviewable_items:
         preview = item.text.replace("\n", " ").strip()

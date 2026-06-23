@@ -33,13 +33,14 @@ The repository now contains:
 - a completed Phase 8B.4G Gemini Transient Retry Handling
 - a completed Phase 8B.4H Gemini Model Stability Comparison
 - a completed Phase 8B.4I Production Model Validation
+- a completed Phase 8B.4J Realistic File Validation
 - the documented MVP workflow for later phases
 
 The current runnable CLI path is the File Reader plus Text Extractor plus
-Context Loader plus Agent Review plus Report Writer flow.
+Context Loader plus Agent Review plus optional Clean Copy Writer plus Report
+Writer flow.
 
-The current implementation focus is Phase 8B.4I: Production Model Validation
-inside the broader Gemini Evaluation Snapshot track.
+The current implementation focus is Phase 7A: Clean Copy Generation.
 
 Phase 6.97 did not change runtime behavior. It improved submission readiness by
 adding clearer reviewer-facing architecture explanation, concept framing, and a
@@ -102,6 +103,12 @@ evaluation through the `GEMINI_MODEL` environment variable. The default remains
 `gemini-2.5-flash`, while `gemini-2.5-pro` is now the documented recommended
 production candidate for reliability-sensitive Gemini validation and demo use.
 
+Phase 7A adds optional clean-copy generation behind an explicit CLI flag. The
+original source file is never modified. Instead, the CLI can write one
+separate `output/<stem>-clean-copy<extension>` artifact that applies only
+safe, exact suggested replacements and skips ambiguous replacements
+conservatively.
+
 ## Implemented Flow
 
 User
@@ -110,15 +117,17 @@ User
 -> Text Extractor
 -> Context Loader
 -> Agent Review
+-> Optional Clean Copy Writer
 -> Report Writer
 -> Console Summary
 
 The current CLI accepts one source file path, reads it as UTF-8, extracts
 reviewable text from Python, JavaScript-family, HTML, and Markdown source
 files, loads review context from YAML config files, reviews the extracted text
-through the Agent Review boundary, writes one Markdown audit report, and
-prints a console summary of the extracted items, loaded context, findings, and
-report path.
+through the Agent Review boundary, optionally writes one separate clean-copy
+artifact under `output/`, writes one Markdown audit report, and prints a
+console summary of the extracted items, loaded context, findings, report path,
+and optional clean-copy summary.
 
 If the file type is unsupported, the CLI now fails clearly before review and no
 audit report is generated.
@@ -138,7 +147,6 @@ Not part of the current runtime path:
 
 - report generation
 - evaluation
-- clean copy generation
 - repository-wide scanning
 
 ## MVP Workflow v1
@@ -180,6 +188,7 @@ Output:
 
 - Console summary
 - Exit code
+- One optional clean-copy file under `output/`
 
 On Failure:
 
@@ -191,12 +200,14 @@ Responsibility:
 - Coordinate the current file-read workflow
 - Validate command usage
 - Display final results
+- Optionally trigger conservative clean-copy generation
 
 Does NOT:
 
 - Extract text
 - Review content
 - Generate findings
+- Modify the original source file
 
 ## File Reader
 

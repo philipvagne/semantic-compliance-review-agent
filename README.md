@@ -76,7 +76,9 @@ Current implemented workflow:
 3. Extract reviewable text from supported source types.
 4. Load review context from YAML config files.
 5. Run semantic review through the agent boundary.
-6. Write one audit report to `output/`.
+6. Optionally generate one separate clean-copy file under `output/` with
+   conservative exact suggested replacements.
+7. Write one audit report to `output/`.
 
 Current deterministic evaluation workflow:
 
@@ -141,6 +143,7 @@ Current review outputs:
 - recommendation text
 - optional suggested replacement text
 - Markdown audit report
+- optional separate clean-copy artifact under `output/` when `--clean-copy` is used
 
 ## Current Limitations
 
@@ -148,7 +151,6 @@ The current implementation does not yet provide:
 
 - repository-wide scanning
 - automatic source modification
-- clean-copy generation
 - web UI
 - database
 - authentication
@@ -280,6 +282,12 @@ Realistic deterministic validation run:
 python -m src.main examples/realistic_sample.py --backend deterministic
 ```
 
+Deterministic clean-copy validation run:
+
+```text
+python -m src.main examples/realistic_sample.py --backend deterministic --clean-copy
+```
+
 Deterministic evaluation run:
 
 ```text
@@ -349,6 +357,13 @@ $env:GEMINI_MODEL="gemini-2.5-pro"
 python -m src.main examples/realistic_sample.py --backend gemini
 ```
 
+Recommended Gemini Pro clean-copy run:
+
+```text
+$env:GEMINI_MODEL="gemini-2.5-pro"
+python -m src.main examples/realistic_sample.py --backend gemini --clean-copy
+```
+
 ## Example Behavior
 
 Current sample input:
@@ -363,6 +378,7 @@ Generated report location:
 
 - `output/sample_input-audit-report.md`
 - `output/realistic_sample-audit-report.md`
+- `output/realistic_sample-clean-copy.py` when `--clean-copy` is used
 
 Validation note:
 
@@ -371,6 +387,8 @@ Validation note:
   not a formal benchmark case
 - the recommended Gemini model for this realistic validation is
   `gemini-2.5-pro` because it is the project's reliability-sensitive model
+- clean-copy generation is optional, never overwrites the original file, and
+  still requires human review before any adoption
 
 Typical console flow:
 

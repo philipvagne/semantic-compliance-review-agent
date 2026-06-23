@@ -18,6 +18,7 @@ Responsibilities:
 - Generate Markdown report content.
 - Preserve finding order, line numbers, and source text.
 - Include available backend and model metadata.
+- Include available clean-copy summary data when requested by the CLI.
 - Write the report to the output directory.
 
 Non-responsibilities:
@@ -35,6 +36,7 @@ from datetime import datetime
 from pathlib import Path
 import re
 
+from src.clean_copy_writer import CleanCopyResult
 from src.schemas import FileContent
 from src.schemas import Finding
 from src.schemas import ReviewContext
@@ -106,6 +108,7 @@ def write_audit_report(
     findings: list[Finding],
     backend: str | None,
     model: str | None,
+    clean_copy_result: CleanCopyResult | None = None,
     output_dir: str = "output",
 ) -> str:
     _validate_report_inputs(
@@ -129,6 +132,7 @@ def write_audit_report(
         findings=findings,
         backend=backend,
         model=model,
+        clean_copy_result=clean_copy_result,
     )
 
     try:
@@ -170,6 +174,7 @@ def _build_report_markdown(
     findings: list[Finding],
     backend: str | None,
     model: str | None,
+    clean_copy_result: CleanCopyResult | None,
 ) -> str:
     references = _build_references(findings)
     sections: list[str] = [
@@ -198,15 +203,28 @@ def _build_report_markdown(
             findings=findings,
             references=references,
         ),
-        "",
-        "---",
-        "",
-        _build_reference_guide(),
-        "",
-        "---",
-        "",
-        _build_review_philosophy(),
     ]
+    if clean_copy_result is not None:
+        sections.extend(
+            [
+                "",
+                "---",
+                "",
+                _build_clean_copy_section(clean_copy_result),
+            ]
+        )
+    sections.extend(
+        [
+            "",
+            "---",
+            "",
+            _build_reference_guide(),
+            "",
+            "---",
+            "",
+            _build_review_philosophy(),
+        ]
+    )
     return "\n".join(sections).rstrip() + "\n"
 
 
@@ -340,7 +358,37 @@ def _build_reference_guide() -> str:
             "",
             _render_table(rows),
         ]
+    ) 
+
+
+def _build_clean_copy_section(clean_copy_result: CleanCopyResult | None) -> str:
+    lines = [
+        "## Clean Copy Summary",
+        "",
+        f"- Clean copy generated: `{clean_copy_result.output_path}`",
+        f"- Replacements applied: `{clean_copy_result.applied_count}`",
+        f"- Replacements skipped: `{clean_copy_result.skipped_count}`",
+    ]
+
+    if not clean_copy_result.skipped_replacements:
+        lines.append("- Skipped replacement reasons: none")
+        return "\n".join(lines)
+
+    lines.extend(
+        [
+            "- Skipped replacement reasons:",
+        ]
     )
+    for skipped in clean_copy_result.skipped_replacements:
+        line_label = (
+            f"line {skipped.line_start}"
+            if skipped.line_start == skipped.line_end
+            else f"lines {skipped.line_start}-{skipped.line_end}"
+        )
+        lines.append(
+            f"  - `{skipped.finding_id}` ({line_label}): {skipped.reason}"
+        )
+    return "\n".join(lines)
 
 
 def _build_review_philosophy() -> str:
@@ -352,9 +400,9 @@ def _build_review_philosophy() -> str:
             "",
             "Human review is required before any action is taken.",
             "",
-            "No source code was modified during this audit.",
+            "The original source file was not modified during this audit.",
             "",
-            "No changes should be applied automatically without developer review.",
+            "Any generated clean copy is a separate advisory artifact under `output/` and still requires developer review.",
             "",
             "The developer remains responsible for final decisions.",
         ]

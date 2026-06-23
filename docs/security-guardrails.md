@@ -26,7 +26,12 @@ It does not overwrite the source file.
 
 It does not apply suggested replacements to the source file.
 
-It does not generate a clean copy yet.
+When clean-copy generation is requested, it writes a separate file under
+`output/`.
+
+It never overwrites the original input file.
+
+It never applies changes in place.
 
 ### No Automatic Commits
 
@@ -53,13 +58,18 @@ This applies to:
 
 Suggested replacements are optional review outputs.
 
-They are not applied automatically.
+They are not applied automatically to the original source file.
 
 They should be treated as draft wording for human review, not as trusted
 automatic remediation.
 
 The report may display a suggested replacement when Agent Review provides one,
 but the report writer does not invent replacements on its own.
+
+If clean-copy generation is requested, only safe, exact, unambiguous
+replacements are applied to the separate clean-copy artifact. Ambiguous or
+missing replacements are skipped conservatively and reported in the audit
+report.
 
 ### No Silent Gemini Fallback
 
@@ -152,7 +162,6 @@ Current supported extraction scope:
 Not yet implemented:
 
 - repository-wide scanning
-- automatic clean-copy generation
 - evaluation harness
 
 These limitations are intentional MVP boundaries, not hidden capabilities.

@@ -48,9 +48,10 @@ Completed:
 [completed] Phase 8B.4H Gemini Model Stability Comparison Implemented
 [completed] Phase 8B.4I Production Model Validation Implemented
 [completed] Phase 8B.4J Realistic File Validation Implemented
+[completed] Phase 7A Clean Copy Generation Implemented
 
 Current Phase:
-PHASE 8B.4J - REALISTIC FILE VALIDATION
+PHASE 7A - CLEAN COPY GENERATION
 
 Next Milestone:
 PHASE 9 - FINAL DOCUMENTATION
@@ -1725,6 +1726,25 @@ Exit Criteria:
 [completed] generated report is saved when available
 [completed] no prompts, extractors, or evaluation rules changed
 [completed] docs explain the realistic validation as non-benchmark evidence
+
+PHASE 7A - CLEAN COPY GENERATION
+
+- Add conservative clean-copy generation behind an explicit `--clean-copy`
+  flag
+- Never modify the original source file or overwrite the original input path
+- Apply only safe, exact suggested replacements and skip ambiguous
+  replacements conservatively
+
+Exit Criteria:
+
+[completed] `--clean-copy` exists
+[completed] default behavior unchanged
+[completed] original file is never modified
+[completed] separate clean-copy output is generated
+[completed] unsafe replacements are skipped
+[completed] report includes clean-copy summary
+[completed] realistic sample validates clean-copy behavior
+[completed] no prompt, extractor, or evaluation matching changes
 
 Exit Criteria:
 

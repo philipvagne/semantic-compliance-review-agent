@@ -31,12 +31,14 @@ The evaluation runner now also supports the Gemini backend path:
 - `python -m evaluation.run --backend gemini`
 - `python -m evaluation.run --backend gemini --delay-seconds 15`
 - `python -m evaluation.run --backend gemini --case security_python --delay-seconds 15`
+- `GEMINI_MODEL="gemini-2.5-pro" python -m evaluation.run --backend gemini --delay-seconds 15`
 - `evaluation/results/gemini-results.md` is the intended committed snapshot artifact
 
 The repository now also includes a Gemini path diagnosis helper:
 
 - `python -m evaluation.diagnose_gemini`
 - `python -m evaluation.diagnose_gemini --repeat 5 --delay-seconds 15`
+- `python -m evaluation.diagnose_gemini --model gemini-2.5-flash --repeat 1`
 
 ## Current Status
 
@@ -60,6 +62,20 @@ Not implemented yet:
 - committed Gemini evaluation snapshot in this environment
 
 This document is intentionally honest about that gap.
+
+Documented investigation evidence now includes:
+
+- intermittent `503 UNAVAILABLE` failures while using `gemini-2.5-flash`
+- API-key variable checks showing `GOOGLE_API_KEY` versus `GEMINI_API_KEY` was
+  not the root cause
+- a fixed local ADK event-loop lifecycle issue from the runner-reuse
+  investigation
+- bounded transient retry handling for provider-side high-demand failures
+- prior manual model-comparison diagnostics showing `gemini-2.5-pro` completed
+  5/5 cycles across direct smoke, direct realistic prompt, and ADK-backed
+  review-path checks
+- prior manual Gemini evaluation evidence showing the 10 evaluation cases
+  passed when collected one by one
 
 ## Evaluation Goal
 
@@ -113,6 +129,15 @@ Practical runtime note:
 - `--delay-seconds 15` is the recommended starting command for paced Gemini runs
 - one-case or small-subset runs are supported through `--case` and `--cases`
 - pacing changes execution speed only; it does not change matching or scoring
+- the shared `GEMINI_MODEL` environment variable now controls the Gemini model
+  for normal review and evaluation runs
+- if `GEMINI_MODEL` is unset, the project continues using the default
+  `gemini-2.5-flash` model
+- `gemini-2.5-pro` is the current recommended production candidate for
+  reliability-sensitive Gemini evaluation and demo use, based on the
+  documented investigation evidence
+- the recommendation does not make Pro the default model; model choice remains
+  a tradeoff between reliability and quality, latency, and likely cost
 - a separate diagnosis command exists to compare direct `google.genai` calls
   with the ADK-backed project path when repeated 503 errors occur
 - the ADK-backed Gemini review path now retries small transient provider
@@ -122,6 +147,9 @@ Practical runtime note:
 - the diagnosis command now reports safe API-key configuration status, per-test
   elapsed time, and repeated observation summaries without printing secret
   values
+- the diagnosis command now also reports which Gemini model is under test and
+  supports a `--model` override for stability comparison without changing the
+  shared project model selection
 - the diagnosis command also reminds users that their API key should be
   restricted to the Gemini API / `generativelanguage.googleapis.com`
 

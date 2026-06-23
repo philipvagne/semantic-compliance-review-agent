@@ -12,6 +12,7 @@ Output:
 
 Responsibilities:
 - Run the review behind a clean ADK-backed boundary.
+- Apply the configured Gemini model selection when the Gemini backend is used.
 - Validate structured findings.
 - Retry once on malformed structured output.
 
@@ -60,8 +61,10 @@ logging.getLogger("google.adk").setLevel(logging.ERROR)
 BackendName = Literal["gemini", "deterministic"]
 DEFAULT_BACKEND: BackendName = "gemini"
 GEMINI_MODEL_NAME = "gemini-2.5-flash"
+GEMINI_MODEL_ENV_VAR = "GEMINI_MODEL"
 _configured_backend: BackendName = DEFAULT_BACKEND
 _configured_api_key: str | None = None
+_configured_gemini_model_name: str = GEMINI_MODEL_NAME
 GEMINI_TRANSIENT_MAX_ATTEMPTS = 3
 GEMINI_TRANSIENT_RETRY_DELAYS_SECONDS = (1, 2)
 
@@ -200,15 +203,20 @@ def review(reviewable_texts: list[ReviewableText], review_context: ReviewContext
         raise AgentReviewError(f"Unexpected agent review failure: {exc}") from exc
 
 
-def configure_backend(backend: BackendName) -> None:
+def configure_backend(
+    backend: BackendName,
+    gemini_model_name: str | None = None,
+) -> None:
     global _configured_backend
     global _configured_api_key
+    global _configured_gemini_model_name
 
     if backend not in ("gemini", "deterministic"):
         raise AgentReviewError(f"Unsupported agent review backend: {backend}")
 
     _configured_backend = backend
     _configured_api_key = None
+    _configured_gemini_model_name = _resolve_gemini_model_name(gemini_model_name)
 
     if backend == "gemini":
         api_key = _resolve_gemini_api_key()
@@ -224,8 +232,14 @@ def get_backend_display_name() -> str:
     return "Gemini" if _configured_backend == "gemini" else "Deterministic"
 
 
+def get_default_gemini_model_name() -> str:
+    return _resolve_gemini_model_name(None)
+
+
 def get_model_display_name() -> str | None:
-    return GEMINI_MODEL_NAME if _configured_backend == "gemini" else "deterministic-local"
+    if _configured_backend == "gemini":
+        return _configured_gemini_model_name
+    return "deterministic-local"
 
 
 def build_agent(backend: BackendName) -> Agent:
@@ -314,7 +328,7 @@ async def _run_review(
 
 def _build_model(backend: BackendName) -> BaseLlm:
     if backend == "gemini":
-        return ConfiguredGeminiModel(model=GEMINI_MODEL_NAME)
+        return ConfiguredGeminiModel(model=_configured_gemini_model_name)
     return DeterministicAgentReviewModel()
 
 
@@ -330,6 +344,12 @@ async def _run_single_review_attempt(
 
 def _resolve_gemini_api_key() -> str | None:
     return os.environ.get("GOOGLE_API_KEY") or os.environ.get("GEMINI_API_KEY")
+
+
+def _resolve_gemini_model_name(gemini_model_name: str | None) -> str:
+    if gemini_model_name:
+        return gemini_model_name
+    return os.environ.get(GEMINI_MODEL_ENV_VAR) or GEMINI_MODEL_NAME
 
 
 def _is_transient_gemini_error(error: Exception) -> bool:

@@ -368,3 +368,28 @@ package rather than disposable local runtime files.
 Status:
 
 Accepted
+
+## 2026-06-23
+
+### Keep Flash as Default but Recommend Pro for Reliability-Sensitive Gemini Use
+
+Decision:
+
+Keep `gemini-2.5-flash` as the default Gemini model, but recommend
+`gemini-2.5-pro` for reliability-sensitive Gemini validation, evaluation, and
+demo use.
+
+Reason:
+
+The documented reliability investigation found intermittent Flash
+`503 UNAVAILABLE` failures, while prior manual diagnostics showed Pro
+completed 5/5 cycles across direct smoke, direct realistic prompt, and
+ADK-backed review-path checks. The same investigation also documented higher
+observed latency for Pro and the likelihood of different cost characteristics.
+Keeping Flash as the default preserves current lightweight project behavior,
+while recommending Pro acknowledges the stronger reliability evidence without
+overstating the latency and cost tradeoff.
+
+Status:
+
+Accepted

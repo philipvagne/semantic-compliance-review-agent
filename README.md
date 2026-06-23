@@ -92,7 +92,8 @@ Current Gemini evaluation workflow:
 1. Load the same files from `evaluation/cases/`.
 2. Load the same matching expected JSON files from `evaluation/expected/`.
 3. Optionally narrow the run to one case or a selected subset.
-4. Run each case through the existing pipeline with the Gemini backend.
+4. Run each case through the existing pipeline with the Gemini backend and the
+   current Gemini model selection.
 5. Compare actual findings against expected findings with the same matching rules.
 6. Optionally pause between cases with `--delay-seconds` for rate-limit-friendly pacing.
 7. Write one Markdown evaluation snapshot artifact to `evaluation/results/` when Gemini credentials are available.
@@ -152,6 +153,13 @@ Evaluation status:
 - Gemini evaluation runner support is implemented
 - Gemini snapshot generation still requires configured Gemini credentials
 - Gemini free-tier evaluation may require pacing between cases to avoid RPM limits
+- `gemini-2.5-flash` showed intermittent `503 UNAVAILABLE` failures during
+  investigation
+- prior manual diagnostics showed `gemini-2.5-pro` completed 5/5 cycles across
+  direct smoke, direct realistic prompt, and ADK-backed review checks
+- current project decision: keep `gemini-2.5-flash` as the default model, but
+  recommend `gemini-2.5-pro` for reliability-sensitive Gemini validation and
+  demo runs
 
 Important scope truth:
 
@@ -194,16 +202,38 @@ Set one of these environment variables:
 - `GOOGLE_API_KEY`
 - `GEMINI_API_KEY`
 
+Optional Gemini model selection:
+
+- `GEMINI_MODEL`
+
 Example PowerShell session:
 
 ```text
 $env:GOOGLE_API_KEY="your-key-here"
+$env:GEMINI_MODEL="gemini-2.5-pro"
 ```
 
 Gemini is the default backend.
 
 If Gemini is selected and no credentials are available, the CLI fails clearly.
 It does not silently fall back to deterministic mode.
+
+If `GEMINI_MODEL` is not set, the project keeps the current default model:
+`gemini-2.5-flash`.
+
+Current recommendation:
+
+- keep `gemini-2.5-flash` as the default model for compatibility with the
+  existing project behavior
+- use `gemini-2.5-pro` for reliability-sensitive Gemini validation, evaluation,
+  and demo runs
+
+Tradeoff note:
+
+- `gemini-2.5-pro` appeared more stable in the documented diagnostics
+- it also showed higher observed latency than Flash
+- it may have different cost characteristics
+- model choice is a tradeoff between reliability and quality, latency, and cost
 
 ### 3. Run the Agent
 
@@ -277,6 +307,26 @@ Repeated Gemini diagnosis command:
 
 ```text
 python -m evaluation.diagnose_gemini --repeat 5 --delay-seconds 15
+```
+
+Gemini model comparison diagnosis command:
+
+```text
+python -m evaluation.diagnose_gemini --model gemini-2.5-flash --repeat 1
+```
+
+Recommended Gemini Pro evaluation run:
+
+```text
+$env:GEMINI_MODEL="gemini-2.5-pro"
+python -m evaluation.run --backend gemini --delay-seconds 15
+```
+
+Git Bash equivalent:
+
+```text
+export GEMINI_MODEL="gemini-2.5-pro"
+python -m evaluation.run --backend gemini --delay-seconds 15
 ```
 
 ## Example Behavior

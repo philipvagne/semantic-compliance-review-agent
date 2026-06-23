@@ -36,8 +36,10 @@ import time
 from google.genai import Client
 
 from src.agent_review import AgentReviewError
+from src.agent_review import GEMINI_MODEL_ENV_VAR
 from src.agent_review import GEMINI_MODEL_NAME
 from src.agent_review import configure_backend
+from src.agent_review import get_default_gemini_model_name
 from src.agent_review import review
 from src.context_loader import ContextLoadError
 from src.context_loader import load_review_context
@@ -73,11 +75,12 @@ def main() -> None:
     args = parse_args()
     key_configuration = _resolve_key_configuration()
     case_text = DIAGNOSTIC_CASE_PATH.read_text(encoding="utf-8")
+    selected_model = args.model or get_default_gemini_model_name()
 
     print("Gemini Backend Diagnosis")
     print(f"Case file: {DIAGNOSTIC_CASE_PATH.as_posix()}")
     print("")
-    _print_key_configuration(key_configuration)
+    _print_key_configuration(key_configuration, selected_model)
 
     if not key_configuration.selected_key:
         raise SystemExit(
@@ -94,7 +97,11 @@ def main() -> None:
 
         cycle_number = cycle_index + 1
         print(f"Cycle {cycle_number}/{args.repeat}")
-        cycle_results = _run_diagnostic_cycle(key_configuration.selected_key, case_text)
+        cycle_results = _run_diagnostic_cycle(
+            key_configuration.selected_key,
+            case_text,
+            selected_model,
+        )
         all_results.append(cycle_results)
         for result in cycle_results:
             _print_result(result)
@@ -122,6 +129,15 @@ def parse_args() -> argparse.Namespace:
         type=_parse_delay_seconds,
         default=0.0,
         help="Optional delay between diagnostic cycles. Defaults to 0 seconds.",
+    )
+    parser.add_argument(
+        "--model",
+        default=None,
+        help=(
+            "Optional Gemini model override for investigation. "
+            f"Defaults to the current project Gemini model selection "
+            f"({GEMINI_MODEL_ENV_VAR} or {GEMINI_MODEL_NAME})."
+        ),
     )
     return parser.parse_args()
 
@@ -154,37 +170,45 @@ def _parse_delay_seconds(value: str) -> float:
     return delay_seconds
 
 
-def _run_diagnostic_cycle(api_key: str, case_text: str) -> list[DiagnosticResult]:
+def _run_diagnostic_cycle(
+    api_key: str,
+    case_text: str,
+    model_name: str,
+) -> list[DiagnosticResult]:
     client = Client(api_key=api_key)
     return [
-        _run_direct_smoke_test(client),
-        _run_direct_realistic_test(client, case_text),
-        _run_adk_backed_test(),
+        _run_direct_smoke_test(client, model_name),
+        _run_direct_realistic_test(client, case_text, model_name),
+        _run_adk_backed_test(model_name),
     ]
 
 
-def _run_direct_smoke_test(client: Client) -> DiagnosticResult:
+def _run_direct_smoke_test(client: Client, model_name: str) -> DiagnosticResult:
     started_at = time.perf_counter()
     try:
         response = client.models.generate_content(
-            model=GEMINI_MODEL_NAME,
+            model=model_name,
             contents="Say hello.",
         )
         return DiagnosticResult(
-            test_name="Direct google.genai smoke test",
+            test_name="Direct google.genai smoke test (direct google.genai path)",
             passed=True,
             elapsed_seconds=time.perf_counter() - started_at,
             preview=_preview_text(getattr(response, "text", None)),
         )
     except Exception as exc:
         return _build_failure_result(
-            "Direct google.genai smoke test",
+            "Direct google.genai smoke test (direct google.genai path)",
             exc,
             elapsed_seconds=time.perf_counter() - started_at,
         )
 
 
-def _run_direct_realistic_test(client: Client, case_text: str) -> DiagnosticResult:
+def _run_direct_realistic_test(
+    client: Client,
+    case_text: str,
+    model_name: str,
+) -> DiagnosticResult:
     prompt = (
         "Review the following Python file text for security risks, professionalism "
         "risks, and internal naming risks. Return JSON-like findings with fields "
@@ -197,27 +221,31 @@ def _run_direct_realistic_test(client: Client, case_text: str) -> DiagnosticResu
     started_at = time.perf_counter()
     try:
         response = client.models.generate_content(
-            model=GEMINI_MODEL_NAME,
+            model=model_name,
             contents=prompt,
         )
         return DiagnosticResult(
-            test_name="Direct google.genai realistic review prompt",
+            test_name=(
+                "Direct google.genai realistic review prompt "
+                "(direct google.genai path)"
+            ),
             passed=True,
             elapsed_seconds=time.perf_counter() - started_at,
             preview=_preview_text(getattr(response, "text", None)),
         )
     except Exception as exc:
         return _build_failure_result(
-            "Direct google.genai realistic review prompt",
+            "Direct google.genai realistic review prompt "
+            "(direct google.genai path)",
             exc,
             elapsed_seconds=time.perf_counter() - started_at,
         )
 
 
-def _run_adk_backed_test() -> DiagnosticResult:
+def _run_adk_backed_test(model_name: str) -> DiagnosticResult:
     started_at = time.perf_counter()
     try:
-        configure_backend("gemini")
+        configure_backend("gemini", gemini_model_name=model_name)
         review_context = load_review_context()
         file_content = read_file(str(DIAGNOSTIC_CASE_PATH))
         reviewable_texts = extract_reviewable_text(file_content)
@@ -235,7 +263,7 @@ def _run_adk_backed_test() -> DiagnosticResult:
         if not findings:
             preview = "[]"
         return DiagnosticResult(
-            test_name="ADK-backed review path",
+            test_name="ADK-backed review path (project Gemini review path)",
             passed=True,
             elapsed_seconds=time.perf_counter() - started_at,
             preview=_preview_text(preview),
@@ -248,7 +276,7 @@ def _run_adk_backed_test() -> DiagnosticResult:
         OSError,
     ) as exc:
         return _build_failure_result(
-            "ADK-backed review path",
+            "ADK-backed review path (project Gemini review path)",
             exc,
             elapsed_seconds=time.perf_counter() - started_at,
         )
@@ -309,7 +337,10 @@ def _print_result(result: DiagnosticResult) -> None:
     print(f"  Error: {result.error_type}: {result.error_message}")
 
 
-def _print_key_configuration(key_configuration: KeyConfiguration) -> None:
+def _print_key_configuration(
+    key_configuration: KeyConfiguration,
+    selected_model: str,
+) -> None:
     print("API Key Configuration")
     print(
         f"- GOOGLE_API_KEY set: {'yes' if key_configuration.google_api_key_set else 'no'}"
@@ -321,6 +352,14 @@ def _print_key_configuration(key_configuration: KeyConfiguration) -> None:
         "- Selected variable: "
         f"{key_configuration.selected_variable or '(none)'}"
     )
+    print(
+        f"- {GEMINI_MODEL_ENV_VAR} set: "
+        f"{'yes' if os.environ.get(GEMINI_MODEL_ENV_VAR) else 'no'}"
+    )
+    print(f"- Selected Gemini model: {selected_model}")
+    print("- Backend paths under test:")
+    print("  - direct google.genai")
+    print("  - project ADK-backed Gemini review path")
     print(
         "- Reminder: the selected API key should be restricted to the Gemini API "
         "/ generativelanguage.googleapis.com."

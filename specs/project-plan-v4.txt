@@ -45,9 +45,11 @@ Completed:
 [completed] Phase 8B.4E Gemini Reliability Investigation Implemented
 [completed] Phase 8B.4F ADK Event Loop Lifecycle Fix Implemented
 [completed] Phase 8B.4G Gemini Transient Retry Handling Implemented
+[completed] Phase 8B.4H Gemini Model Stability Comparison Implemented
+[completed] Phase 8B.4I Production Model Validation Implemented
 
 Current Phase:
-PHASE 8B.4G - GEMINI TRANSIENT RETRY HANDLING
+PHASE 8B.4I - PRODUCTION MODEL VALIDATION
 
 Next Milestone:
 PHASE 9 - FINAL DOCUMENTATION
@@ -1667,6 +1669,43 @@ Exit Criteria:
 [completed] deterministic backend unchanged
 [completed] no prompt, model, matching, dataset, or schema changes
 [completed] final failures remain visible
+
+PHASE 8B.4H - GEMINI MODEL STABILITY COMPARISON
+
+- Make Gemini model selection configurable while keeping the default model
+  unchanged
+- Extend diagnostics so different Gemini model names can be compared during
+  reliability investigation
+- Preserve prompts, extraction behavior, matching, dataset content, and
+  default CLI review behavior
+
+Exit Criteria:
+
+[completed] Gemini model is configurable
+[completed] default model remains unchanged
+[completed] diagnostic reports selected Gemini model
+[completed] diagnostic supports `--model`
+[completed] unsupported models fail clearly through the configured Gemini path
+[completed] no prompt, model-behavior, matching, dataset, or schema changes
+
+PHASE 8B.4I - PRODUCTION MODEL VALIDATION
+
+- Document the Gemini reliability investigation path and current evidence
+- Extend Gemini model selection into normal review and evaluation through
+  `GEMINI_MODEL`
+- Validate whether `gemini-2.5-pro` should be the default model, the
+  recommended model, or only a documented reliability option
+
+Exit Criteria:
+
+[completed] reliability investigation process is documented
+[completed] Gemini model selection is available for normal Gemini review and evaluation
+[completed] `gemini-2.5-pro` validation command is documented
+[completed] cost, latency, and reliability tradeoff is documented carefully
+[completed] no prompts, dataset, or matching changes
+[completed] deterministic backend still works
+[completed] decision status is clear: Flash remains default, Pro is recommended
+            for reliability-sensitive validation and demo use
 
 Exit Criteria:
 

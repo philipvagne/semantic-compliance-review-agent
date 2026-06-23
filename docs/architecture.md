@@ -31,12 +31,14 @@ The repository now contains:
 - a completed Phase 8B.4E Gemini Reliability Investigation
 - a completed Phase 8B.4F ADK Event Loop Lifecycle Fix
 - a completed Phase 8B.4G Gemini Transient Retry Handling
+- a completed Phase 8B.4H Gemini Model Stability Comparison
+- a completed Phase 8B.4I Production Model Validation
 - the documented MVP workflow for later phases
 
 The current runnable CLI path is the File Reader plus Text Extractor plus
 Context Loader plus Agent Review plus Report Writer flow.
 
-The current implementation focus is Phase 8B.4G: Gemini Transient Retry Handling
+The current implementation focus is Phase 8B.4I: Production Model Validation
 inside the broader Gemini Evaluation Snapshot track.
 
 Phase 6.97 did not change runtime behavior. It improved submission readiness by
@@ -91,6 +93,14 @@ only. When the Gemini-backed review path fails with a clearly transient
 `503 UNAVAILABLE` or similar high-demand error, the review call retries up to
 three total attempts with short exponential backoff. Deterministic review and
 non-transient failures do not use this retry path.
+
+Phase 8B.4H made Gemini model selection configurable for reliability
+investigation while keeping the default project model unchanged.
+
+Phase 8B.4I extends that same model selection into normal Gemini review and
+evaluation through the `GEMINI_MODEL` environment variable. The default remains
+`gemini-2.5-flash`, while `gemini-2.5-pro` is now the documented recommended
+production candidate for reliability-sensitive Gemini validation and demo use.
 
 ## Implemented Flow
 
@@ -737,7 +747,15 @@ Phase 5.2 implementation note:
 - missing Gemini credentials fail during CLI startup before file reading, text
   extraction, context loading, or agent review begins
 - supported environment variables are `GOOGLE_API_KEY` and `GEMINI_API_KEY`
-- Gemini model selection is currently `gemini-2.5-flash`
+- the optional `GEMINI_MODEL` environment variable selects the Gemini model for
+  normal review and evaluation runs
+- if `GEMINI_MODEL` is unset, Gemini model selection defaults to
+  `gemini-2.5-flash`
+- the Gemini diagnostic command can still override the model name per run for
+  investigation without changing the shared project configuration
+- `gemini-2.5-pro` is the current recommended production candidate for
+  reliability-sensitive Gemini validation and demo use, while Flash remains
+  the default model
 - one review request is still used per file
 - malformed structured output now fails clearly without a provider retry
 - transient Gemini `503` / `UNAVAILABLE` / `high demand` provider failures now

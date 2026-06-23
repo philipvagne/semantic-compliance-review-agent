@@ -7,6 +7,7 @@ Input:
 - Evaluation case files from `evaluation/cases/`.
 - Matching expected JSON files from `evaluation/expected/`.
 - One required backend flag for deterministic or Gemini evaluation.
+- The current Gemini model selection when the Gemini backend is used.
 - One optional delay value between evaluation cases.
 - Optional selection of one case or multiple cases by case ID.
 
@@ -18,6 +19,7 @@ Responsibilities:
 - Validate the supported evaluation CLI mode.
 - Load evaluation cases and matching expected outputs.
 - Run the existing pipeline with the selected backend.
+- Preserve backend and model metadata in the committed results artifact.
 - Optionally pause between cases when the user requests pacing.
 - Optionally limit the run to selected cases.
 - Compare actual findings to expected findings with simple matching rules.
@@ -46,6 +48,7 @@ from pydantic import ValidationError
 from src.agent_review import AgentReviewError
 from src.agent_review import configure_backend
 from src.agent_review import get_backend_display_name
+from src.agent_review import get_model_display_name
 from src.agent_review import review
 from src.context_loader import ContextLoadError
 from src.context_loader import load_review_context
@@ -498,6 +501,7 @@ def _build_summary(
     return {
         "timestamp": datetime.now(timezone.utc).replace(microsecond=0).isoformat(),
         "backend": backend,
+        "model": get_model_display_name() or "(unknown)",
         "cases_run": len(case_results),
         "cases_passed": passed_cases,
         "cases_failed": len(case_results) - passed_cases,
@@ -526,6 +530,7 @@ def _write_results_markdown(
         title,
         "",
         f"- Backend: `{summary['backend']}`",
+        f"- Model: `{summary['model']}`",
         f"- Timestamp: `{summary['timestamp']}`",
         f"- Cases run: `{summary['cases_run']}`",
     ]

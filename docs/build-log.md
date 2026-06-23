@@ -2,6 +2,63 @@
 
 ## 2026-06-23
 
+### Phase 8B.4I - Production Model Validation
+
+Completed:
+- Updated `src/agent_review.py` so normal Gemini review and evaluation runs can
+  use the shared `GEMINI_MODEL` environment variable while keeping the default
+  model selection at `gemini-2.5-flash`.
+- Updated `evaluation/run.py` so committed evaluation result artifacts include
+  the selected model in addition to the backend.
+- Kept `evaluation/diagnose_gemini.py` support for explicit `--model`
+  overrides while aligning its default behavior with the shared project model
+  selection.
+- Documented the full reliability investigation path, including intermittent
+  Flash `503 UNAVAILABLE` failures, API-key-variable checks, the fixed ADK
+  event-loop lifecycle issue, bounded transient retries, and prior manual
+  evidence that `gemini-2.5-pro` completed 5/5 diagnostic cycles and that the
+  10 Gemini evaluation cases passed when collected one by one.
+- Recorded the current model decision: keep Flash as the default model, but
+  recommend Pro for reliability-sensitive Gemini validation and demo use.
+
+Tested:
+- Ran `python -m compileall src evaluation`.
+- Ran `python -m src.main examples/sample_input.py --backend deterministic`.
+- Ran `python -m evaluation.run --backend deterministic --case security_python`.
+- Checked local environment variable availability for `GOOGLE_API_KEY`,
+  `GEMINI_API_KEY`, and `GEMINI_MODEL`.
+- Could not run credentialed Gemini Pro diagnostics or full Gemini evaluation
+  in this environment because no Gemini credentials were set.
+
+Result:
+- The repository now supports shared Gemini model selection across diagnostics,
+  normal review, and evaluation without changing prompts, extraction,
+  matching, or dataset content.
+- The current project recommendation is explicit: `gemini-2.5-pro` is the
+  preferred reliability-sensitive production candidate, while
+  `gemini-2.5-flash` remains the default model because latency and cost
+  tradeoffs still matter.
+
+### Phase 8B.4H - Gemini Model Stability Comparison
+
+Completed:
+- Updated `src/agent_review.py` so Gemini model selection is configurable while
+  preserving the existing default model name of `gemini-2.5-flash`.
+- Kept the standard CLI review path unchanged when no model override is
+  supplied.
+- Extended `evaluation/diagnose_gemini.py` with an optional `--model`
+  override, selected-model reporting, and clearer backend-path reporting for
+  direct and ADK-backed Gemini checks.
+
+Tested:
+- Ran `python -m compileall src evaluation`.
+- Ran `python -m evaluation.diagnose_gemini --repeat 1`.
+
+Result:
+- The repository can now compare Gemini stability across model names during
+  diagnostics without changing prompts, extraction behavior, evaluation
+  matching, or the default review configuration.
+
 ### Phase 8B.4G - Gemini Transient Retry Handling
 
 Completed:

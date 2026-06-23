@@ -267,6 +267,12 @@ Rate-limit-friendly Gemini single-case evaluation run:
 python -m evaluation.run --backend gemini --case security_python --delay-seconds 15
 ```
 
+Gemini backend diagnosis command:
+
+```text
+python -m evaluation.diagnose_gemini
+```
+
 ## Example Behavior
 
 Current sample input:

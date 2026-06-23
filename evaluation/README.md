@@ -18,6 +18,7 @@ The repository now includes:
 - Gemini evaluation runner support in `evaluation/run.py`
 - optional pacing support through `--delay-seconds`
 - optional case-selection support through `--case` and `--cases`
+- a Gemini backend diagnosis helper at `evaluation/diagnose_gemini.py`
 
 ## Backend Separation
 
@@ -49,6 +50,10 @@ supported:
 
 - `--case security_python`
 - `--cases security_python,security_javascript`
+
+When Gemini evaluation failures need path diagnosis, run:
+
+- `python -m evaluation.diagnose_gemini`
 
 ## Future Phase 8B Steps
 

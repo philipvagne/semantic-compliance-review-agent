@@ -1573,6 +1573,25 @@ Exit Criteria:
 [completed] no expected JSON changes
 [completed] no Agent Review or Gemini prompt changes
 
+PHASE 8B.4C - GEMINI BACKEND PATH DIAGNOSIS
+
+- Add `evaluation/diagnose_gemini.py`
+- Compare direct `google.genai` smoke behavior against a realistic direct prompt
+- Compare both against the existing ADK-backed Gemini review path
+- Keep the diagnosis utility separate from production runtime behavior
+
+Exit Criteria:
+
+[completed] `evaluation/diagnose_gemini.py` exists
+[completed] diagnostic command runs
+[completed] direct `google.genai` smoke test included
+[completed] direct `google.genai` realistic prompt test included
+[completed] ADK-backed review path test included
+[completed] output clearly distinguishes PASS / FAIL per path
+[completed] no production behavior changed
+[completed] no Agent Review prompt changes
+[completed] no dataset / expected JSON changes
+
 Exit Criteria:
 
 [ ] Evaluation dataset exists

@@ -2,40 +2,97 @@
 
 |                                |                            |
 | ------------------------------ | -------------------------- |
-| **Target File**                | `examples/sample_input.md` |
-| **Generated On**               | 2026-06-22 · 07:39 UTC     |
-| **Backend**                    | Deterministic              |
-| **Model**                      | `deterministic-local`      |
+| **Target File**                | `examples/sample_input.py` |
+| **Generated On**               | 2026-06-23 · 06:53 UTC     |
+| **Backend**                    | Gemini                     |
+| **Model**                      | `gemini-2.5-flash`         |
 | **Configured Sensitive Terms** | 3                          |
-| **Findings Count**             | 0                          |
-| **Audit Status**               | **NO ISSUES FOUND**        |
+| **Findings Count**             | 2                          |
+| **Audit Status**               | **ISSUES FOUND**           |
 
 ---
 
 ## Executive Summary
 
-This audit completed with status **NO ISSUES FOUND**.
+This audit completed with status **ISSUES FOUND**.
 
 - Reviewable text items analyzed: 6
-- Findings generated: 0
-- Highest severity found: None
-- Categories detected: None
+- Findings generated: 2
+- Highest severity found: 🔴 Critical
+- Categories detected: Security Risk, Professionalism Risk
 
 ---
 
 ## Audit Summary Matrix
 
-| Reference | Category    | Severity | Confidence |
-| --------- | ----------- | -------- | ---------- |
-| -         | No findings | -        | -          |
+| Reference | Category             | Severity   | Confidence |
+| --------- | -------------------- | ---------- | ---------- |
+| SEC-001   | Security Risk        | 🔴 Critical | ● High     |
+| PRO-001   | Professionalism Risk | 🟡 Medium   | ● High     |
 
 ---
 
 ## Detailed Findings
 
-No findings were generated for this file.
-The audit completed successfully.
-Human review is still recommended before publication or release.
+### SEC-001: Security Risk
+
+**Severity:** 🔴 Critical | **Confidence:** ● High
+
+**Detection Method:** Semantic Analysis
+
+`examples/sample_input.py` — line 3
+
+#### Source Text
+
+```text
+TODO: remove the temporary admin password before release
+```
+
+#### Why This Was Flagged
+
+- The source code explicitly mentions a 'temporary admin password' that needs to be removed before release.
+- This constitutes a critical security risk as it implies sensitive credentials might be present or easily discoverable in the codebase if not properly handled prior to deployment.
+
+#### Recommended Action
+
+Ensure that all temporary admin credentials, especially passwords, are completely removed and securely managed (e.g., through environment variables or secure configuration management) before any release. Hardcoding or leaving temporary credentials in the code is a critical security vulnerability.
+
+#### Suggested Replacement
+
+```diff
+- TODO: remove the temporary admin password before release
++ TODO: remove the temporary admin credential reference before release
+```
+
+### PRO-001: Professionalism Risk
+
+**Severity:** 🟡 Medium | **Confidence:** ● High
+
+**Detection Method:** Semantic Analysis
+
+`examples/sample_input.py` — line 14
+
+#### Source Text
+
+```text
+FIXME: replace the hard-coded example value later
+```
+
+#### Why This Was Flagged
+
+- The comment 'FIXME: replace the hard-coded example value later' indicates that a placeholder value is currently present in the code.
+- Leaving hard-coded example values can lead to unexpected behavior, maintenance issues, or potential exposure of implementation details in a production environment.
+
+#### Recommended Action
+
+Replace the hard-coded example value with the appropriate production-ready value or a secure configuration reference. Ensure all placeholders are removed before deployment to production.
+
+#### Suggested Replacement
+
+```diff
+- FIXME: replace the hard-coded example value later
++ FIXME: replace the placeholder value before release
+```
 
 ---
 

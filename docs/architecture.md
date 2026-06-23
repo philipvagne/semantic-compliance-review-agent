@@ -68,6 +68,10 @@ Phase 8B.4B adds optional case selection so the same evaluation runner can
 execute one case or a small subset without changing scoring, matching, or
 dataset behavior.
 
+Phase 8B.4C adds a separate Gemini diagnosis utility under `evaluation/` that
+compares direct `google.genai` calls against the existing ADK-backed review
+path without changing the production backend.
+
 ## Implemented Flow
 
 User

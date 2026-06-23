@@ -33,6 +33,10 @@ The evaluation runner now also supports the Gemini backend path:
 - `python -m evaluation.run --backend gemini --case security_python --delay-seconds 15`
 - `evaluation/results/gemini-results.md` is the intended committed snapshot artifact
 
+The repository now also includes a Gemini path diagnosis helper:
+
+- `python -m evaluation.diagnose_gemini`
+
 ## Current Status
 
 Implemented now:
@@ -108,6 +112,8 @@ Practical runtime note:
 - `--delay-seconds 15` is the recommended starting command for paced Gemini runs
 - one-case or small-subset runs are supported through `--case` and `--cases`
 - pacing changes execution speed only; it does not change matching or scoring
+- a separate diagnosis command exists to compare direct `google.genai` calls
+  with the ADK-backed project path when repeated 503 errors occur
 
 Deterministic and Gemini results should not be collapsed into one vague score.
 

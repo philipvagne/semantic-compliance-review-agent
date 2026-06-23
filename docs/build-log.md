@@ -2,6 +2,29 @@
 
 ## 2026-06-22
 
+### Phase 8B.4C - Gemini Backend Path Diagnosis
+
+Completed:
+- Added `evaluation/diagnose_gemini.py`.
+- Implemented a direct `google.genai` smoke test with a minimal prompt.
+- Implemented a direct `google.genai` realistic review-prompt test using the
+  committed `security_python.py` evaluation case.
+- Implemented an ADK-backed review-path test that exercises the existing
+  production Gemini review boundary on the same evaluation case.
+- Added concise PASS / FAIL reporting plus short previews or error summaries.
+- Added an interpretation summary that points toward general Gemini
+  availability, ADK-path isolation, realistic prompt complexity, or
+  intermittent behavior depending on the observed pattern.
+
+Tested:
+- Ran `python -m compileall src evaluation`.
+- Ran `python -m evaluation.diagnose_gemini`.
+
+Result:
+- The repository now includes a focused Gemini path-diagnosis command without
+  changing production backend behavior, prompts, extraction, or evaluation
+  data.
+
 ### Phase 8B.4B - Evaluation Case Selection
 
 Completed:

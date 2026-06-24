@@ -1,358 +1,102 @@
 # Evaluation Plan
 
-This document describes the approved evaluation design for the Semantic
-Compliance Review Agent.
+## Purpose
 
-Phase 8A documented the design.
+This document explains how evaluation works for the Semantic Compliance Review
+Agent and how to interpret the committed evaluation artifacts.
 
-Phase 8B is implementing the evaluation harness and artifacts described here in
-small slices.
-
-The repository now contains the Phase 8B.1 foundation structure:
-
-- `evaluation/__init__.py`
-- `evaluation/README.md`
-- `evaluation/cases/`
-- `evaluation/expected/`
-- `evaluation/results/`
-
-The repository now also contains the initial Phase 8B.2 dataset:
-
-- 10 evaluation case files in `evaluation/cases/`
-- 10 matching expected-output JSON files in `evaluation/expected/`
-
-The repository now also contains the initial Phase 8B.3 runner output:
-
-- `evaluation/run.py`
-- `evaluation/results/deterministic-results.md`
-
-The evaluation runner now also supports the Gemini backend path:
-
-- `python -m evaluation.run --backend gemini`
-- `python -m evaluation.run --backend gemini --delay-seconds 15`
-- `python -m evaluation.run --backend gemini --case security_python --delay-seconds 15`
-- `GEMINI_MODEL="gemini-2.5-pro" python -m evaluation.run --backend gemini --delay-seconds 15`
-- `evaluation/results/gemini-results.md` is the intended committed snapshot artifact
-
-The repository now also includes a Gemini path diagnosis helper:
-
-- `python -m evaluation.diagnose_gemini`
-- `python -m evaluation.diagnose_gemini --repeat 5 --delay-seconds 15`
-- `python -m evaluation.diagnose_gemini --model gemini-2.5-flash --repeat 1`
-
-## Current Status
-
-Implemented now:
-
-- manual sample input
-- manual sample output
-- deterministic backend for stable local checks
-- live Gemini verification documented in the build log
-- approved evaluation design for the next implementation step
-- committed initial evaluation cases
-- committed initial expected-output JSON files
-- deterministic evaluation runner
-- deterministic expected-output comparison
-- deterministic precision and recall reporting
-- committed deterministic evaluation results artifact
-- Gemini-capable evaluation runner path
-
-Not implemented yet:
-
-- committed Gemini evaluation snapshot in this environment
-
-This document is intentionally honest about that gap.
-
-Documented investigation evidence now includes:
-
-- intermittent `503 UNAVAILABLE` failures while using `gemini-2.5-flash`
-- API-key variable checks showing `GOOGLE_API_KEY` versus `GEMINI_API_KEY` was
-  not the root cause
-- a fixed local ADK event-loop lifecycle issue from the runner-reuse
-  investigation
-- bounded transient retry handling for provider-side high-demand failures
-- prior manual model-comparison diagnostics showing `gemini-2.5-pro` completed
-  5/5 cycles across direct smoke, direct realistic prompt, and ADK-backed
-  review-path checks
-- prior manual Gemini evaluation evidence showing the 10 evaluation cases
-  passed when collected one by one
-- one realistic sample-file validation path under `examples/` for demo-style
-  usability checks outside the formal benchmark suite
-
-## Evaluation Goal
-
-The evaluation phase should provide credible, repeatable evidence that:
-
-- the extraction pipeline works correctly
-- the review pipeline works correctly
-- the agent can identify expected risks
-- the agent can avoid obvious false positives
-- the results can be measured and reported
-
-The goal is not benchmark scale.
-
-The goal is submission-quality evidence for a small, explainable capstone
-project.
-
-The committed 10-case evaluation dataset remains the measured benchmark.
-
-Separate realistic sample-file runs may be used to show the agent on more
-natural user-style input, but those runs are not part of the scored benchmark
-unless they are explicitly promoted into `evaluation/cases/` in a future phase.
+The goal is credible capstone evidence for a small, explainable review system,
+not benchmark scale.
 
 ## Evaluation Philosophy
 
-The evaluation should measure whether the agent understood the risk, not
-whether it produced exact expected wording.
+The evaluation measures whether the system identifies the right risk in the
+right place, not whether it reproduces one exact explanation or recommendation.
 
-Exact explanation and recommendation text matches should not be required.
-
-Evaluation should focus on semantic correctness:
+Evaluation focuses on semantic correctness:
 
 - whether the right text or line range was targeted
 - whether the right category was identified
-- whether the explanation is meaningfully related to the expected concern
+- whether the output is meaningfully aligned with the expected concern
 
-## Backend Strategy
+## Benchmark Shape
 
-The deterministic and Gemini backends should be evaluated separately.
+The committed benchmark is a 10-case dataset:
 
-### Deterministic Backend Purpose
+- input files in `evaluation/cases/`
+- matching expected JSON files in `evaluation/expected/`
 
-- validate pipeline correctness
-- validate extraction behavior
-- validate repeatable rule-based findings
-- provide committed precision and recall evidence
+The dataset is intentionally small and understandable. It is meant to show:
 
-### Gemini Backend Purpose
+- risk detection
+- false-positive handling
+- multi-language coverage
+- recommendation coverage
 
-- validate semantic reasoning
-- validate contextual understanding
-- validate category selection
-- provide a committed snapshot of the live model-backed review path
-
-Practical runtime note:
-
-- Gemini free-tier users may hit requests-per-minute limits during evaluation
-- `--delay-seconds 15` is the recommended starting command for paced Gemini runs
-- one-case or small-subset runs are supported through `--case` and `--cases`
-- pacing changes execution speed only; it does not change matching or scoring
-- the shared `GEMINI_MODEL` environment variable now controls the Gemini model
-  for normal review and evaluation runs
-- if `GEMINI_MODEL` is unset, the project continues using the default
-  `gemini-2.5-flash` model
-- `gemini-2.5-pro` is the current recommended production candidate for
-  reliability-sensitive Gemini evaluation and demo use, based on the
-  documented investigation evidence
-- the same Pro recommendation also applies to realistic sample-file validation
-  runs when a live Gemini review is desired
-- the recommendation does not make Pro the default model; model choice remains
-  a tradeoff between reliability and quality, latency, and likely cost
-- a separate diagnosis command exists to compare direct `google.genai` calls
-  with the ADK-backed project path when repeated 503 errors occur
-- the ADK-backed Gemini review path now retries small transient provider
-  failures such as `503 UNAVAILABLE` with bounded backoff before failing
-  clearly
-- non-transient failures such as validation/schema errors are not retried
-- the diagnosis command now reports safe API-key configuration status, per-test
-  elapsed time, and repeated observation summaries without printing secret
-  values
-- the diagnosis command now also reports which Gemini model is under test and
-  supports a `--model` override for stability comparison without changing the
-  shared project model selection
-- the diagnosis command also reminds users that their API key should be
-  restricted to the Gemini API / `generativelanguage.googleapis.com`
-
-Deterministic and Gemini results should not be collapsed into one vague score.
-
-## Supported Evaluation Coverage
-
-The evaluation should cover the currently supported file types:
+Supported evaluation coverage includes:
 
 - `.py`
 - `.js`
-- `.ts` / `.tsx` through JavaScript-family coverage
+- `.ts` / `.tsx`
 - `.html`
 - `.md`
 
-Coverage does not need to be equal.
+Coverage is representative rather than equal across file types.
 
-Coverage does need to be representative.
+## Backends
 
-The target size is 10 to 14 total evaluation cases.
+Evaluation is reported separately for the two supported backends.
 
-The goal is credible coverage, not a large benchmark suite.
-
-## Evaluation Case Types
-
-### 1. Clean File
+### Deterministic Backend
 
 Purpose:
 
-Verify that safe content produces zero findings.
+- validate pipeline correctness
+- validate extraction and matching behavior
+- provide repeatable precision and recall evidence
 
-Expected:
-
-`0` findings.
-
-### 2. Security Risk
-
-Examples:
-
-- temporary password
-- hard-coded secret
-- sensitive credential reference
-
-Expected:
-
-`SECURITY_RISK` finding.
-
-### 3. Internal Naming Risk
-
-Examples:
-
-- confidential project names
-- internal codenames
-- restricted initiatives
-
-Expected:
-
-`INTERNAL_CODENAME_EXPOSURE` finding.
-
-### 4. Professionalism Risk
-
-Examples:
-
-- unfinished TODO comments
-- placeholder release notes
-- unprofessional language
-
-Expected:
-
-`PROFESSIONALISM_RISK` finding.
-
-### 5. Suggested Replacement Case
+### Gemini Backend
 
 Purpose:
 
-Verify recommendation quality for obvious high-confidence cases.
+- validate semantic reasoning
+- validate contextual judgment
+- provide a committed snapshot of the live model-backed review path
 
-Expected:
+Gemini results should be interpreted as evaluation evidence, not as a perfectly
+reproducible benchmark.
 
-The finding includes a reasonable `suggested_replacement`.
+## Metrics
 
-### 6. Documentation False-Positive Case
+The evaluation reports:
 
-Purpose:
+- True Positive (TP)
+- False Positive (FP)
+- False Negative (FN)
+- Precision
+- Recall
 
-Measure whether the agent incorrectly flags safe documentation.
+Primary interpretation:
 
-Example:
+- Precision: how trustworthy are reported findings?
+- Recall: how many expected findings were detected?
 
-README-style documentation containing:
-
-- `GOOGLE_API_KEY`
-- `GEMINI_API_KEY`
-- API endpoint references
-- credential setup instructions
-
-in safe instructional context.
-
-Expected:
-
-Zero findings or near-zero findings.
-
-This case is important because README self-review during development exposed
-possible over-flagging of safe instructional credential examples.
-
-### 7. Multi-Language Coverage Cases
-
-Purpose:
-
-Verify extraction and review behavior across supported file types.
-
-Include:
-
-- Python
-- JavaScript-family
-- HTML
-- Markdown
-
-Expected:
-
-Expected findings are produced consistently regardless of file type.
-
-### Optional Additional Cases
-
-If time allows and examples remain stable:
-
-- configured sensitive-term match case
-- hybrid case combining term match and semantic risk
-- compliance-risk case
+Severity is informative but secondary. A correct detection can still count as a
+match even when severity differs from the expected example.
 
 ## Matching Rules
 
-Evaluation should not require exact wording matches.
+A finding counts as a match when:
 
-A finding should count as a match when:
-
-1. The expected reviewable text was identified, or the correct line range was
-   targeted.
+1. The expected reviewable text was identified, or the correct line range was targeted.
 2. The expected category was identified.
-3. The explanation is meaningfully related to the expected concern.
+3. The finding meaningfully matches the expected concern.
 
-## Severity Rules
+Exact wording matches are not required.
 
-Severity is secondary.
+## Expected JSON Schema
 
-Example:
-
-- expected: `HIGH`
-- actual: `MEDIUM`
-
-This may still count as a successful detection.
-
-Primary concern:
-
-Was the correct risk detected?
-
-Secondary concern:
-
-Was the severity reasonable?
-
-## Evaluation Metrics
-
-The evaluation should report at least:
-
-- True Positive (TP): expected finding exists and the agent correctly
-  identifies it
-- False Positive (FP): agent reports a finding that should not exist
-- False Negative (FN): expected finding exists and the agent fails to identify
-  it
-- Precision: `TP / (TP + FP)`
-- Recall: `TP / (TP + FN)`
-
-Metric purpose:
-
-- Precision answers: how trustworthy are reported findings?
-- Recall answers: how many expected findings were detected?
-
-If time allows, the final evaluation writeup may also include supporting counts
-such as:
-
-- total cases run
-- total findings expected
-- total findings produced
-
-These metrics should be treated as small-project evaluation signals, not as
-formal scientific claims.
-
-## Expected Output Schema
-
-Phase 8B should implement expected-case JSON files against a small, explicit
-schema.
-
-Example risky case:
+Expected outputs use a small explicit schema:
 
 ```json
 {
@@ -372,7 +116,7 @@ Example risky case:
 }
 ```
 
-Example clean or false-positive case:
+Clean cases use:
 
 ```json
 {
@@ -383,102 +127,110 @@ Example clean or false-positive case:
 }
 ```
 
-Field meanings:
+## Result Artifacts
 
-- `case_id`: stable identifier for the evaluation case
-- `expected_findings`: expected matched findings for the case
-- `category`: expected finding category
-- `target_text_contains`: short anchor text that should appear in the matched
-  source text
-- `line_start`: expected start line for the matched finding
-- `line_end`: expected end line for the matched finding
-- `line_range_approximate`: whether near-line matching is acceptable
-- `requires_suggested_replacement`: whether the finding should include a
-  reasonable suggested replacement
-- `expected_finding_count_min`: lower bound for acceptable finding count
-- `expected_finding_count_max`: upper bound for acceptable finding count
-
-## Evaluation Artifact Structure
-
-Planned repository structure:
-
-```text
-evaluation/
-  cases/
-  expected/
-  results/
-```
-
-Examples:
-
-- `evaluation/cases/security_python.py`
-- `evaluation/cases/security_javascript.js`
-- `evaluation/cases/internal_codename_markdown.md`
-- `evaluation/cases/clean_html.html`
-- `evaluation/cases/documentation_false_positive.md`
-
-- `evaluation/expected/security_python.json`
-- `evaluation/expected/security_javascript.json`
-- `evaluation/expected/clean_html.json`
-- `evaluation/expected/documentation_false_positive.json`
+Committed evaluation result artifacts:
 
 - `evaluation/results/deterministic-results.md`
 - `evaluation/results/gemini-results.md`
 
-If only a subset of cases is run, the backend-specific result file should
-state that it is a partial evaluation run and report metrics only for the
-selected cases.
+These artifacts are part of the capstone evidence package.
 
-## Result Policy
+If only a subset of cases is run, the result file should clearly state that it
+is a partial evaluation run.
 
-Evaluation results should be committed to the repository.
+The committed Gemini snapshot artifact in this repository was captured with
+`gemini-2.5-pro` and should be interpreted as a point-in-time evaluation
+snapshot rather than a perfectly reproducible benchmark.
+
+## Running Evaluation
+
+Deterministic evaluation:
+
+```text
+python -m evaluation.run --backend deterministic
+```
+
+Single deterministic case:
+
+```text
+python -m evaluation.run --backend deterministic --case security_python
+```
+
+Gemini evaluation:
+
+```text
+python -m evaluation.run --backend gemini --delay-seconds 15
+```
+
+Recommended reliability-sensitive Gemini evaluation, PowerShell:
+
+```text
+$env:GEMINI_MODEL="gemini-2.5-pro"
+python -m evaluation.run --backend gemini --delay-seconds 15
+```
+
+Recommended reliability-sensitive Gemini evaluation, Bash:
+
+```text
+export GEMINI_MODEL="gemini-2.5-pro"
+python -m evaluation.run --backend gemini --delay-seconds 15
+```
+
+The runner also supports `--cases` for selected subsets.
+
+## Gemini Model Guidance
+
+Default model:
+
+- `gemini-2.5-flash`
+
+Recommended model for reliability-sensitive evaluation and demos:
+
+- `gemini-2.5-pro`
 
 Reason:
 
-Capstone reviewers should be able to inspect evaluation evidence without
-rerunning the project.
+- Flash remains the default for continuity and lighter-weight behavior
+- Pro is the documented recommendation for reliability-sensitive validation
 
-Evaluation artifacts are capstone evidence, not temporary runtime files.
+That recommendation should not be read as a claim that Pro is always superior
+in all cost, latency, or deployment contexts.
 
-For Gemini specifically, the committed artifact should be interpreted as a
-snapshot captured at a specific point in time rather than as a perfectly
-reproducible benchmark.
+## Reliability And Diagnostics
 
-That Gemini snapshot may also take longer to generate when pacing is enabled
-for rate-limit handling.
+The repository also includes `evaluation/diagnose_gemini.py` for path diagnosis
+and repeated observation.
 
-## Evaluation Constraints
+Use it when you need to compare:
 
-The evaluation phase should remain aligned with the rest of the project:
+- direct Gemini access
+- realistic direct prompt behavior
+- ADK-backed review behavior
 
-- no automatic source modification
-- findings remain advisory
-- deterministic mode may be used for stable local checks
-- Gemini may be used for live-path verification where appropriate
-- no prompt tuning as part of the baseline evaluation implementation
-- no extraction-behavior changes as part of the baseline evaluation implementation
+It is a diagnostic tool, not part of the benchmark itself.
 
-## Explicit Non-Goals for Phase 8A
+## Realistic Sample Validation
 
-Phase 8A does not:
+The repository also includes `examples/realistic_sample.py`.
 
-- implement the evaluation harness
-- create evaluation cases
-- create expected JSON files
-- generate metrics
-- tune prompts
-- modify Gemini behavior
-- modify extraction behavior
-- modify report generation
-- modify runtime architecture
+This file is useful for:
 
-## What This Document Does Not Claim
+- usability validation
+- demo-style validation
+- checking the review and clean-copy experience on a more natural file
 
-This document does not claim that evaluation is already complete.
+It is not part of the scored 10-case benchmark suite.
 
-It does not claim that metrics are already available.
+## Constraints And Non-Goals
 
-It does not claim that the current repository contains a finished benchmark
-suite.
+Evaluation does not:
 
-Those items belong to later Phase 8 implementation work.
+- change extraction behavior
+- change prompts
+- tune the model
+- modify source files
+- replace human review
+
+The evaluation system is intended to measure the current project, not optimize
+it during scoring.

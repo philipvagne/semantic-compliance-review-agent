@@ -1,8 +1,10 @@
 # Codex Workflow
 
-This document defines how Codex should be used for the Semantic Compliance Review Agent project.
+This document defines how Codex should be used for the Semantic Compliance
+Review Agent project.
 
-The goal is to keep implementation controlled, understandable, and aligned with the project plan.
+The goal is to keep implementation controlled, understandable, and aligned
+with the archived project plan and current documentation set.
 
 ## Core Rule
 
@@ -15,7 +17,7 @@ Do not ask Codex to build the entire agent in one request.
 Before making changes, Codex should read:
 
 * `AGENTS.md`
-* `specs/project-plan-v4.txt`
+* `docs/archive/project-plan-v4.txt`
 * `docs/architecture.md`
 * This file
 
@@ -23,10 +25,10 @@ For task-specific work, Codex should also read the relevant documentation file.
 
 Examples:
 
-* Evaluation work → `docs/evaluation-plan.md`
-* Security/guardrails work → `docs/security-guardrails.md`
-* Architecture changes → `docs/architecture.md`
-* Course concept mapping → `docs/course-concepts.md`
+* Evaluation work -> `docs/evaluation-plan.md`
+* Security/guardrails work -> `docs/security-guardrails.md`
+* Architecture changes -> `docs/architecture.md`
+* Course concept mapping -> `docs/course-concepts.md`
 
 ## Conversation Strategy
 
@@ -34,7 +36,7 @@ Use separate Codex conversations for major implementation areas.
 
 Recommended conversations:
 
-1. `Phase 0.5 — ADK Feasibility Spike`
+1. `Phase 0.5 - ADK Feasibility Spike`
 2. `CLI and File Reader`
 3. `Text Extraction`
 4. `Context Loading`
@@ -59,7 +61,7 @@ Implement [specific task].
 Context:
 Read:
 - AGENTS.md
-- specs/project-plan-v4.txt
+- docs/archive/project-plan-v4.txt
 - docs/architecture.md
 - docs/codex-workflow.md
 - [task-specific docs]
@@ -128,12 +130,13 @@ Add evaluation harness
 
 ## Documentation Sync Rule
 
-For every non-trivial task, Codex must identify which documentation files are affected and update them in the same task.
+For every non-trivial task, Codex must identify which documentation files are
+affected and update them in the same task.
 
 Codex must check at minimum:
 - README.md
-- specs/project-plan-v4.txt
-- docs/build-log.md
+- docs/archive/project-plan-v4.txt
+- docs/archive/build-log.md
 - docs/architecture.md
 - docs/codex-workflow.md
 - docs/security-guardrails.md
@@ -148,9 +151,11 @@ Before finishing, Codex must report:
 3. Which documentation files were intentionally left unchanged
 4. Why each unchanged file did not need an update
 
-Codex must not defer documentation synchronization to a later cleanup step unless the user explicitly asks for that.
+Codex must not defer documentation synchronization to a later cleanup step
+unless the user explicitly asks for that.
 
-The user reviews the diff. The user does not manually synchronize documentation unless needed.
+The user reviews the diff. The user does not manually synchronize
+documentation unless needed.
 
 ## Scope Control
 
@@ -177,4 +182,5 @@ The final project should be:
 
 The goal is not to build the most complex agent.
 
-The goal is to build a useful agent that can be understood, demonstrated, and defended.
+The goal is to build a useful agent that can be understood, demonstrated, and
+defended.

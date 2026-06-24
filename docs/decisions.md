@@ -1,7 +1,7 @@
 # Architectural Decisions
 
-This log records the most important product and architecture decisions that
-shape the current project behavior.
+This log records the durable decisions that shape the current project
+behavior.
 
 ## 2026-06-20
 
@@ -17,10 +17,6 @@ This keeps the project small, reproducible, and easy to explain during the
 capstone. It also avoids spending time on UI concerns before the core review
 pipeline is stable.
 
-Status:
-
-Accepted
-
 ### One File In, One Report Out MVP
 
 Decision:
@@ -33,10 +29,6 @@ Reason:
 This establishes a narrow, testable contract and avoids overreaching into
 repository-wide scanning before the core review logic is stable.
 
-Status:
-
-Accepted
-
 ### Python-Only Extraction for the Current MVP
 
 Decision:
@@ -46,13 +38,8 @@ Limit current extraction support to Python files only.
 Reason:
 
 Python comments and docstrings were the fastest path to a working semantic
-review demo with traceable line numbers. Multi-language support remains
-required before final submission but was intentionally deferred to avoid
-diluting Phase 3 quality.
-
-Status:
-
-Accepted for MVP
+review demo with traceable line numbers. Multi-language support remained
+deferred at that stage so Phase 3 could stay narrow and reliable.
 
 ### ADK Review Boundary as a Swappable Seam
 
@@ -66,10 +53,6 @@ Reason:
 The rest of the application should not care whether findings come from Gemini,
 deterministic review, or a future replacement backend. This preserves
 architectural flexibility without forcing broader rewrites.
-
-Status:
-
-Accepted
 
 ## 2026-06-21
 
@@ -85,10 +68,6 @@ The capstone project needs a real semantic review path, not only a stub. Gemini
 provides the model-backed path while still fitting within the current CLI
 architecture.
 
-Status:
-
-Accepted
-
 ### Deterministic Backend as Explicit Offline/Test Mode
 
 Decision:
@@ -99,10 +78,6 @@ Reason:
 
 This supports local development, documentation verification, and predictable
 manual checks without requiring live credentials on every run.
-
-Status:
-
-Accepted
 
 ### No Silent Fallback from Gemini to Deterministic
 
@@ -116,10 +91,6 @@ Reason:
 Silent fallback would hide the real runtime condition and make it unclear
 whether the produced findings came from the live model or a local fallback.
 
-Status:
-
-Accepted
-
 ### Fail-Fast Credential Validation
 
 Decision:
@@ -132,26 +103,31 @@ Reason:
 It is better to fail early than to let the user assume a full review occurred
 when the selected backend could not actually run.
 
-Status:
-
-Accepted
-
-### Retry Only Malformed Structured Output
+### Current Gemini Retry Policy
 
 Decision:
 
-Retry once when model output cannot be parsed into the `Finding` schema, but do
-not retry provider or network failures as if they were schema problems.
+Do not retry validation or schema-parsing failures, but do retry bounded
+transient Gemini provider failures such as `503`, `UNAVAILABLE`, or clear
+high-demand conditions.
 
 Reason:
 
-Malformed structured output is a bounded format problem. Provider and network
-failures are different classes of failure and should remain visible to the
-user.
+Structured-output failures and provider-availability failures are different
+classes of problems. Validation failures should remain visible immediately,
+while small transient provider outages can be retried safely with bounded
+backoff.
 
-Status:
+### Environment-Variable Secrets Only
 
-Accepted
+Decision:
+
+Load Gemini credentials from environment variables only.
+
+Reason:
+
+This avoids hardcoded secrets and keeps local credential handling aligned with
+standard development practice.
 
 ### Suggested Replacements Belong to Agent Review, Not the Report Writer
 
@@ -165,10 +141,6 @@ Reason:
 The report writer should present findings, not generate new review judgments or
 remediation content.
 
-Status:
-
-Accepted
-
 ### Report Writer Must Preserve Finding Order
 
 Decision:
@@ -179,10 +151,6 @@ Reason:
 
 Finding order should remain traceable to the review output so the report stays
 faithful to the pipeline rather than becoming a second decision-making layer.
-
-Status:
-
-Accepted
 
 ### Report Writer Must Not Invent Findings, Metrics, or Replacements
 
@@ -196,10 +164,6 @@ Reason:
 Invented statistics or remediation content would weaken trust, blur component
 boundaries, and create misleading demo artifacts.
 
-Status:
-
-Accepted
-
 ### Human-Readable Finding References
 
 Decision:
@@ -212,25 +176,18 @@ Reason:
 These identifiers are easier to discuss in reports, demos, and manual review
 than internal object IDs.
 
-Status:
-
-Accepted
-
 ### Multi-Language Extraction Is Required Before Submission
 
 Decision:
 
 Treat broader language support as a submission requirement, but do not claim it
-as implemented now.
+as implemented in earlier MVP stages.
 
 Reason:
 
-The current Python-only MVP is real and useful, but it is narrower than the
-planned capstone deliverable. The roadmap must acknowledge that gap honestly.
-
-Status:
-
-Accepted as a roadmap requirement
+The early Python-only MVP was real and useful, but it was narrower than the
+planned capstone deliverable. The roadmap needed to acknowledge that gap
+honestly.
 
 ### Unsupported File Types Must Fail Clearly
 
@@ -240,13 +197,8 @@ Do not treat unsupported file types as clean zero-finding audits.
 
 Reason:
 
-A zero-finding report implies that a review was actually performed. For the
-current Python-only MVP, unsupported inputs should fail clearly and state that
-no audit was performed.
-
-Status:
-
-Accepted
+A zero-finding report implies that a review was actually performed. Unsupported
+inputs should fail clearly and state that no audit was performed.
 
 ## 2026-06-22
 
@@ -263,10 +215,6 @@ This preserves the explainable architecture and avoids dragging schema,
 review-agent, prompt, report, or context-loading changes into an extraction
 scope increase.
 
-Status:
-
-Accepted
-
 ### Treat Multi-language Support as Human-Written Text Extraction, Not Full Parsing
 
 Decision:
@@ -279,10 +227,6 @@ Reason:
 The project goal is semantic review of comments and documentation, not general
 purpose source understanding. Narrow extraction rules reduce complexity and
 lower the risk of accidentally reviewing executable code or unrelated syntax.
-
-Status:
-
-Accepted
 
 ### Keep JSX and TSX Comment-Only in the MVP
 
@@ -297,10 +241,6 @@ Visible JSX text, nested markup, and mixed syntax introduce parsing complexity
 that is outside the current extraction-only phase. Comment-only support meets
 the narrow MVP goal more safely.
 
-Status:
-
-Accepted
-
 ### Exclude Markdown Fenced Code Blocks from Reviewable Text
 
 Decision:
@@ -313,10 +253,6 @@ Reason:
 Fenced code blocks are often examples or copied snippets rather than
 human-written repository guidance. Excluding them keeps Markdown extraction
 focused on headings, paragraphs, lists, and blockquotes.
-
-Status:
-
-Accepted
 
 ### Evaluate Semantic Correctness Rather Than Exact Wording
 
@@ -332,10 +268,6 @@ The project evaluates semantic review quality, not exact sentence generation.
 Strict wording equality would under-measure correct behavior and over-penalize
 reasonable phrasing differences, especially for Gemini.
 
-Status:
-
-Accepted
-
 ### Evaluate Deterministic and Gemini Backends Separately
 
 Decision:
@@ -349,10 +281,6 @@ The two backends serve different goals. Deterministic evaluation validates
 pipeline correctness and repeatability, while Gemini evaluation validates
 semantic reasoning and contextual judgment.
 
-Status:
-
-Accepted
-
 ### Commit Evaluation Results as Capstone Evidence
 
 Decision:
@@ -365,9 +293,17 @@ Reviewers should be able to inspect evaluation evidence without rerunning the
 project. In this project, evaluation outputs are part of the capstone evidence
 package rather than disposable local runtime files.
 
-Status:
+### Clean Copies Must Be Conservative And Separate
 
-Accepted
+Decision:
+
+Allow clean-copy generation only as a separate advisory artifact and only for
+safe, exact, unambiguous replacements.
+
+Reason:
+
+This preserves the original file, keeps human review central, and reduces the
+risk of accidental over-editing.
 
 ## 2026-06-23
 
@@ -382,14 +318,8 @@ demo use.
 Reason:
 
 The documented reliability investigation found intermittent Flash
-`503 UNAVAILABLE` failures, while prior manual diagnostics showed Pro
-completed 5/5 cycles across direct smoke, direct realistic prompt, and
-ADK-backed review-path checks. The same investigation also documented higher
-observed latency for Pro and the likelihood of different cost characteristics.
-Keeping Flash as the default preserves current lightweight project behavior,
-while recommending Pro acknowledges the stronger reliability evidence without
+`503 UNAVAILABLE` failures, while the committed Gemini evaluation snapshot in
+this repository was captured successfully with `gemini-2.5-pro`. Keeping Flash
+as the default preserves current lightweight project behavior, while
+recommending Pro acknowledges the stronger reliability evidence without
 overstating the latency and cost tradeoff.
-
-Status:
-
-Accepted

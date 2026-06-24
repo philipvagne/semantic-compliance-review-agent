@@ -1,35 +1,48 @@
 # Course Concepts Mapping
 
-This document maps the Semantic Compliance Review Agent to capstone and course
-concepts using the current repository state as of Phase 6.9A.
+This document maps the current Semantic Compliance Review Agent implementation
+to capstone and course concepts.
 
-The goal is to be explicit about what is already implemented versus what is
-planned for later phases.
+## 1. Agent
 
-## Implemented Concepts
+The project includes a real ADK-backed review boundary in `src/agent_review.py`.
 
-### 1. Agent
+The agent receives:
 
-Implemented now.
+- extracted reviewable text
+- project context
 
-The project includes an ADK-backed review boundary in
-`src/agent_review.py`.
+The agent returns:
 
-Current role of the agent:
+- structured findings
 
-- receive extracted reviewable text
-- receive project context
-- return structured findings
+This is a single-agent design by choice. The project favors clarity and
+submission-ready scope over multi-agent complexity.
 
-This is a single-agent design, not a multi-agent system.
+## 2. Gemini And Deterministic Backends
 
-That is an intentional MVP choice.
+The system includes backend abstraction for:
 
-### 2. Tools and Workflow Components
+- Gemini for the live semantic-review path
+- deterministic mode for repeatable offline and test runs
 
-Implemented now.
+This supports demo, evaluation, and validation workflows even when live
+credentials are unavailable.
 
-The project is organized as a CLI workflow with focused components:
+## 3. Structured Output
+
+The review layer validates findings against shared schemas.
+
+That supports:
+
+- explainable outputs
+- safer downstream report generation
+- evaluation matching
+- reproducible artifacts
+
+## 4. Tool Use And Workflow Design
+
+The project is organized as an explicit workflow of focused components:
 
 - File Reader
 - Text Extractor
@@ -37,167 +50,86 @@ The project is organized as a CLI workflow with focused components:
 - Agent Review
 - optional Clean Copy Writer
 - Report Writer
+- Evaluation Runner
+- Gemini Diagnostic Tool
 
-These components behave like explicit tools or stages in a controlled agent
-workflow even though the user experience is CLI-first.
+These components form the project workflow used by the CLI and evaluation
+tooling.
 
-### 3. Structured Output
+## 5. Context Loading
 
-Implemented now.
-
-The review layer validates model output against a structured `Finding` schema.
-
-This matters for:
-
-- predictable downstream report generation
-- safer handling of model responses
-- explainable and testable review outputs
-
-### 4. Guardrails
-
-Implemented now and documented more explicitly in Phase 6.9A.
-
-Examples:
-
-- no automatic source modification
-- no automatic commits
-- no silent Gemini fallback
-- fail-fast credential validation
-- human review required
-- advisory suggestions only
-
-### 5. Human-in-the-Loop
-
-Implemented now.
-
-The current product outcome is a Markdown audit report for developer review.
-
-The system does not auto-apply suggestions or make release decisions.
-
-When clean-copy generation is requested, it produces a separate advisory file
-under `output/` rather than modifying the original source file in place.
-
-### 6. Prompting and Instruction Design
-
-Implemented now.
-
-The Gemini path uses explicit review instructions that constrain:
-
-- finding shape
-- detection methods
-- confidence usage
-- replacement behavior
-
-This is part of the project's explainability story, even though prompt quality
-will continue to evolve.
-
-### 7. Configuration and Context Loading
-
-Implemented now.
-
-The project loads context from YAML configuration files:
+The project loads review context from:
 
 - `config/sensitive_terms.yaml`
 - `config/project_context.yaml`
 
-This demonstrates context injection into the review step rather than using a
-stateless prompt only.
+This provides contextual review inputs rather than a stateless prompt-only
+design.
 
-### 8. CLI Workflow
+## 6. Safety And Guardrails
 
-Implemented now.
+The project includes several safety concepts:
 
-The project is intentionally CLI-first.
+- no automatic source modification
+- no silent Gemini fallback
+- environment-variable credential handling
+- human review required
+- conservative clean-copy generation
+- fail-clear behavior for unsupported or invalid conditions
 
-That supports:
+## 7. Evaluation
 
-- reproducibility
-- low operational complexity
-- transparent local execution
-- easy capstone demo flow
+The repository includes:
 
-### 9. Observability and Development Record
+- a committed 10-case evaluation dataset
+- matching expected JSON files
+- deterministic evaluation artifacts
+- Gemini evaluation artifacts
+- precision and recall reporting
 
-Partially implemented now.
+These artifacts provide benchmark and result evidence alongside the runtime
+implementation.
 
-There is no dedicated runtime logging system yet, but the repository does have:
+## 8. Diagnostics And Reliability Investigation
 
-- clear CLI status output
-- a detailed build log in `docs/build-log.md`
-- recorded phase-by-phase implementation notes
+The repository also includes targeted diagnostics for Gemini path comparison and
+reliability investigation.
 
-This is enough to support the current project story, but runtime observability
-could still improve later.
+These diagnostics support reliability investigation by allowing the project to:
 
-## Planned Concepts
+- compare direct Gemini calls with the ADK-backed path
+- observe repeated runs
+- inspect model selection and API-key configuration safely
 
-### 10. Evaluation
+## 9. Human-In-The-Loop Design
 
-Partially implemented now.
+The project produces advisory outputs for developer review.
 
-Evaluation now has:
+Even when clean-copy generation is requested:
 
-- an approved design
-- committed evaluation cases
-- committed expected-output JSON files
-- a deterministic runner
-- committed deterministic metrics output
+- the original file is preserved
+- ambiguous changes are skipped
+- final adoption remains a human decision
 
-It is not yet complete across both backends.
+## 10. Documentation And Process Discipline
 
-Planned scope includes:
+The repository includes:
 
-- Gemini evaluation snapshot recording
+- architecture documentation
+- evaluation documentation
+- security guardrails
+- archived build-log history
+- code and documentation audit artifacts
 
-This concept should still not be claimed as complete yet.
+These materials document implementation, safety, evaluation, and review
+processes for the project.
 
-### 11. Broader Extraction Coverage
+## Intentional Scope Exclusions
 
-Implemented now for the required MVP file types.
+The project intentionally does not include:
 
-Current extraction scope includes:
+- multi-agent orchestration
+- deployment architecture
+- repository-wide autonomous remediation
 
-- `.py`
-- `.js`
-- `.ts`
-- `.jsx`
-- `.tsx`
-- `.html`
-- `.md`
-
-Required before final submission:
-
-- `.py`
-- `.js`
-- `.ts`
-- `.jsx`
-- `.tsx`
-- `.html`
-- `.md`
-
-Potential later expansion:
-
-- `.yaml` / `.yml`
-- `.json`
-- `Dockerfile`
-- Terraform files
-
-This required coverage is now implemented. Broader file-family expansion
-remains a roadmap item.
-
-## Honest Current Summary
-
-The strongest course-concept coverage today is:
-
-- agent workflow
-- structured output
-- guardrails
-- human-in-the-loop review
-- context loading
-- CLI orchestration
-- prompt/instruction design
-
-The weakest still-missing concept area is full two-backend evaluation coverage.
-
-That remaining gap is already recognized in the project plan and is now limited
-mainly to the Phase 8B.4 Gemini snapshot work.
+Those omissions are scope decisions, not hidden missing features.

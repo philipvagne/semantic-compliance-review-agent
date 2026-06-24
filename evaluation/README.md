@@ -1,133 +1,133 @@
 # Evaluation Artifacts
 
-This directory contains the evaluation artifacts for the Semantic Compliance
-Review Agent.
+This directory contains the evaluation dataset, expected outputs, result
+artifacts, and Gemini diagnostic tooling for the Semantic Compliance Review
+Agent.
 
 ## Directory Roles
 
-- `cases/` contains input files used for evaluation.
-- `expected/` contains expected outcome JSON files.
-- `results/` contains committed evaluation result artifacts.
+- `cases/`: input files used for evaluation
+- `expected/`: expected outcome JSON files
+- `results/`: committed evaluation result artifacts
 
-The repository now includes:
+Important files:
 
-- an initial 10-case dataset and 10 matching expected JSON files from Phase 8B.2
-- a deterministic evaluation runner at `evaluation/run.py`
-- a committed deterministic results artifact at
-  `evaluation/results/deterministic-results.md`
-- Gemini evaluation runner support in `evaluation/run.py`
-- optional pacing support through `--delay-seconds`
-- optional case-selection support through `--case` and `--cases`
-- a Gemini backend diagnosis helper at `evaluation/diagnose_gemini.py`
-- repeated Gemini diagnosis support through `--repeat` and `--delay-seconds`
-- shared Gemini model selection support through `GEMINI_MODEL` for normal
-  review and evaluation runs
-- optional Gemini model override support through `--model` for stability
-  comparison without changing the default review configuration
+- `evaluation/run.py`
+- `evaluation/diagnose_gemini.py`
+- `evaluation/results/deterministic-results.md`
+- `evaluation/results/gemini-results.md`
 
-## Backend Separation
+## What The Evaluation Covers
 
-Evaluation will treat deterministic and Gemini results separately.
+The committed benchmark is a 10-case dataset covering:
 
-- The deterministic backend validates repeatable pipeline behavior.
-- The Gemini backend validates semantic reasoning.
+- safe cases
+- security risks
+- internal codename exposure
+- professionalism risks
+- false-positive handling
+- multi-language extraction coverage
 
-Current Phase 8B status:
+The dataset remains the formal measured benchmark.
 
-- `8B.3` deterministic runner and metrics are implemented
-- `8B.4` Gemini runner support is implemented
-- `8B.4A` rate-limit-friendly Gemini pacing support is implemented
-- `8B.4I` production model validation support is implemented
-- committed Gemini snapshot results remain pending until a credentialed run is completed
+Realistic sample files under `examples/` are useful for demo-style validation,
+but they are not part of the scored benchmark suite.
 
-Benchmark boundary note:
+## Run Deterministic Evaluation
 
-- the committed 10-case dataset in `evaluation/cases/` remains the formal,
-  measured benchmark
-- realistic sample files under `examples/` may be used for usability and
-  demo-style validation, but they are not part of the scored benchmark suite
-  unless a future phase explicitly promotes them into `evaluation/cases/`
+Full run:
 
-## Result Policy
+```text
+python -m evaluation.run --backend deterministic
+```
 
-Evaluation results are committed as capstone evidence.
+Single case:
 
-Gemini results should be treated as a review snapshot, not a perfectly
-reproducible benchmark.
+```text
+python -m evaluation.run --backend deterministic --case security_python
+```
 
-Free-tier Gemini users may hit requests-per-minute limits during evaluation.
-When that happens, running with `--delay-seconds 15` is the recommended
-starting point.
+Selected subset:
 
-The shared `GEMINI_MODEL` environment variable now controls which Gemini model
-normal review and evaluation runs use. If it is unset, the project keeps the
-current default model selection: `gemini-2.5-flash`.
+```text
+python -m evaluation.run --backend deterministic --cases security_python,security_javascript
+```
 
-Current model decision:
+## Run Gemini Evaluation
 
-- keep `gemini-2.5-flash` as the default model
-- recommend `gemini-2.5-pro` for reliability-sensitive Gemini validation,
-  evaluation, and demo runs
+Paced Gemini run:
 
-This recommendation is based on the documented investigation path:
+```text
+python -m evaluation.run --backend gemini --delay-seconds 15
+```
 
-- Flash produced intermittent `503 UNAVAILABLE` failures
-- API-key variable testing did not identify `GOOGLE_API_KEY` versus
-  `GEMINI_API_KEY` as the root cause
-- a local ADK event-loop lifecycle issue was found and fixed separately
-- bounded transient retry handling was added for provider-side high-demand
-  failures
-- prior manual model-comparison diagnostics showed `gemini-2.5-pro` completed
-  5/5 cycles across direct and ADK-backed paths
-- prior manual Gemini evaluation evidence showed the 10 committed cases passed
-  when run one by one
+Paced Gemini single-case run:
 
-Tradeoff note:
+```text
+python -m evaluation.run --backend gemini --case security_python --delay-seconds 15
+```
 
-- Pro appeared more stable in diagnostics
-- Pro also showed higher observed latency than Flash
-- Pro may have different cost characteristics
-- model choice remains a reliability, latency, and cost tradeoff
+Recommended reliability-sensitive run, PowerShell:
 
-When a full Gemini run is too fragile or too slow, targeted selection is also
-supported:
+```text
+$env:GEMINI_MODEL="gemini-2.5-pro"
+python -m evaluation.run --backend gemini --delay-seconds 15
+```
 
-- `--case security_python`
-- `--cases security_python,security_javascript`
+Recommended reliability-sensitive run, Bash:
 
-When Gemini evaluation failures need path diagnosis, run:
+```text
+export GEMINI_MODEL="gemini-2.5-pro"
+python -m evaluation.run --backend gemini --delay-seconds 15
+```
 
-- `python -m evaluation.diagnose_gemini`
-- `python -m evaluation.diagnose_gemini --repeat 5 --delay-seconds 15`
-- `python -m evaluation.diagnose_gemini --model gemini-2.5-flash --repeat 3`
-- `python -m evaluation.diagnose_gemini --model gemini-2.5-pro --repeat 5 --delay-seconds 15`
-- `export GEMINI_MODEL="gemini-2.5-pro" && python -m evaluation.run --backend gemini --delay-seconds 15`
+Results are written to:
 
-The diagnosis command reports:
+- `evaluation/results/deterministic-results.md`
+- `evaluation/results/gemini-results.md`
 
-- whether `GOOGLE_API_KEY` is set
-- whether `GEMINI_API_KEY` is set
-- which variable would be used without printing the key value
-- which Gemini model is being tested
-- which backend path is under test
-- per-test elapsed duration plus PASS / FAIL details
-- per-test success and failure counts across repeated cycles
+## GEMINI_MODEL
 
-If no model is supplied, the diagnosis command keeps the project's current
-shared Gemini model selection from `GEMINI_MODEL`, or `gemini-2.5-flash` when
-that environment variable is unset.
+The shared `GEMINI_MODEL` environment variable controls the Gemini model for
+normal review and evaluation runs.
 
-It also reminds users that the selected key should be restricted to the Gemini
-API / `generativelanguage.googleapis.com`.
+Default model:
 
-The project Gemini-backed review path now retries small transient provider
-failures such as `503 UNAVAILABLE` with short bounded backoff. Deterministic
-evaluation behavior is unchanged, and final Gemini failures still remain
-visible after all retry attempts.
+- `gemini-2.5-flash`
 
-Committed evaluation result artifacts now include both backend and selected
-model metadata so Gemini snapshots can be compared more honestly.
+Recommended reliability-sensitive model:
 
-## Future Phase 8B Steps
+- `gemini-2.5-pro`
 
-- `8B.4` Gemini evaluation snapshot
+The committed Gemini snapshot artifact in this repository was captured with
+`gemini-2.5-pro`.
+
+## Diagnostics
+
+Use the Gemini diagnosis tool when you need to compare direct Gemini access
+with the ADK-backed review path.
+
+Examples:
+
+```text
+python -m evaluation.diagnose_gemini
+python -m evaluation.diagnose_gemini --repeat 5 --delay-seconds 15
+python -m evaluation.diagnose_gemini --model gemini-2.5-flash --repeat 3
+python -m evaluation.diagnose_gemini --model gemini-2.5-pro --repeat 5 --delay-seconds 15
+```
+
+The diagnostic reports:
+
+- PASS / FAIL by test path
+- elapsed duration
+- selected Gemini model
+- which API-key variable is in use
+- concise previews or error summaries
+
+## Notes
+
+- Deterministic and Gemini results are evaluated separately.
+- Gemini results should be interpreted as snapshots rather than perfectly reproducible benchmarks.
+- `--delay-seconds 15` is a reasonable starting point for paced Gemini runs on rate-limited accounts.
+
+For benchmark philosophy and matching rules, see `docs/evaluation-plan.md`.

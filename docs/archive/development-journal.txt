@@ -52,12 +52,13 @@ Completed:
 [completed] Phase 8C.1 Source Code Quality Audit Implemented
 [completed] Phase 8C.2 Low-Risk Submission Polish Implemented
 [completed] Phase 9A Documentation Audit Implemented
+[completed] Phase 9B Documentation Clean Copies Implemented
 
 Current Phase:
-PHASE 9A - DOCUMENTATION AUDIT
+PHASE 9B - DOCUMENTATION CLEAN COPY DRAFTING
 
 Next Milestone:
-PHASE 9B - DOCUMENTATION CLEAN COPY DRAFTING
+PHASE 9C - FINAL DOCUMENTATION CONSOLIDATION
 
 ================================================================================
 PROJECT OVERVIEW
@@ -1803,6 +1804,24 @@ Exit Criteria:
 [completed] readability issues identified
 [completed] Phase 9B recommendations produced
 [completed] Phase 9C recommendations produced
+
+PHASE 9B - DOCUMENTATION CLEAN COPY DRAFTING
+
+- Create clean-copy drafts of the key submission-facing documentation files
+- Keep all original audited docs unchanged in this phase
+- Use the documentation audit findings to reduce drift, repetition, and
+  overly historical narration
+
+Exit Criteria:
+
+[completed] `docs/clean-copies/` exists
+[completed] all seven clean-copy files exist
+[completed] original documentation files remain unchanged
+[completed] clean copies address the Phase 9A findings
+[completed] clean copies reduce stale status drift
+[completed] clean copies reduce duplicated Gemini reliability explanation
+[completed] clean copies improve first-reader clarity
+[completed] build log and project plan record Phase 9B
 
 Exit Criteria:
 

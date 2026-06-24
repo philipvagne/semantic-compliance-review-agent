@@ -1,7 +1,7 @@
 # Security Guardrails
 
 This document records the current safety boundaries for the Semantic
-Compliance Review Agent as of Phase 6.9A.
+Compliance Review Agent.
 
 The project is intentionally designed as an advisory review tool, not an
 autonomous repository-editing system.
@@ -10,100 +10,68 @@ autonomous repository-editing system.
 
 - The tool reviews one file at a time.
 - The tool produces an audit report.
-- The tool does not automatically fix source files.
-- The tool does not automatically commit changes.
-- The tool does not silently switch review backends when Gemini fails.
+- The tool may optionally produce a separate clean-copy artifact.
+- The tool does not overwrite the original source file.
+- The tool does not silently switch backends when Gemini fails.
 - The developer remains responsible for all final decisions.
 
-## Current Guardrails
+## Source Modification Boundaries
 
-### No Automatic Source Modification
+### Original Files Are Never Modified
 
-The current implemented pipeline reads a file, extracts reviewable text, loads
-context, performs review, and writes a Markdown audit report.
+The runtime pipeline reads a file, extracts reviewable text, loads context,
+reviews the content, and writes output artifacts under `output/`.
 
-It does not overwrite the source file.
+It does not overwrite the original input file.
 
-It does not apply suggested replacements to the source file.
+It does not apply suggested replacements in place.
 
-When clean-copy generation is requested, it writes a separate file under
-`output/`.
+### Clean Copies Are Separate Advisory Artifacts
 
-It never overwrites the original input file.
+When `--clean-copy` is requested, the system may write a separate clean-copy
+file under `output/`.
 
-It never applies changes in place.
+Clean-copy generation is conservative:
 
-### No Automatic Commits
+- it requires source text plus a non-empty suggested replacement
+- the source text must appear exactly once
+- the replacement must be exact and unambiguous
+- ambiguous or missing replacements are skipped
 
-The project does not create commits, push branches, or modify git history as
-part of normal runtime behavior.
+Human review is still required before adopting the clean-copy wording.
 
-All repository changes remain a human decision outside the review pipeline.
-
-### Human Review Required
-
-All findings are advisory.
-
-All recommendations require developer review before any action is taken.
-
-This applies to:
-
-- finding severity
-- finding confidence
-- recommendations
-- suggested replacements
-- release decisions
-
-### Suggested Replacements Are Advisory Only
-
-Suggested replacements are optional review outputs.
-
-They are not applied automatically to the original source file.
-
-They should be treated as draft wording for human review, not as trusted
-automatic remediation.
-
-The report may display a suggested replacement when Agent Review provides one,
-but the report writer does not invent replacements on its own.
-
-If clean-copy generation is requested, only safe, exact, unambiguous
-replacements are applied to the separate clean-copy artifact. Ambiguous or
-missing replacements are skipped conservatively and reported in the audit
-report.
+## Backend Safety
 
 ### No Silent Gemini Fallback
 
-Gemini is the default backend for the current CLI.
+Gemini is the default backend.
 
 Deterministic mode exists as an explicit offline and test backend.
 
-If Gemini is selected and fails, the run should fail clearly.
+If Gemini is selected and fails, the run fails clearly.
 
-The system must not silently fall back to deterministic mode, because silent
-fallback would hide runtime conditions and make review provenance unclear.
+The system must not silently fall back to deterministic mode.
 
-### Fail Clearly on Unsupported or Invalid Conditions
+### Model Configuration Safety
 
-The current pipeline is designed to fail with explicit errors when a core
-assumption is violated.
+Gemini model selection is controlled through `GEMINI_MODEL`.
 
-Examples:
+Default model:
 
-- missing Gemini credentials when Gemini is selected
-- invalid YAML configuration
-- unsupported file type input
-- malformed structured model output after one retry
-- unreadable or invalid input files
+- `gemini-2.5-flash`
 
-Clear failure is preferred over hidden behavior changes.
+Recommended reliability-sensitive model:
 
-## Secrets and Credential Handling
+- `gemini-2.5-pro`
+
+Model selection changes which Gemini model is used. It does not bypass the
+existing backend boundary, credential checks, or report-generation rules.
+
+## Credential Handling
 
 ### Environment Variables Only
 
-Gemini credentials must come from environment variables.
-
-Supported variables:
+Gemini credentials must come from environment variables:
 
 - `GOOGLE_API_KEY`
 - `GEMINI_API_KEY`
@@ -115,66 +83,65 @@ The repository should not contain real API keys.
 Secrets must not be printed in normal console output, written into generated
 reports, or committed into the repository.
 
-The audit scope is source text review, not credential inspection of runtime
-environment values.
+### API Key Hygiene
 
-### No Secret Commits
+When using Gemini, API keys should be restricted appropriately for the Gemini
+API / `generativelanguage.googleapis.com`.
 
-Real credentials must not be stored in:
+## Failure-Mode Safety
 
-- tracked source files
-- documentation
-- config files
-- sample outputs
-- commit history
+The system is designed to fail clearly when a core assumption is violated.
 
-`.env.example` exists only to document required variable names.
+Examples:
+
+- missing Gemini credentials
+- invalid YAML configuration
+- unsupported file type input
+- malformed structured output
+- unreadable or invalid input files
+
+Clear failure is preferred over hidden behavior changes.
 
 ## Report Safety Boundaries
 
-The generated report is an advisory audit artifact.
+The audit report is an advisory artifact.
 
 It is not:
 
 - an automatic fix
-- a code patch
-- a source-of-truth security approval
+- a security approval
+- a source patch
 - a replacement for human review
 
-The report should be understood as a structured prompt for developer review.
+Suggested replacements are optional review outputs and should be treated as
+draft remediation wording, not trusted automatic edits.
 
 ## Scope Guardrails
 
-The current implementation is intentionally limited.
-
 Current supported extraction scope:
 
-- Python files:
-  comments, docstrings, TODO / FIXME / NOTE comments
-- JavaScript-family files:
-  `//` comments, `/* */` block comments, `/** */` JSDoc blocks, and
-  TODO / FIXME / NOTE comments
-- HTML files:
-  `<!-- -->` comments only
-- Markdown files:
-  headings, paragraphs, list items, and blockquotes
+- Python comments and docstrings
+- JavaScript-family comments
+- HTML comments
+- Markdown prose blocks
 
-Not yet implemented:
+The project does not include:
 
 - repository-wide scanning
-- evaluation harness
-
-These limitations are intentional MVP boundaries, not hidden capabilities.
+- web UI
+- database
+- authentication
+- multi-agent orchestration
+- autonomous code modification
 
 ## Why These Guardrails Matter
 
-The capstone goal is to demonstrate a useful agent with explainable behavior,
-clear boundaries, and human accountability.
+The project is meant to demonstrate useful agent behavior with clear
+boundaries, visible failure modes, and human accountability.
 
-This project therefore prioritizes:
+This repo therefore prioritizes:
 
 - explicit scope
-- visible failure modes
+- visible provenance
 - review over automation
-- documentation over implied behavior
 - safe defaults over convenience

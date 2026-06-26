@@ -21,7 +21,9 @@ Evaluation focuses on semantic correctness:
 
 ## Benchmark Shape
 
-The committed benchmark is a 10-case dataset:
+The repository currently includes two committed benchmarks.
+
+The original benchmark is a 10-case dataset:
 
 - input files in `evaluation/cases/`
 - matching expected JSON files in `evaluation/expected/`
@@ -42,6 +44,16 @@ Supported evaluation coverage includes:
 - `.md`
 
 Coverage is representative rather than equal across file types.
+
+The repository benchmark adds a second repository-style dataset:
+
+- input files in `evaluation/cases/repository_benchmark/`
+- matching expected JSON files in
+  `evaluation/expected/repository_benchmark/`
+
+Its purpose is broader engineering evaluation on coherent repository content
+rather than isolated synthetic examples. The goal is more meaningful evidence,
+not simply a larger case count.
 
 ## Backends
 
@@ -133,11 +145,21 @@ Committed evaluation result artifacts:
 
 - `evaluation/results/deterministic-results.md`
 - `evaluation/results/gemini-results.md`
+- `evaluation/results/deterministic-repository_benchmark-results.md`
+- `evaluation/results/gemini-repository_benchmark-results.md`
 
 These artifacts are part of the capstone evidence package.
 
 If only a subset of cases is run, the result file should clearly state that it
 is a partial evaluation run.
+
+During execution, the runner also writes incremental recovery artifacts:
+
+- `*-progress.json` after each completed case
+- `*-partial.md` while a run is in progress and if it is interrupted
+
+These artifacts preserve completed work without changing scoring or report
+methodology.
 
 The committed Gemini snapshot artifact in this repository was captured with
 `gemini-2.5-pro` and should be interpreted as a point-in-time evaluation
@@ -163,6 +185,13 @@ Gemini evaluation:
 python -m evaluation.run --backend gemini --delay-seconds 15
 ```
 
+Repository benchmark examples:
+
+```text
+python -m evaluation.run --backend deterministic --benchmark repository_benchmark
+python -m evaluation.run --backend gemini --benchmark repository_benchmark --delay-seconds 15
+```
+
 Recommended reliability-sensitive Gemini evaluation, PowerShell:
 
 ```text
@@ -179,20 +208,28 @@ python -m evaluation.run --backend gemini --delay-seconds 15
 
 The runner also supports `--cases` for selected subsets.
 
+Benchmark selection:
+
+- Omit `--benchmark` or use `--benchmark default` for the original top-level benchmark.
+- Use `--benchmark <folder-name>` for a benchmark folder under `evaluation/cases/`
+  with matching expected files under `evaluation/expected/`.
+
 ## Gemini Model Guidance
 
 Default model:
 
 - `gemini-2.5-flash`
 
-Recommended model for reliability-sensitive evaluation and demos:
+During project evaluation, `gemini-2.5-pro` produced the most consistent
+results and was therefore used for the committed Gemini evaluation snapshot
+and reliability-sensitive demos:
 
 - `gemini-2.5-pro`
 
 Reason:
 
 - Flash remains the default for continuity and lighter-weight behavior
-- Pro is the documented recommendation for reliability-sensitive validation
+- Pro was the most consistent path during project evaluation
 
 That recommendation should not be read as a claim that Pro is always superior
 in all cost, latency, or deployment contexts.
@@ -221,6 +258,17 @@ This file is useful for:
 - checking the review and clean-copy experience on a more natural file
 
 It is not part of the scored 10-case benchmark suite.
+
+## Repository Benchmark Analyses
+
+The repository benchmark also has separate engineering review documents:
+
+- `docs/repository-benchmark/repository-benchmark-review.md`
+- `docs/repository-benchmark/repository-benchmark-review-gemini.md`
+- `docs/repository-benchmark/repository-benchmark-backend-comparison.md`
+
+These documents interpret benchmark behavior and backend differences without
+changing the evaluation methodology, matching rules, or metrics.
 
 ## Constraints And Non-Goals
 

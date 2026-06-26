@@ -16,10 +16,12 @@ Important files:
 - `evaluation/diagnose_gemini.py`
 - `evaluation/results/deterministic-results.md`
 - `evaluation/results/gemini-results.md`
+- `evaluation/results/deterministic-repository_benchmark-results.md`
+- `evaluation/results/gemini-repository_benchmark-results.md`
 
 ## What The Evaluation Covers
 
-The committed benchmark is a 10-case dataset covering:
+The original committed benchmark is a 10-case dataset covering:
 
 - safe cases
 - security risks
@@ -28,7 +30,12 @@ The committed benchmark is a 10-case dataset covering:
 - false-positive handling
 - multi-language extraction coverage
 
-The dataset remains the formal measured benchmark.
+The repository also includes a repository-style benchmark under
+`evaluation/cases/repository_benchmark/` with matching expected JSON files
+under `evaluation/expected/repository_benchmark/`.
+
+The original dataset remains the small baseline benchmark. The repository
+benchmark adds broader engineering evidence on coherent repository content.
 
 Realistic sample files under `examples/` are useful for demo-style validation,
 but they are not part of the scored benchmark suite.
@@ -39,6 +46,12 @@ Full run:
 
 ```text
 python -m evaluation.run --backend deterministic
+```
+
+Repository benchmark run:
+
+```text
+python -m evaluation.run --backend deterministic --benchmark repository_benchmark
 ```
 
 Single case:
@@ -53,12 +66,24 @@ Selected subset:
 python -m evaluation.run --backend deterministic --cases security_python,security_javascript
 ```
 
+Benchmark selection:
+
+- Omit `--benchmark` or use `--benchmark default` for the original top-level dataset.
+- Use `--benchmark <folder-name>` for a benchmark folder under `evaluation/cases/`
+  with matching expected files under `evaluation/expected/`.
+
 ## Run Gemini Evaluation
 
 Paced Gemini run:
 
 ```text
 python -m evaluation.run --backend gemini --delay-seconds 15
+```
+
+Paced Gemini repository benchmark run:
+
+```text
+python -m evaluation.run --backend gemini --benchmark repository_benchmark --delay-seconds 15
 ```
 
 Paced Gemini single-case run:
@@ -85,6 +110,17 @@ Results are written to:
 
 - `evaluation/results/deterministic-results.md`
 - `evaluation/results/gemini-results.md`
+- `evaluation/results/deterministic-repository_benchmark-results.md`
+- `evaluation/results/gemini-repository_benchmark-results.md`
+
+During execution, the runner also writes incremental progress artifacts:
+
+- `*-progress.json`: machine-readable completed-case progress saved after each evaluated file
+- `*-partial.md`: a clearly marked partial report that is updated during the run and retained if execution is interrupted
+
+Console diagnostics now include compact failure summaries such as expected versus
+returned finding counts, missing findings, unexpected findings, and backend or
+JSON/schema failures.
 
 ## GEMINI_MODEL
 
@@ -95,7 +131,9 @@ Default model:
 
 - `gemini-2.5-flash`
 
-Recommended reliability-sensitive model:
+During project evaluation, `gemini-2.5-pro` produced the most consistent
+results and was therefore used for the committed Gemini evaluation snapshots
+and reliability-sensitive demos:
 
 - `gemini-2.5-pro`
 
@@ -131,3 +169,9 @@ The diagnostic reports:
 - `--delay-seconds 15` is a reasonable starting point for paced Gemini runs on rate-limited accounts.
 
 For benchmark philosophy and matching rules, see `docs/evaluation-plan.md`.
+
+Related engineering analyses:
+
+- `docs/repository-benchmark/repository-benchmark-review.md`
+- `docs/repository-benchmark/repository-benchmark-review-gemini.md`
+- `docs/repository-benchmark/repository-benchmark-backend-comparison.md`

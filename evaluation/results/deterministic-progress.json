@@ -1,0 +1,117 @@
+{
+  "status": "interrupted",
+  "backend": "deterministic",
+  "benchmark": "default",
+  "model": "deterministic-local",
+  "run_started_at": "2026-06-25T07:51:28+00:00",
+  "last_updated_at": "2026-06-25T07:51:28+00:00",
+  "interruption_reason": "Keyboard interrupt.",
+  "selected_case_ids": [
+    "security_python",
+    "security_javascript"
+  ],
+  "planned_case_ids": [
+    "security_python",
+    "security_javascript"
+  ],
+  "completed_case_ids": [
+    "security_python"
+  ],
+  "remaining_case_ids": [
+    "security_javascript"
+  ],
+  "completed_case_count": 1,
+  "remaining_case_count": 1,
+  "completed_results": [
+    {
+      "case_filename": "security_python.py",
+      "case_id": "security_python",
+      "case_path": "C:/Users/phili/Desktop/semantic-compliance-review-agent/evaluation/cases/security_python.py",
+      "expected_path": "C:/Users/phili/Desktop/semantic-compliance-review-agent/evaluation/expected/security_python.json",
+      "status": "PASS",
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "count_in_range": true,
+      "expected_case": {
+        "case_id": "security_python",
+        "expected_findings": [
+          {
+            "category": "SECURITY_RISK",
+            "target_text_contains": "temporary password",
+            "line_start": 3,
+            "line_end": 3,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          }
+        ],
+        "expected_finding_count_min": 1,
+        "expected_finding_count_max": 1
+      },
+      "actual_findings": [
+        {
+          "id": "finding:security_python.py:todo:3:2:security_risk",
+          "reviewable_text_id": "security_python.py:todo:3:2",
+          "category": "SECURITY_RISK",
+          "severity": "HIGH",
+          "confidence": "HIGH",
+          "detection_method": "SEMANTIC_ANALYSIS",
+          "source_text": "TODO: remove the temporary password before production release.",
+          "line_start": 3,
+          "line_end": 3,
+          "explanation": "The text references a temporary or administrative secret-like value that should be reviewed before release.",
+          "recommendation": "Remove the sensitive reference or replace it with a neutral, human-reviewed task description.",
+          "suggested_replacement": "TODO: remove the temporary credential reference before production release."
+        }
+      ],
+      "expected_outcomes": [
+        {
+          "expected": {
+            "category": "SECURITY_RISK",
+            "target_text_contains": "temporary password",
+            "line_start": 3,
+            "line_end": 3,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          "matched": true,
+          "matched_actual": {
+            "id": "finding:security_python.py:todo:3:2:security_risk",
+            "reviewable_text_id": "security_python.py:todo:3:2",
+            "category": "SECURITY_RISK",
+            "severity": "HIGH",
+            "confidence": "HIGH",
+            "detection_method": "SEMANTIC_ANALYSIS",
+            "source_text": "TODO: remove the temporary password before production release.",
+            "line_start": 3,
+            "line_end": 3,
+            "explanation": "The text references a temporary or administrative secret-like value that should be reviewed before release.",
+            "recommendation": "Remove the sensitive reference or replace it with a neutral, human-reviewed task description.",
+            "suggested_replacement": "TODO: remove the temporary credential reference before production release."
+          },
+          "reason": "Category matched, target text matched, and line range matched."
+        }
+      ],
+      "actual_outcomes": [
+        {
+          "actual": {
+            "id": "finding:security_python.py:todo:3:2:security_risk",
+            "reviewable_text_id": "security_python.py:todo:3:2",
+            "category": "SECURITY_RISK",
+            "severity": "HIGH",
+            "confidence": "HIGH",
+            "detection_method": "SEMANTIC_ANALYSIS",
+            "source_text": "TODO: remove the temporary password before production release.",
+            "line_start": 3,
+            "line_end": 3,
+            "explanation": "The text references a temporary or administrative secret-like value that should be reviewed before release.",
+            "recommendation": "Remove the sensitive reference or replace it with a neutral, human-reviewed task description.",
+            "suggested_replacement": "TODO: remove the temporary credential reference before production release."
+          },
+          "matched": true,
+          "reason": "Matched expected finding 'temporary password'."
+        }
+      ]
+    }
+  ]
+}

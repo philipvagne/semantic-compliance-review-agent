@@ -1,0 +1,31 @@
+{
+  "case_id": "bootstrap_env",
+  "expected_findings": [
+    {
+      "category": "SECURITY_RISK",
+      "target_text_contains": "temporary bootstrap secret reminder",
+      "line_start": 37,
+      "line_end": 37,
+      "line_range_approximate": true,
+      "requires_suggested_replacement": false
+    },
+    {
+      "category": "PROFESSIONALISM_RISK",
+      "target_text_contains": "calling the preview script half-baked",
+      "line_start": 38,
+      "line_end": 39,
+      "line_range_approximate": true,
+      "requires_suggested_replacement": false
+    },
+    {
+      "category": "COMPLIANCE_RISK",
+      "target_text_contains": "approval tagging can be skipped",
+      "line_start": 40,
+      "line_end": 41,
+      "line_range_approximate": true,
+      "requires_suggested_replacement": false
+    }
+  ],
+  "expected_finding_count_min": 3,
+  "expected_finding_count_max": 3
+}

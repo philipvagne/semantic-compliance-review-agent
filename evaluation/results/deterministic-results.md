@@ -1,8 +1,11 @@
 # Deterministic Evaluation Results
 
 - Backend: `deterministic`
-- Timestamp: `2026-06-22T15:04:51+00:00`
+- Benchmark: `default`
+- Model: `deterministic-local`
+- Timestamp: `2026-06-25T07:50:35+00:00`
 - Cases run: `10`
+- Run type: `full evaluation`
 
 ## Overall Metrics
 

@@ -4,7 +4,7 @@ This document defines how Codex should be used for the Semantic Compliance
 Review Agent project.
 
 The goal is to keep implementation controlled, understandable, and aligned
-with the archived project plan and current documentation set.
+with the archived planning artifact and current documentation set.
 
 ## Core Rule
 
@@ -17,7 +17,7 @@ Do not ask Codex to build the entire agent in one request.
 Before making changes, Codex should read:
 
 * `AGENTS.md`
-* `docs/archive/project-plan-v4.txt`
+* `docs/archive/development-journal.txt`
 * `docs/architecture.md`
 * This file
 
@@ -61,7 +61,7 @@ Implement [specific task].
 Context:
 Read:
 - AGENTS.md
-- docs/archive/project-plan-v4.txt
+- docs/archive/development-journal.txt
 - docs/architecture.md
 - docs/codex-workflow.md
 - [task-specific docs]
@@ -135,7 +135,7 @@ affected and update them in the same task.
 
 Codex must check at minimum:
 - README.md
-- docs/archive/project-plan-v4.txt
+- docs/archive/development-journal.txt
 - docs/archive/build-log.md
 - docs/architecture.md
 - docs/codex-workflow.md

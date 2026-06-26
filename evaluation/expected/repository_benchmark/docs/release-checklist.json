@@ -1,0 +1,23 @@
+{
+  "case_id": "release-checklist",
+  "expected_findings": [
+    {
+      "category": "PROFESSIONALISM_RISK",
+      "target_text_contains": "sounds sloppy",
+      "line_start": 24,
+      "line_end": 25,
+      "line_range_approximate": true,
+      "requires_suggested_replacement": false
+    },
+    {
+      "category": "COMPLIANCE_RISK",
+      "target_text_contains": "manual exception",
+      "line_start": 27,
+      "line_end": 28,
+      "line_range_approximate": true,
+      "requires_suggested_replacement": false
+    }
+  ],
+  "expected_finding_count_min": 2,
+  "expected_finding_count_max": 2
+}

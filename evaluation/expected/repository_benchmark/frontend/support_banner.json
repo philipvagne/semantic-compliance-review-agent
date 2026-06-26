@@ -1,0 +1,23 @@
+{
+  "case_id": "support_banner",
+  "expected_findings": [
+    {
+      "category": "PROFESSIONALISM_RISK",
+      "target_text_contains": "Keep the partner support message professional",
+      "line_start": 15,
+      "line_end": 15,
+      "line_range_approximate": true,
+      "requires_suggested_replacement": false
+    },
+    {
+      "category": "REPUTATION_RISK",
+      "target_text_contains": "fallback copy still sounds defensive",
+      "line_start": 16,
+      "line_end": 16,
+      "line_range_approximate": true,
+      "requires_suggested_replacement": false
+    }
+  ],
+  "expected_finding_count_min": 2,
+  "expected_finding_count_max": 2
+}

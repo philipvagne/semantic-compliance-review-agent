@@ -230,10 +230,13 @@ Primary evaluation modules:
 
 Evaluation responsibilities:
 
+- resolve the original benchmark or a named benchmark folder
 - load committed cases and expected JSON files
 - run deterministic or Gemini evaluation
 - calculate TP, FP, FN, precision, and recall
-- write committed result artifacts
+- write benchmark-specific committed result artifacts
+- persist completed case progress after each successful evaluation
+- write partial reports when evaluation is interrupted
 
 Diagnostic responsibilities:
 

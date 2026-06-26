@@ -78,7 +78,7 @@ generation separate. For deeper architectural detail, see
 - ADK-backed review boundary with Gemini as the default backend
 - deterministic backend for repeatable offline and test runs
 - structured findings with category, severity, confidence, and explanation
-- committed evaluation dataset and result artifacts
+- committed multi-benchmark evaluation artifacts for deterministic and Gemini runs
 - optional clean-copy generation behind `--clean-copy`
 - conservative safety posture with no silent fallback and no original-file edits
 
@@ -102,7 +102,9 @@ Default model:
 
 - `gemini-2.5-flash`
 
-Recommended model for reliability-sensitive validation, evaluation, and demos:
+During project evaluation, `gemini-2.5-pro` produced the most consistent
+results and was therefore used for the committed Gemini evaluation snapshots
+and reliability-sensitive demos:
 
 - `gemini-2.5-pro`
 
@@ -202,14 +204,20 @@ python -m src.main examples/realistic_sample.py --backend gemini
 
 ## Evaluation
 
-The repository includes a committed 10-case evaluation dataset under
-`evaluation/cases/` with matching expected JSON files under
-`evaluation/expected/`.
+The repository includes two committed evaluation benchmarks:
 
-Committed result artifacts:
+- the original 10-case benchmark under `evaluation/cases/` with matching
+  expected JSON files under `evaluation/expected/`
+- the repository-style benchmark under
+  `evaluation/cases/repository_benchmark/` with matching expected JSON files
+  under `evaluation/expected/repository_benchmark/`
+
+Committed result artifacts include:
 
 - `evaluation/results/deterministic-results.md`
 - `evaluation/results/gemini-results.md`
+- `evaluation/results/deterministic-repository_benchmark-results.md`
+- `evaluation/results/gemini-repository_benchmark-results.md`
 
 Deterministic evaluation run:
 
@@ -217,10 +225,22 @@ Deterministic evaluation run:
 python -m evaluation.run --backend deterministic
 ```
 
+Deterministic repository benchmark run:
+
+```text
+python -m evaluation.run --backend deterministic --benchmark repository_benchmark
+```
+
 Gemini evaluation run:
 
 ```text
 python -m evaluation.run --backend gemini --delay-seconds 15
+```
+
+Gemini repository benchmark run:
+
+```text
+python -m evaluation.run --backend gemini --benchmark repository_benchmark --delay-seconds 15
 ```
 
 Recommended Gemini Pro evaluation run, PowerShell:
@@ -237,14 +257,34 @@ export GEMINI_MODEL="gemini-2.5-pro"
 python -m evaluation.run --backend gemini --delay-seconds 15
 ```
 
-The committed 10-case dataset remains the formal measured benchmark.
+Benchmark selection:
+
+- Omit `--benchmark` or use `--benchmark default` for the original top-level
+  benchmark.
+- Use `--benchmark <folder-name>` for a benchmark folder under
+  `evaluation/cases/` with matching expected files under `evaluation/expected/`.
+
+During execution, the runner writes incremental progress artifacts after each
+completed file and retains a clearly marked partial report if the run is
+interrupted:
+
+- `*-progress.json`
+- `*-partial.md`
+
+The original 10-case dataset remains the small baseline benchmark. The
+repository benchmark provides broader repository-style evaluation evidence and
+supports the engineering analyses in:
+
+- `docs/repository-benchmark/repository-benchmark-review.md`
+- `docs/repository-benchmark/repository-benchmark-review-gemini.md`
+- `docs/repository-benchmark/repository-benchmark-backend-comparison.md`
 
 `examples/realistic_sample.py` is complementary usability and demo validation,
 not part of the scored benchmark suite.
 
 The committed Gemini snapshot artifact in this repository was captured with
-`gemini-2.5-pro` and should be interpreted as a point-in-time evaluation
-snapshot rather than a perfectly reproducible benchmark.
+`gemini-2.5-pro` and should be interpreted as point-in-time evaluation
+snapshots rather than perfectly reproducible benchmarks.
 
 ## Clean-Copy Generation
 
@@ -297,4 +337,4 @@ Terraform are roadmap ideas, not current runtime behavior.
 - Course concept mapping: `docs/course-concepts.md`
 - Durable project decisions: `docs/decisions.md`
 - Historical build log: `docs/archive/build-log.md`
-- Historical planning artifact: `docs/archive/project-plan-v4.txt`
+- Historical planning artifact: `docs/archive/development-journal.txt`

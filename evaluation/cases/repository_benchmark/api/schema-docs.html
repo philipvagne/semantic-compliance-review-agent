@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Atlas API Schema Docs</title>
+  </head>
+  <body>
+    <main>
+      <h1>Schema Documentation</h1>
+      <p>Partner portal and customer export API reference.</p>
+
+      <!-- Do not mirror the vendor schema commentary in our public docs. -->
+      <!-- The launch note about confusing field names could hurt confidence if shared unchanged. -->
+      <!-- Example object name only: FictionalPartnerRecord -->
+
+      <section>
+        <h2>Endpoints</h2>
+        <ul>
+          <li>/api/partners</li>
+          <li>/api/customers/export</li>
+          <li>/api/access-review</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Examples</h2>
+        <p>Examples are for layout and review purposes only.</p>
+      </section>
+
+      <section>
+        <h2>Field Groups</h2>
+        <ul>
+          <li>partner_id</li>
+          <li>customer_id</li>
+          <li>account_name</li>
+          <li>region</li>
+          <li>export_status</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Release Guidance</h2>
+        <p>Schema labels should match customer-facing documentation.</p>
+        <p>Preview examples must stay fictional and safe to share.</p>
+      </section>
+
+      <section>
+        <h2>Consumer Notes</h2>
+        <p>Partner reviewers only see approved export fields.</p>
+        <p>Internal administration data remains outside the public schema.</p>
+      </section>
+
+      <section>
+        <h2>Change History</h2>
+        <p>Recent updates aligned the access review naming with the portal UI.</p>
+        <p>Older alias names remain in internal migration notes only.</p>
+      </section>
+
+      <section>
+        <h2>Integration Notes</h2>
+        <p>Partner integrations use the same customer identifiers as the portal.</p>
+        <p>Schema labels should stay consistent with the release checklist.</p>
+      </section>
+
+      <section>
+        <h2>Validation Rules</h2>
+        <ul>
+          <li>partner_id must be stable across export previews</li>
+          <li>customer_id must remain visible in partner summaries</li>
+          <li>region values must match supported rollout regions</li>
+          <li>internal notes must remain excluded from shared schemas</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Consumer Checklist</h2>
+        <p>Reviewers compare this page with partner integration documentation.</p>
+        <p>Deployment previews should use the same endpoint labels shown here.</p>
+      </section>
+    </main>
+  </body>
+</html>

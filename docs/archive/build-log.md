@@ -1,5 +1,31 @@
 # Build Log
 
+## 2026-06-24
+
+### Submission Video Slide Deck
+
+Completed:
+- Added `docs/submission-video-slides.html` as a repo-local slideshow for the
+  capstone submission video.
+- Reworked the attached draft into a cleaner six-slide narrative covering the
+  project pitch, problem framing, architecture, demo flow, guardrails, and
+  closing value proposition.
+- Fixed the broken character encoding issues from the draft and tightened the
+  wording so the deck matches the current repository state more closely.
+- Added lightweight presenter controls including previous/next buttons,
+  keyboard navigation, click-zone navigation, touch-swipe support, URL hash
+  slide state, fullscreen toggle, and a visible progress indicator.
+
+Tested:
+- Verified the generated HTML structure and navigation script wiring locally.
+- Checked the deck source for the original encoding artifacts and confirmed the
+  repo version no longer contains the corrupted checkmark text from the draft.
+
+Result:
+- The repository now includes a presentation asset that is better suited for a
+  recorded submission walkthrough while staying aligned with the project's
+  current scope and messaging.
+
 ## 2026-06-23
 
 ### Phase 9B - Documentation Clean Copies

@@ -1,0 +1,31 @@
+{
+  "case_id": "oauth_callback",
+  "expected_findings": [
+    {
+      "category": "SECURITY_RISK",
+      "target_text_contains": "fallback state secret note",
+      "line_start": 92,
+      "line_end": 92,
+      "line_range_approximate": true,
+      "requires_suggested_replacement": false
+    },
+    {
+      "category": "REPUTATION_RISK",
+      "target_text_contains": "looks broken and undermines trust",
+      "line_start": 93,
+      "line_end": 94,
+      "line_range_approximate": true,
+      "requires_suggested_replacement": false
+    },
+    {
+      "category": "SECURITY_RISK",
+      "target_text_contains": "logs the raw callback state",
+      "line_start": 95,
+      "line_end": 95,
+      "line_range_approximate": true,
+      "requires_suggested_replacement": false
+    }
+  ],
+  "expected_finding_count_min": 3,
+  "expected_finding_count_max": 3
+}

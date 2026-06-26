@@ -1,0 +1,2332 @@
+{
+  "status": "completed",
+  "backend": "deterministic",
+  "benchmark": "repository_benchmark",
+  "model": "deterministic-local",
+  "run_started_at": "2026-06-25T07:53:18+00:00",
+  "run_completed_at": "2026-06-25T07:53:18+00:00",
+  "last_updated_at": "2026-06-25T07:53:18+00:00",
+  "interruption_reason": null,
+  "selected_case_ids": [],
+  "planned_case_ids": [
+    "api/public_status",
+    "api/schema-docs",
+    "auth/oauth_callback",
+    "auth/session_manager",
+    "backend/billing_rules",
+    "backend/customer_export",
+    "ci/build_summary",
+    "ci/pipeline-notes",
+    "config/feature_flags",
+    "docs/credential-rotation-guide",
+    "docs/incident-retrospective",
+    "docs/partner-integration",
+    "docs/release-checklist",
+    "frontend/account_settings",
+    "frontend/admin_debug",
+    "frontend/support_banner",
+    "project/roadmap-notes",
+    "scripts/bootstrap_env",
+    "scripts/deploy_preview",
+    "security/access_review"
+  ],
+  "completed_case_ids": [
+    "api/public_status",
+    "api/schema-docs",
+    "auth/oauth_callback",
+    "auth/session_manager",
+    "backend/billing_rules",
+    "backend/customer_export",
+    "ci/build_summary",
+    "ci/pipeline-notes",
+    "config/feature_flags",
+    "docs/credential-rotation-guide",
+    "docs/incident-retrospective",
+    "docs/partner-integration",
+    "docs/release-checklist",
+    "frontend/account_settings",
+    "frontend/admin_debug",
+    "frontend/support_banner",
+    "project/roadmap-notes",
+    "scripts/bootstrap_env",
+    "scripts/deploy_preview",
+    "security/access_review"
+  ],
+  "remaining_case_ids": [],
+  "completed_case_count": 20,
+  "remaining_case_count": 0,
+  "completed_results": [
+    {
+      "case_filename": "public_status.js",
+      "case_id": "api/public_status",
+      "case_path": "C:/Users/phili/Desktop/semantic-compliance-review-agent/evaluation/cases/repository_benchmark/api/public_status.js",
+      "expected_path": "C:/Users/phili/Desktop/semantic-compliance-review-agent/evaluation/expected/repository_benchmark/api/public_status.json",
+      "status": "FAIL",
+      "tp": 0,
+      "fp": 1,
+      "fn": 0,
+      "count_in_range": false,
+      "expected_case": {
+        "case_id": "public_status",
+        "expected_findings": [],
+        "expected_finding_count_min": 0,
+        "expected_finding_count_max": 0
+      },
+      "actual_findings": [
+        {
+          "id": "finding:public_status.js:docstring:29:2:security_risk",
+          "reviewable_text_id": "public_status.js:docstring:29:2",
+          "category": "SECURITY_RISK",
+          "severity": "HIGH",
+          "confidence": "HIGH",
+          "detection_method": "SEMANTIC_ANALYSIS",
+          "source_text": "Historical note for internal testing:\nThe 2025 preview incident mentioned a temporary credential example during\nthe postmortem, but the example value was already fictional and removed from\nthe live runbook before partner review.\n\nExample placeholder only:\nusername = sample-user\npassword = example-password\n\nThis comment is retained because it explains why the public incident summary\nintentionally avoids repeating internal cleanup details.",
+          "line_start": 29,
+          "line_end": 41,
+          "explanation": "The text references a temporary or administrative secret-like value that should be reviewed before release.",
+          "recommendation": "Remove the sensitive reference or replace it with a neutral, human-reviewed task description.",
+          "suggested_replacement": "Historical note for internal testing:\nThe 2025 preview incident mentioned a temporary credential example during\nthe postmortem, but the example value was already fictional and removed from\nthe live runbook before partner review.\n\nExample placeholder only:\nusername = sample-user\ncredential reference = example-credential reference\n\nThis comment is retained because it explains why the public incident summary\nintentionally avoids repeating internal cleanup details."
+        }
+      ],
+      "expected_outcomes": [],
+      "actual_outcomes": [
+        {
+          "actual": {
+            "id": "finding:public_status.js:docstring:29:2:security_risk",
+            "reviewable_text_id": "public_status.js:docstring:29:2",
+            "category": "SECURITY_RISK",
+            "severity": "HIGH",
+            "confidence": "HIGH",
+            "detection_method": "SEMANTIC_ANALYSIS",
+            "source_text": "Historical note for internal testing:\nThe 2025 preview incident mentioned a temporary credential example during\nthe postmortem, but the example value was already fictional and removed from\nthe live runbook before partner review.\n\nExample placeholder only:\nusername = sample-user\npassword = example-password\n\nThis comment is retained because it explains why the public incident summary\nintentionally avoids repeating internal cleanup details.",
+            "line_start": 29,
+            "line_end": 41,
+            "explanation": "The text references a temporary or administrative secret-like value that should be reviewed before release.",
+            "recommendation": "Remove the sensitive reference or replace it with a neutral, human-reviewed task description.",
+            "suggested_replacement": "Historical note for internal testing:\nThe 2025 preview incident mentioned a temporary credential example during\nthe postmortem, but the example value was already fictional and removed from\nthe live runbook before partner review.\n\nExample placeholder only:\nusername = sample-user\ncredential reference = example-credential reference\n\nThis comment is retained because it explains why the public incident summary\nintentionally avoids repeating internal cleanup details."
+          },
+          "matched": false,
+          "reason": "Unmatched actual finding."
+        }
+      ]
+    },
+    {
+      "case_filename": "schema-docs.html",
+      "case_id": "api/schema-docs",
+      "case_path": "C:/Users/phili/Desktop/semantic-compliance-review-agent/evaluation/cases/repository_benchmark/api/schema-docs.html",
+      "expected_path": "C:/Users/phili/Desktop/semantic-compliance-review-agent/evaluation/expected/repository_benchmark/api/schema-docs.json",
+      "status": "FAIL",
+      "tp": 0,
+      "fp": 0,
+      "fn": 2,
+      "count_in_range": false,
+      "expected_case": {
+        "case_id": "schema-docs",
+        "expected_findings": [
+          {
+            "category": "INTELLECTUAL_PROPERTY_RISK",
+            "target_text_contains": "vendor schema commentary",
+            "line_start": 12,
+            "line_end": 12,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          {
+            "category": "REPUTATION_RISK",
+            "target_text_contains": "could hurt confidence if shared unchanged",
+            "line_start": 13,
+            "line_end": 13,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          }
+        ],
+        "expected_finding_count_min": 2,
+        "expected_finding_count_max": 2
+      },
+      "actual_findings": [],
+      "expected_outcomes": [
+        {
+          "expected": {
+            "category": "INTELLECTUAL_PROPERTY_RISK",
+            "target_text_contains": "vendor schema commentary",
+            "line_start": 12,
+            "line_end": 12,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          "matched": false,
+          "matched_actual": null,
+          "reason": "No actual finding matched the expected category and text/line rule."
+        },
+        {
+          "expected": {
+            "category": "REPUTATION_RISK",
+            "target_text_contains": "could hurt confidence if shared unchanged",
+            "line_start": 13,
+            "line_end": 13,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          "matched": false,
+          "matched_actual": null,
+          "reason": "No actual finding matched the expected category and text/line rule."
+        }
+      ],
+      "actual_outcomes": []
+    },
+    {
+      "case_filename": "oauth_callback.ts",
+      "case_id": "auth/oauth_callback",
+      "case_path": "C:/Users/phili/Desktop/semantic-compliance-review-agent/evaluation/cases/repository_benchmark/auth/oauth_callback.ts",
+      "expected_path": "C:/Users/phili/Desktop/semantic-compliance-review-agent/evaluation/expected/repository_benchmark/auth/oauth_callback.json",
+      "status": "FAIL",
+      "tp": 1,
+      "fp": 0,
+      "fn": 2,
+      "count_in_range": false,
+      "expected_case": {
+        "case_id": "oauth_callback",
+        "expected_findings": [
+          {
+            "category": "SECURITY_RISK",
+            "target_text_contains": "fallback state secret note",
+            "line_start": 92,
+            "line_end": 92,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          {
+            "category": "REPUTATION_RISK",
+            "target_text_contains": "looks broken and undermines trust",
+            "line_start": 93,
+            "line_end": 94,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          {
+            "category": "SECURITY_RISK",
+            "target_text_contains": "logs the raw callback state",
+            "line_start": 95,
+            "line_end": 95,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          }
+        ],
+        "expected_finding_count_min": 3,
+        "expected_finding_count_max": 3
+      },
+      "actual_findings": [
+        {
+          "id": "finding:oauth_callback.ts:docstring:91:2:security_risk",
+          "reviewable_text_id": "oauth_callback.ts:docstring:91:2",
+          "category": "SECURITY_RISK",
+          "severity": "HIGH",
+          "confidence": "HIGH",
+          "detection_method": "SEMANTIC_ANALYSIS",
+          "source_text": "TODO: remove the fallback state secret note before external sharing.\nIf the callback redirect loops during launch prep, the partner reviewer sees\nan error page that looks broken and undermines trust in the portal.\nThe old callback branch still logs the raw callback state during launch prep.",
+          "line_start": 91,
+          "line_end": 96,
+          "explanation": "The text references a temporary or administrative secret-like value that should be reviewed before release.",
+          "recommendation": "Remove the sensitive reference or replace it with a neutral, human-reviewed task description.",
+          "suggested_replacement": "TODO: remove the fallback state sensitive reference note before external sharing.\nIf the callback redirect loops during launch prep, the partner reviewer sees\nan error page that looks broken and undermines trust in the portal.\nThe old callback branch still logs the raw callback state during launch prep."
+        }
+      ],
+      "expected_outcomes": [
+        {
+          "expected": {
+            "category": "SECURITY_RISK",
+            "target_text_contains": "fallback state secret note",
+            "line_start": 92,
+            "line_end": 92,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          "matched": true,
+          "matched_actual": {
+            "id": "finding:oauth_callback.ts:docstring:91:2:security_risk",
+            "reviewable_text_id": "oauth_callback.ts:docstring:91:2",
+            "category": "SECURITY_RISK",
+            "severity": "HIGH",
+            "confidence": "HIGH",
+            "detection_method": "SEMANTIC_ANALYSIS",
+            "source_text": "TODO: remove the fallback state secret note before external sharing.\nIf the callback redirect loops during launch prep, the partner reviewer sees\nan error page that looks broken and undermines trust in the portal.\nThe old callback branch still logs the raw callback state during launch prep.",
+            "line_start": 91,
+            "line_end": 96,
+            "explanation": "The text references a temporary or administrative secret-like value that should be reviewed before release.",
+            "recommendation": "Remove the sensitive reference or replace it with a neutral, human-reviewed task description.",
+            "suggested_replacement": "TODO: remove the fallback state sensitive reference note before external sharing.\nIf the callback redirect loops during launch prep, the partner reviewer sees\nan error page that looks broken and undermines trust in the portal.\nThe old callback branch still logs the raw callback state during launch prep."
+          },
+          "reason": "Category matched, target text matched, and line range matched."
+        },
+        {
+          "expected": {
+            "category": "REPUTATION_RISK",
+            "target_text_contains": "looks broken and undermines trust",
+            "line_start": 93,
+            "line_end": 94,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          "matched": false,
+          "matched_actual": null,
+          "reason": "No actual finding matched the expected category and text/line rule."
+        },
+        {
+          "expected": {
+            "category": "SECURITY_RISK",
+            "target_text_contains": "logs the raw callback state",
+            "line_start": 95,
+            "line_end": 95,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          "matched": false,
+          "matched_actual": null,
+          "reason": "No actual finding matched the expected category and text/line rule."
+        }
+      ],
+      "actual_outcomes": [
+        {
+          "actual": {
+            "id": "finding:oauth_callback.ts:docstring:91:2:security_risk",
+            "reviewable_text_id": "oauth_callback.ts:docstring:91:2",
+            "category": "SECURITY_RISK",
+            "severity": "HIGH",
+            "confidence": "HIGH",
+            "detection_method": "SEMANTIC_ANALYSIS",
+            "source_text": "TODO: remove the fallback state secret note before external sharing.\nIf the callback redirect loops during launch prep, the partner reviewer sees\nan error page that looks broken and undermines trust in the portal.\nThe old callback branch still logs the raw callback state during launch prep.",
+            "line_start": 91,
+            "line_end": 96,
+            "explanation": "The text references a temporary or administrative secret-like value that should be reviewed before release.",
+            "recommendation": "Remove the sensitive reference or replace it with a neutral, human-reviewed task description.",
+            "suggested_replacement": "TODO: remove the fallback state sensitive reference note before external sharing.\nIf the callback redirect loops during launch prep, the partner reviewer sees\nan error page that looks broken and undermines trust in the portal.\nThe old callback branch still logs the raw callback state during launch prep."
+          },
+          "matched": true,
+          "reason": "Matched expected finding 'fallback state secret note'."
+        }
+      ]
+    },
+    {
+      "case_filename": "session_manager.py",
+      "case_id": "auth/session_manager",
+      "case_path": "C:/Users/phili/Desktop/semantic-compliance-review-agent/evaluation/cases/repository_benchmark/auth/session_manager.py",
+      "expected_path": "C:/Users/phili/Desktop/semantic-compliance-review-agent/evaluation/expected/repository_benchmark/auth/session_manager.json",
+      "status": "FAIL",
+      "tp": 1,
+      "fp": 0,
+      "fn": 2,
+      "count_in_range": false,
+      "expected_case": {
+        "case_id": "session_manager",
+        "expected_findings": [
+          {
+            "category": "SECURITY_RISK",
+            "target_text_contains": "temporary admin password note",
+            "line_start": 119,
+            "line_end": 119,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          {
+            "category": "COMPLIANCE_RISK",
+            "target_text_contains": "skip consent refresh",
+            "line_start": 120,
+            "line_end": 121,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          {
+            "category": "SECURITY_RISK",
+            "target_text_contains": "stale session IDs",
+            "line_start": 122,
+            "line_end": 123,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          }
+        ],
+        "expected_finding_count_min": 3,
+        "expected_finding_count_max": 3
+      },
+      "actual_findings": [
+        {
+          "id": "finding:session_manager.py:todo:119:2:security_risk",
+          "reviewable_text_id": "session_manager.py:todo:119:2",
+          "category": "SECURITY_RISK",
+          "severity": "HIGH",
+          "confidence": "HIGH",
+          "detection_method": "SEMANTIC_ANALYSIS",
+          "source_text": "TODO: remove the temporary admin password note before partner review.",
+          "line_start": 119,
+          "line_end": 119,
+          "explanation": "The text references a temporary or administrative secret-like value that should be reviewed before release.",
+          "recommendation": "Remove the sensitive reference or replace it with a neutral, human-reviewed task description.",
+          "suggested_replacement": "TODO: remove the temporary admin credential reference note before partner review."
+        }
+      ],
+      "expected_outcomes": [
+        {
+          "expected": {
+            "category": "SECURITY_RISK",
+            "target_text_contains": "temporary admin password note",
+            "line_start": 119,
+            "line_end": 119,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          "matched": true,
+          "matched_actual": {
+            "id": "finding:session_manager.py:todo:119:2:security_risk",
+            "reviewable_text_id": "session_manager.py:todo:119:2",
+            "category": "SECURITY_RISK",
+            "severity": "HIGH",
+            "confidence": "HIGH",
+            "detection_method": "SEMANTIC_ANALYSIS",
+            "source_text": "TODO: remove the temporary admin password note before partner review.",
+            "line_start": 119,
+            "line_end": 119,
+            "explanation": "The text references a temporary or administrative secret-like value that should be reviewed before release.",
+            "recommendation": "Remove the sensitive reference or replace it with a neutral, human-reviewed task description.",
+            "suggested_replacement": "TODO: remove the temporary admin credential reference note before partner review."
+          },
+          "reason": "Category matched, target text matched, and line range matched."
+        },
+        {
+          "expected": {
+            "category": "COMPLIANCE_RISK",
+            "target_text_contains": "skip consent refresh",
+            "line_start": 120,
+            "line_end": 121,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          "matched": false,
+          "matched_actual": null,
+          "reason": "No actual finding matched the expected category and text/line rule."
+        },
+        {
+          "expected": {
+            "category": "SECURITY_RISK",
+            "target_text_contains": "stale session IDs",
+            "line_start": 122,
+            "line_end": 123,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          "matched": false,
+          "matched_actual": null,
+          "reason": "No actual finding matched the expected category and text/line rule."
+        }
+      ],
+      "actual_outcomes": [
+        {
+          "actual": {
+            "id": "finding:session_manager.py:todo:119:2:security_risk",
+            "reviewable_text_id": "session_manager.py:todo:119:2",
+            "category": "SECURITY_RISK",
+            "severity": "HIGH",
+            "confidence": "HIGH",
+            "detection_method": "SEMANTIC_ANALYSIS",
+            "source_text": "TODO: remove the temporary admin password note before partner review.",
+            "line_start": 119,
+            "line_end": 119,
+            "explanation": "The text references a temporary or administrative secret-like value that should be reviewed before release.",
+            "recommendation": "Remove the sensitive reference or replace it with a neutral, human-reviewed task description.",
+            "suggested_replacement": "TODO: remove the temporary admin credential reference note before partner review."
+          },
+          "matched": true,
+          "reason": "Matched expected finding 'temporary admin password note'."
+        }
+      ]
+    },
+    {
+      "case_filename": "billing_rules.py",
+      "case_id": "backend/billing_rules",
+      "case_path": "C:/Users/phili/Desktop/semantic-compliance-review-agent/evaluation/cases/repository_benchmark/backend/billing_rules.py",
+      "expected_path": "C:/Users/phili/Desktop/semantic-compliance-review-agent/evaluation/expected/repository_benchmark/backend/billing_rules.json",
+      "status": "FAIL",
+      "tp": 0,
+      "fp": 0,
+      "fn": 3,
+      "count_in_range": false,
+      "expected_case": {
+        "case_id": "billing_rules",
+        "expected_findings": [
+          {
+            "category": "COMPLIANCE_RISK",
+            "target_text_contains": "regional tax shortcut",
+            "line_start": 68,
+            "line_end": 69,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          {
+            "category": "REPUTATION_RISK",
+            "target_text_contains": "billing process sound negotiable",
+            "line_start": 70,
+            "line_end": 71,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          {
+            "category": "INTERNAL_CODENAME_EXPOSURE",
+            "target_text_contains": "Atlas pilot bundle label",
+            "line_start": 72,
+            "line_end": 72,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          }
+        ],
+        "expected_finding_count_min": 3,
+        "expected_finding_count_max": 3
+      },
+      "actual_findings": [],
+      "expected_outcomes": [
+        {
+          "expected": {
+            "category": "COMPLIANCE_RISK",
+            "target_text_contains": "regional tax shortcut",
+            "line_start": 68,
+            "line_end": 69,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          "matched": false,
+          "matched_actual": null,
+          "reason": "No actual finding matched the expected category and text/line rule."
+        },
+        {
+          "expected": {
+            "category": "REPUTATION_RISK",
+            "target_text_contains": "billing process sound negotiable",
+            "line_start": 70,
+            "line_end": 71,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          "matched": false,
+          "matched_actual": null,
+          "reason": "No actual finding matched the expected category and text/line rule."
+        },
+        {
+          "expected": {
+            "category": "INTERNAL_CODENAME_EXPOSURE",
+            "target_text_contains": "Atlas pilot bundle label",
+            "line_start": 72,
+            "line_end": 72,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          "matched": false,
+          "matched_actual": null,
+          "reason": "No actual finding matched the expected category and text/line rule."
+        }
+      ],
+      "actual_outcomes": []
+    },
+    {
+      "case_filename": "customer_export.py",
+      "case_id": "backend/customer_export",
+      "case_path": "C:/Users/phili/Desktop/semantic-compliance-review-agent/evaluation/cases/repository_benchmark/backend/customer_export.py",
+      "expected_path": "C:/Users/phili/Desktop/semantic-compliance-review-agent/evaluation/expected/repository_benchmark/backend/customer_export.json",
+      "status": "FAIL",
+      "tp": 1,
+      "fp": 0,
+      "fn": 2,
+      "count_in_range": false,
+      "expected_case": {
+        "case_id": "customer_export",
+        "expected_findings": [
+          {
+            "category": "SECURITY_RISK",
+            "target_text_contains": "temporary export token reference",
+            "line_start": 58,
+            "line_end": 58,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          {
+            "category": "INTELLECTUAL_PROPERTY_RISK",
+            "target_text_contains": "vendor packet",
+            "line_start": 59,
+            "line_end": 60,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          {
+            "category": "COMPLIANCE_RISK",
+            "target_text_contains": "approval notes that belong only in internal review",
+            "line_start": 61,
+            "line_end": 62,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          }
+        ],
+        "expected_finding_count_min": 3,
+        "expected_finding_count_max": 3
+      },
+      "actual_findings": [
+        {
+          "id": "finding:customer_export.py:todo:58:2:security_risk",
+          "reviewable_text_id": "customer_export.py:todo:58:2",
+          "category": "SECURITY_RISK",
+          "severity": "HIGH",
+          "confidence": "HIGH",
+          "detection_method": "SEMANTIC_ANALYSIS",
+          "source_text": "TODO: remove the temporary export token reference before external sharing.",
+          "line_start": 58,
+          "line_end": 58,
+          "explanation": "The text references a temporary or administrative secret-like value that should be reviewed before release.",
+          "recommendation": "Remove the sensitive reference or replace it with a neutral, human-reviewed task description.",
+          "suggested_replacement": "TODO: remove the temporary export token reference reference before external sharing."
+        }
+      ],
+      "expected_outcomes": [
+        {
+          "expected": {
+            "category": "SECURITY_RISK",
+            "target_text_contains": "temporary export token reference",
+            "line_start": 58,
+            "line_end": 58,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          "matched": true,
+          "matched_actual": {
+            "id": "finding:customer_export.py:todo:58:2:security_risk",
+            "reviewable_text_id": "customer_export.py:todo:58:2",
+            "category": "SECURITY_RISK",
+            "severity": "HIGH",
+            "confidence": "HIGH",
+            "detection_method": "SEMANTIC_ANALYSIS",
+            "source_text": "TODO: remove the temporary export token reference before external sharing.",
+            "line_start": 58,
+            "line_end": 58,
+            "explanation": "The text references a temporary or administrative secret-like value that should be reviewed before release.",
+            "recommendation": "Remove the sensitive reference or replace it with a neutral, human-reviewed task description.",
+            "suggested_replacement": "TODO: remove the temporary export token reference reference before external sharing."
+          },
+          "reason": "Category matched, target text matched, and line range matched."
+        },
+        {
+          "expected": {
+            "category": "INTELLECTUAL_PROPERTY_RISK",
+            "target_text_contains": "vendor packet",
+            "line_start": 59,
+            "line_end": 60,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          "matched": false,
+          "matched_actual": null,
+          "reason": "No actual finding matched the expected category and text/line rule."
+        },
+        {
+          "expected": {
+            "category": "COMPLIANCE_RISK",
+            "target_text_contains": "approval notes that belong only in internal review",
+            "line_start": 61,
+            "line_end": 62,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          "matched": false,
+          "matched_actual": null,
+          "reason": "No actual finding matched the expected category and text/line rule."
+        }
+      ],
+      "actual_outcomes": [
+        {
+          "actual": {
+            "id": "finding:customer_export.py:todo:58:2:security_risk",
+            "reviewable_text_id": "customer_export.py:todo:58:2",
+            "category": "SECURITY_RISK",
+            "severity": "HIGH",
+            "confidence": "HIGH",
+            "detection_method": "SEMANTIC_ANALYSIS",
+            "source_text": "TODO: remove the temporary export token reference before external sharing.",
+            "line_start": 58,
+            "line_end": 58,
+            "explanation": "The text references a temporary or administrative secret-like value that should be reviewed before release.",
+            "recommendation": "Remove the sensitive reference or replace it with a neutral, human-reviewed task description.",
+            "suggested_replacement": "TODO: remove the temporary export token reference reference before external sharing."
+          },
+          "matched": true,
+          "reason": "Matched expected finding 'temporary export token reference'."
+        }
+      ]
+    },
+    {
+      "case_filename": "build_summary.html",
+      "case_id": "ci/build_summary",
+      "case_path": "C:/Users/phili/Desktop/semantic-compliance-review-agent/evaluation/cases/repository_benchmark/ci/build_summary.html",
+      "expected_path": "C:/Users/phili/Desktop/semantic-compliance-review-agent/evaluation/expected/repository_benchmark/ci/build_summary.json",
+      "status": "PASS",
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "count_in_range": true,
+      "expected_case": {
+        "case_id": "build_summary",
+        "expected_findings": [],
+        "expected_finding_count_min": 0,
+        "expected_finding_count_max": 0
+      },
+      "actual_findings": [],
+      "expected_outcomes": [],
+      "actual_outcomes": []
+    },
+    {
+      "case_filename": "pipeline-notes.md",
+      "case_id": "ci/pipeline-notes",
+      "case_path": "C:/Users/phili/Desktop/semantic-compliance-review-agent/evaluation/cases/repository_benchmark/ci/pipeline-notes.md",
+      "expected_path": "C:/Users/phili/Desktop/semantic-compliance-review-agent/evaluation/expected/repository_benchmark/ci/pipeline-notes.json",
+      "status": "FAIL",
+      "tp": 0,
+      "fp": 0,
+      "fn": 2,
+      "count_in_range": false,
+      "expected_case": {
+        "case_id": "pipeline-notes",
+        "expected_findings": [
+          {
+            "category": "COMPLIANCE_RISK",
+            "target_text_contains": "skip one approval gate",
+            "line_start": 17,
+            "line_end": 18,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          {
+            "category": "PROFESSIONALISM_RISK",
+            "target_text_contains": "reads like a rushed internal update",
+            "line_start": 20,
+            "line_end": 20,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          }
+        ],
+        "expected_finding_count_min": 2,
+        "expected_finding_count_max": 2
+      },
+      "actual_findings": [],
+      "expected_outcomes": [
+        {
+          "expected": {
+            "category": "COMPLIANCE_RISK",
+            "target_text_contains": "skip one approval gate",
+            "line_start": 17,
+            "line_end": 18,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          "matched": false,
+          "matched_actual": null,
+          "reason": "No actual finding matched the expected category and text/line rule."
+        },
+        {
+          "expected": {
+            "category": "PROFESSIONALISM_RISK",
+            "target_text_contains": "reads like a rushed internal update",
+            "line_start": 20,
+            "line_end": 20,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          "matched": false,
+          "matched_actual": null,
+          "reason": "No actual finding matched the expected category and text/line rule."
+        }
+      ],
+      "actual_outcomes": []
+    },
+    {
+      "case_filename": "feature_flags.ts",
+      "case_id": "config/feature_flags",
+      "case_path": "C:/Users/phili/Desktop/semantic-compliance-review-agent/evaluation/cases/repository_benchmark/config/feature_flags.ts",
+      "expected_path": "C:/Users/phili/Desktop/semantic-compliance-review-agent/evaluation/expected/repository_benchmark/config/feature_flags.json",
+      "status": "FAIL",
+      "tp": 1,
+      "fp": 0,
+      "fn": 2,
+      "count_in_range": false,
+      "expected_case": {
+        "case_id": "feature_flags",
+        "expected_findings": [
+          {
+            "category": "INTERNAL_CODENAME_EXPOSURE",
+            "target_text_contains": "Project Atlas",
+            "line_start": 30,
+            "line_end": 31,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          {
+            "category": "COMPLIANCE_RISK",
+            "target_text_contains": "approval switch as optional",
+            "line_start": 32,
+            "line_end": 33,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          {
+            "category": "INTERNAL_CODENAME_EXPOSURE",
+            "target_text_contains": "Atlas review toggle name",
+            "line_start": 34,
+            "line_end": 34,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          }
+        ],
+        "expected_finding_count_min": 3,
+        "expected_finding_count_max": 3
+      },
+      "actual_findings": [
+        {
+          "id": "finding:feature_flags.ts:docstring:29:2:internal_codename_exposure",
+          "reviewable_text_id": "feature_flags.ts:docstring:29:2",
+          "category": "INTERNAL_CODENAME_EXPOSURE",
+          "severity": "MEDIUM",
+          "confidence": "HIGH",
+          "detection_method": "TERM_MATCH",
+          "source_text": "The rollout note still mentions Project Atlas as the internal feature bundle\nname for partner-facing documentation.\nCompliance note: do not describe the export approval switch as optional in\nthe release summary because that wording is inaccurate.\nThe Atlas review toggle name is also visible in one screenshot caption.",
+          "line_start": 29,
+          "line_end": 35,
+          "explanation": "The text references configured sensitive term(s): Project Atlas.",
+          "recommendation": "Review whether the internal project reference should be removed, generalized, or kept internal.",
+          "suggested_replacement": "The rollout note still mentions the internal project as the internal feature bundle\nname for partner-facing documentation.\nCompliance note: do not describe the export approval switch as optional in\nthe release summary because that wording is inaccurate.\nThe Atlas review toggle name is also visible in one screenshot caption."
+        }
+      ],
+      "expected_outcomes": [
+        {
+          "expected": {
+            "category": "INTERNAL_CODENAME_EXPOSURE",
+            "target_text_contains": "Project Atlas",
+            "line_start": 30,
+            "line_end": 31,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          "matched": true,
+          "matched_actual": {
+            "id": "finding:feature_flags.ts:docstring:29:2:internal_codename_exposure",
+            "reviewable_text_id": "feature_flags.ts:docstring:29:2",
+            "category": "INTERNAL_CODENAME_EXPOSURE",
+            "severity": "MEDIUM",
+            "confidence": "HIGH",
+            "detection_method": "TERM_MATCH",
+            "source_text": "The rollout note still mentions Project Atlas as the internal feature bundle\nname for partner-facing documentation.\nCompliance note: do not describe the export approval switch as optional in\nthe release summary because that wording is inaccurate.\nThe Atlas review toggle name is also visible in one screenshot caption.",
+            "line_start": 29,
+            "line_end": 35,
+            "explanation": "The text references configured sensitive term(s): Project Atlas.",
+            "recommendation": "Review whether the internal project reference should be removed, generalized, or kept internal.",
+            "suggested_replacement": "The rollout note still mentions the internal project as the internal feature bundle\nname for partner-facing documentation.\nCompliance note: do not describe the export approval switch as optional in\nthe release summary because that wording is inaccurate.\nThe Atlas review toggle name is also visible in one screenshot caption."
+          },
+          "reason": "Category matched, target text matched, and line range matched."
+        },
+        {
+          "expected": {
+            "category": "COMPLIANCE_RISK",
+            "target_text_contains": "approval switch as optional",
+            "line_start": 32,
+            "line_end": 33,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          "matched": false,
+          "matched_actual": null,
+          "reason": "No actual finding matched the expected category and text/line rule."
+        },
+        {
+          "expected": {
+            "category": "INTERNAL_CODENAME_EXPOSURE",
+            "target_text_contains": "Atlas review toggle name",
+            "line_start": 34,
+            "line_end": 34,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          "matched": false,
+          "matched_actual": null,
+          "reason": "No actual finding matched the expected category and text/line rule."
+        }
+      ],
+      "actual_outcomes": [
+        {
+          "actual": {
+            "id": "finding:feature_flags.ts:docstring:29:2:internal_codename_exposure",
+            "reviewable_text_id": "feature_flags.ts:docstring:29:2",
+            "category": "INTERNAL_CODENAME_EXPOSURE",
+            "severity": "MEDIUM",
+            "confidence": "HIGH",
+            "detection_method": "TERM_MATCH",
+            "source_text": "The rollout note still mentions Project Atlas as the internal feature bundle\nname for partner-facing documentation.\nCompliance note: do not describe the export approval switch as optional in\nthe release summary because that wording is inaccurate.\nThe Atlas review toggle name is also visible in one screenshot caption.",
+            "line_start": 29,
+            "line_end": 35,
+            "explanation": "The text references configured sensitive term(s): Project Atlas.",
+            "recommendation": "Review whether the internal project reference should be removed, generalized, or kept internal.",
+            "suggested_replacement": "The rollout note still mentions the internal project as the internal feature bundle\nname for partner-facing documentation.\nCompliance note: do not describe the export approval switch as optional in\nthe release summary because that wording is inaccurate.\nThe Atlas review toggle name is also visible in one screenshot caption."
+          },
+          "matched": true,
+          "reason": "Matched expected finding 'Project Atlas'."
+        }
+      ]
+    },
+    {
+      "case_filename": "credential-rotation-guide.md",
+      "case_id": "docs/credential-rotation-guide",
+      "case_path": "C:/Users/phili/Desktop/semantic-compliance-review-agent/evaluation/cases/repository_benchmark/docs/credential-rotation-guide.md",
+      "expected_path": "C:/Users/phili/Desktop/semantic-compliance-review-agent/evaluation/expected/repository_benchmark/docs/credential-rotation-guide.json",
+      "status": "FAIL",
+      "tp": 0,
+      "fp": 7,
+      "fn": 0,
+      "count_in_range": false,
+      "expected_case": {
+        "case_id": "credential-rotation-guide",
+        "expected_findings": [],
+        "expected_finding_count_min": 0,
+        "expected_finding_count_max": 0
+      },
+      "actual_findings": [
+        {
+          "id": "finding:credential-rotation-guide.md:heading:1:1:security_risk",
+          "reviewable_text_id": "credential-rotation-guide.md:heading:1:1",
+          "category": "SECURITY_RISK",
+          "severity": "HIGH",
+          "confidence": "HIGH",
+          "detection_method": "SEMANTIC_ANALYSIS",
+          "source_text": "Credential Rotation Guide",
+          "line_start": 1,
+          "line_end": 1,
+          "explanation": "The text references a temporary or administrative secret-like value that should be reviewed before release.",
+          "recommendation": "Remove the sensitive reference or replace it with a neutral, human-reviewed task description.",
+          "suggested_replacement": null
+        },
+        {
+          "id": "finding:credential-rotation-guide.md:paragraph:5:3:security_risk",
+          "reviewable_text_id": "credential-rotation-guide.md:paragraph:5:3",
+          "category": "SECURITY_RISK",
+          "severity": "HIGH",
+          "confidence": "HIGH",
+          "detection_method": "SEMANTIC_ANALYSIS",
+          "source_text": "This guide explains how the Atlas Ops Portal team documents credential rotation tasks for internal review and partner-facing launch preparation.",
+          "line_start": 5,
+          "line_end": 6,
+          "explanation": "The text references a temporary or administrative secret-like value that should be reviewed before release.",
+          "recommendation": "Remove the sensitive reference or replace it with a neutral, human-reviewed task description.",
+          "suggested_replacement": null
+        },
+        {
+          "id": "finding:credential-rotation-guide.md:list_item:22:12:security_risk",
+          "reviewable_text_id": "credential-rotation-guide.md:list_item:22:12",
+          "category": "SECURITY_RISK",
+          "severity": "HIGH",
+          "confidence": "HIGH",
+          "detection_method": "SEMANTIC_ANALYSIS",
+          "source_text": "API key example: `example-api-key`",
+          "line_start": 22,
+          "line_end": 22,
+          "explanation": "The text references a temporary or administrative secret-like value that should be reviewed before release.",
+          "recommendation": "Remove the sensitive reference or replace it with a neutral, human-reviewed task description.",
+          "suggested_replacement": "API credential reference example: `example-api-key`"
+        },
+        {
+          "id": "finding:credential-rotation-guide.md:list_item:24:14:security_risk",
+          "reviewable_text_id": "credential-rotation-guide.md:list_item:24:14",
+          "category": "SECURITY_RISK",
+          "severity": "HIGH",
+          "confidence": "HIGH",
+          "detection_method": "SEMANTIC_ANALYSIS",
+          "source_text": "Admin password example: `example-password`",
+          "line_start": 24,
+          "line_end": 24,
+          "explanation": "The text references a temporary or administrative secret-like value that should be reviewed before release.",
+          "recommendation": "Remove the sensitive reference or replace it with a neutral, human-reviewed task description.",
+          "suggested_replacement": "admin credential reference example: `example-credential reference`"
+        },
+        {
+          "id": "finding:credential-rotation-guide.md:list_item:25:15:security_risk",
+          "reviewable_text_id": "credential-rotation-guide.md:list_item:25:15",
+          "category": "SECURITY_RISK",
+          "severity": "HIGH",
+          "confidence": "HIGH",
+          "detection_method": "SEMANTIC_ANALYSIS",
+          "source_text": "Export token example: `example-export-token`",
+          "line_start": 25,
+          "line_end": 25,
+          "explanation": "The text references a temporary or administrative secret-like value that should be reviewed before release.",
+          "recommendation": "Remove the sensitive reference or replace it with a neutral, human-reviewed task description.",
+          "suggested_replacement": "Export token reference example: `example-export-token reference`"
+        },
+        {
+          "id": "finding:credential-rotation-guide.md:paragraph:40:24:security_risk",
+          "reviewable_text_id": "credential-rotation-guide.md:paragraph:40:24",
+          "category": "SECURITY_RISK",
+          "severity": "HIGH",
+          "confidence": "HIGH",
+          "detection_method": "SEMANTIC_ANALYSIS",
+          "source_text": "Historical incidents may describe temporary credential cleanup work, but those references should remain in retrospective material only when the examples are already fictional and clearly marked.",
+          "line_start": 40,
+          "line_end": 42,
+          "explanation": "The text references a temporary or administrative secret-like value that should be reviewed before release.",
+          "recommendation": "Remove the sensitive reference or replace it with a neutral, human-reviewed task description.",
+          "suggested_replacement": null
+        },
+        {
+          "id": "finding:credential-rotation-guide.md:paragraph:64:38:security_risk",
+          "reviewable_text_id": "credential-rotation-guide.md:paragraph:64:38",
+          "category": "SECURITY_RISK",
+          "severity": "HIGH",
+          "confidence": "HIGH",
+          "detection_method": "SEMANTIC_ANALYSIS",
+          "source_text": "Credential examples in training material should remain obviously fictional. Archived retrospectives may describe cleanup work, but active instructions should focus on safe current process rather than repeating old mistakes.",
+          "line_start": 64,
+          "line_end": 66,
+          "explanation": "The text references a temporary or administrative secret-like value that should be reviewed before release.",
+          "recommendation": "Remove the sensitive reference or replace it with a neutral, human-reviewed task description.",
+          "suggested_replacement": null
+        }
+      ],
+      "expected_outcomes": [],
+      "actual_outcomes": [
+        {
+          "actual": {
+            "id": "finding:credential-rotation-guide.md:heading:1:1:security_risk",
+            "reviewable_text_id": "credential-rotation-guide.md:heading:1:1",
+            "category": "SECURITY_RISK",
+            "severity": "HIGH",
+            "confidence": "HIGH",
+            "detection_method": "SEMANTIC_ANALYSIS",
+            "source_text": "Credential Rotation Guide",
+            "line_start": 1,
+            "line_end": 1,
+            "explanation": "The text references a temporary or administrative secret-like value that should be reviewed before release.",
+            "recommendation": "Remove the sensitive reference or replace it with a neutral, human-reviewed task description.",
+            "suggested_replacement": null
+          },
+          "matched": false,
+          "reason": "Unmatched actual finding."
+        },
+        {
+          "actual": {
+            "id": "finding:credential-rotation-guide.md:paragraph:5:3:security_risk",
+            "reviewable_text_id": "credential-rotation-guide.md:paragraph:5:3",
+            "category": "SECURITY_RISK",
+            "severity": "HIGH",
+            "confidence": "HIGH",
+            "detection_method": "SEMANTIC_ANALYSIS",
+            "source_text": "This guide explains how the Atlas Ops Portal team documents credential rotation tasks for internal review and partner-facing launch preparation.",
+            "line_start": 5,
+            "line_end": 6,
+            "explanation": "The text references a temporary or administrative secret-like value that should be reviewed before release.",
+            "recommendation": "Remove the sensitive reference or replace it with a neutral, human-reviewed task description.",
+            "suggested_replacement": null
+          },
+          "matched": false,
+          "reason": "Unmatched actual finding."
+        },
+        {
+          "actual": {
+            "id": "finding:credential-rotation-guide.md:list_item:22:12:security_risk",
+            "reviewable_text_id": "credential-rotation-guide.md:list_item:22:12",
+            "category": "SECURITY_RISK",
+            "severity": "HIGH",
+            "confidence": "HIGH",
+            "detection_method": "SEMANTIC_ANALYSIS",
+            "source_text": "API key example: `example-api-key`",
+            "line_start": 22,
+            "line_end": 22,
+            "explanation": "The text references a temporary or administrative secret-like value that should be reviewed before release.",
+            "recommendation": "Remove the sensitive reference or replace it with a neutral, human-reviewed task description.",
+            "suggested_replacement": "API credential reference example: `example-api-key`"
+          },
+          "matched": false,
+          "reason": "Unmatched actual finding."
+        },
+        {
+          "actual": {
+            "id": "finding:credential-rotation-guide.md:list_item:24:14:security_risk",
+            "reviewable_text_id": "credential-rotation-guide.md:list_item:24:14",
+            "category": "SECURITY_RISK",
+            "severity": "HIGH",
+            "confidence": "HIGH",
+            "detection_method": "SEMANTIC_ANALYSIS",
+            "source_text": "Admin password example: `example-password`",
+            "line_start": 24,
+            "line_end": 24,
+            "explanation": "The text references a temporary or administrative secret-like value that should be reviewed before release.",
+            "recommendation": "Remove the sensitive reference or replace it with a neutral, human-reviewed task description.",
+            "suggested_replacement": "admin credential reference example: `example-credential reference`"
+          },
+          "matched": false,
+          "reason": "Unmatched actual finding."
+        },
+        {
+          "actual": {
+            "id": "finding:credential-rotation-guide.md:list_item:25:15:security_risk",
+            "reviewable_text_id": "credential-rotation-guide.md:list_item:25:15",
+            "category": "SECURITY_RISK",
+            "severity": "HIGH",
+            "confidence": "HIGH",
+            "detection_method": "SEMANTIC_ANALYSIS",
+            "source_text": "Export token example: `example-export-token`",
+            "line_start": 25,
+            "line_end": 25,
+            "explanation": "The text references a temporary or administrative secret-like value that should be reviewed before release.",
+            "recommendation": "Remove the sensitive reference or replace it with a neutral, human-reviewed task description.",
+            "suggested_replacement": "Export token reference example: `example-export-token reference`"
+          },
+          "matched": false,
+          "reason": "Unmatched actual finding."
+        },
+        {
+          "actual": {
+            "id": "finding:credential-rotation-guide.md:paragraph:40:24:security_risk",
+            "reviewable_text_id": "credential-rotation-guide.md:paragraph:40:24",
+            "category": "SECURITY_RISK",
+            "severity": "HIGH",
+            "confidence": "HIGH",
+            "detection_method": "SEMANTIC_ANALYSIS",
+            "source_text": "Historical incidents may describe temporary credential cleanup work, but those references should remain in retrospective material only when the examples are already fictional and clearly marked.",
+            "line_start": 40,
+            "line_end": 42,
+            "explanation": "The text references a temporary or administrative secret-like value that should be reviewed before release.",
+            "recommendation": "Remove the sensitive reference or replace it with a neutral, human-reviewed task description.",
+            "suggested_replacement": null
+          },
+          "matched": false,
+          "reason": "Unmatched actual finding."
+        },
+        {
+          "actual": {
+            "id": "finding:credential-rotation-guide.md:paragraph:64:38:security_risk",
+            "reviewable_text_id": "credential-rotation-guide.md:paragraph:64:38",
+            "category": "SECURITY_RISK",
+            "severity": "HIGH",
+            "confidence": "HIGH",
+            "detection_method": "SEMANTIC_ANALYSIS",
+            "source_text": "Credential examples in training material should remain obviously fictional. Archived retrospectives may describe cleanup work, but active instructions should focus on safe current process rather than repeating old mistakes.",
+            "line_start": 64,
+            "line_end": 66,
+            "explanation": "The text references a temporary or administrative secret-like value that should be reviewed before release.",
+            "recommendation": "Remove the sensitive reference or replace it with a neutral, human-reviewed task description.",
+            "suggested_replacement": null
+          },
+          "matched": false,
+          "reason": "Unmatched actual finding."
+        }
+      ]
+    },
+    {
+      "case_filename": "incident-retrospective.md",
+      "case_id": "docs/incident-retrospective",
+      "case_path": "C:/Users/phili/Desktop/semantic-compliance-review-agent/evaluation/cases/repository_benchmark/docs/incident-retrospective.md",
+      "expected_path": "C:/Users/phili/Desktop/semantic-compliance-review-agent/evaluation/expected/repository_benchmark/docs/incident-retrospective.json",
+      "status": "FAIL",
+      "tp": 0,
+      "fp": 1,
+      "fn": 2,
+      "count_in_range": false,
+      "expected_case": {
+        "case_id": "incident-retrospective",
+        "expected_findings": [
+          {
+            "category": "REPUTATION_RISK",
+            "target_text_contains": "team was careless during launch prep",
+            "line_start": 22,
+            "line_end": 23,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          {
+            "category": "COMPLIANCE_RISK",
+            "target_text_contains": "bypassing the normal approval trace",
+            "line_start": 26,
+            "line_end": 26,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          }
+        ],
+        "expected_finding_count_min": 2,
+        "expected_finding_count_max": 2
+      },
+      "actual_findings": [
+        {
+          "id": "finding:incident-retrospective.md:paragraph:32:14:security_risk",
+          "reviewable_text_id": "incident-retrospective.md:paragraph:32:14",
+          "category": "SECURITY_RISK",
+          "severity": "HIGH",
+          "confidence": "HIGH",
+          "detection_method": "SEMANTIC_ANALYSIS",
+          "source_text": "This file also retains a historical note about a removed secret example. That note should remain because it explains the cleanup sequence and does not repeat the old value.",
+          "line_start": 32,
+          "line_end": 34,
+          "explanation": "The text references a temporary or administrative secret-like value that should be reviewed before release.",
+          "recommendation": "Remove the sensitive reference or replace it with a neutral, human-reviewed task description.",
+          "suggested_replacement": "This file also retains a historical note about a removed sensitive reference example. That note should remain because it explains the cleanup sequence and does not repeat the old value."
+        }
+      ],
+      "expected_outcomes": [
+        {
+          "expected": {
+            "category": "REPUTATION_RISK",
+            "target_text_contains": "team was careless during launch prep",
+            "line_start": 22,
+            "line_end": 23,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          "matched": false,
+          "matched_actual": null,
+          "reason": "No actual finding matched the expected category and text/line rule."
+        },
+        {
+          "expected": {
+            "category": "COMPLIANCE_RISK",
+            "target_text_contains": "bypassing the normal approval trace",
+            "line_start": 26,
+            "line_end": 26,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          "matched": false,
+          "matched_actual": null,
+          "reason": "No actual finding matched the expected category and text/line rule."
+        }
+      ],
+      "actual_outcomes": [
+        {
+          "actual": {
+            "id": "finding:incident-retrospective.md:paragraph:32:14:security_risk",
+            "reviewable_text_id": "incident-retrospective.md:paragraph:32:14",
+            "category": "SECURITY_RISK",
+            "severity": "HIGH",
+            "confidence": "HIGH",
+            "detection_method": "SEMANTIC_ANALYSIS",
+            "source_text": "This file also retains a historical note about a removed secret example. That note should remain because it explains the cleanup sequence and does not repeat the old value.",
+            "line_start": 32,
+            "line_end": 34,
+            "explanation": "The text references a temporary or administrative secret-like value that should be reviewed before release.",
+            "recommendation": "Remove the sensitive reference or replace it with a neutral, human-reviewed task description.",
+            "suggested_replacement": "This file also retains a historical note about a removed sensitive reference example. That note should remain because it explains the cleanup sequence and does not repeat the old value."
+          },
+          "matched": false,
+          "reason": "Unmatched actual finding."
+        }
+      ]
+    },
+    {
+      "case_filename": "partner-integration.md",
+      "case_id": "docs/partner-integration",
+      "case_path": "C:/Users/phili/Desktop/semantic-compliance-review-agent/evaluation/cases/repository_benchmark/docs/partner-integration.md",
+      "expected_path": "C:/Users/phili/Desktop/semantic-compliance-review-agent/evaluation/expected/repository_benchmark/docs/partner-integration.json",
+      "status": "FAIL",
+      "tp": 1,
+      "fp": 0,
+      "fn": 3,
+      "count_in_range": false,
+      "expected_case": {
+        "case_id": "partner-integration",
+        "expected_findings": [
+          {
+            "category": "INTERNAL_CODENAME_EXPOSURE",
+            "target_text_contains": "Project Atlas",
+            "line_start": 30,
+            "line_end": 31,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          {
+            "category": "COMPLIANCE_RISK",
+            "target_text_contains": "handled informally",
+            "line_start": 33,
+            "line_end": 35,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          {
+            "category": "INTELLECTUAL_PROPERTY_RISK",
+            "target_text_contains": "vendor packet",
+            "line_start": 37,
+            "line_end": 38,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          {
+            "category": "REPUTATION_RISK",
+            "target_text_contains": "avoidable confusion",
+            "line_start": 40,
+            "line_end": 41,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          }
+        ],
+        "expected_finding_count_min": 4,
+        "expected_finding_count_max": 4
+      },
+      "actual_findings": [
+        {
+          "id": "finding:partner-integration.md:paragraph:30:16:internal_codename_exposure",
+          "reviewable_text_id": "partner-integration.md:paragraph:30:16",
+          "category": "INTERNAL_CODENAME_EXPOSURE",
+          "severity": "MEDIUM",
+          "confidence": "HIGH",
+          "detection_method": "TERM_MATCH",
+          "source_text": "This guide still references Project Atlas in one of the rollout notes, and that codename should be removed before the document is shared externally.",
+          "line_start": 30,
+          "line_end": 31,
+          "explanation": "The text references configured sensitive term(s): Project Atlas.",
+          "recommendation": "Review whether the internal project reference should be removed, generalized, or kept internal.",
+          "suggested_replacement": "This guide still references the internal project in one of the rollout notes, and that codename should be removed before the document is shared externally."
+        }
+      ],
+      "expected_outcomes": [
+        {
+          "expected": {
+            "category": "INTERNAL_CODENAME_EXPOSURE",
+            "target_text_contains": "Project Atlas",
+            "line_start": 30,
+            "line_end": 31,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          "matched": true,
+          "matched_actual": {
+            "id": "finding:partner-integration.md:paragraph:30:16:internal_codename_exposure",
+            "reviewable_text_id": "partner-integration.md:paragraph:30:16",
+            "category": "INTERNAL_CODENAME_EXPOSURE",
+            "severity": "MEDIUM",
+            "confidence": "HIGH",
+            "detection_method": "TERM_MATCH",
+            "source_text": "This guide still references Project Atlas in one of the rollout notes, and that codename should be removed before the document is shared externally.",
+            "line_start": 30,
+            "line_end": 31,
+            "explanation": "The text references configured sensitive term(s): Project Atlas.",
+            "recommendation": "Review whether the internal project reference should be removed, generalized, or kept internal.",
+            "suggested_replacement": "This guide still references the internal project in one of the rollout notes, and that codename should be removed before the document is shared externally."
+          },
+          "reason": "Category matched, target text matched, and line range matched."
+        },
+        {
+          "expected": {
+            "category": "COMPLIANCE_RISK",
+            "target_text_contains": "handled informally",
+            "line_start": 33,
+            "line_end": 35,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          "matched": false,
+          "matched_actual": null,
+          "reason": "No actual finding matched the expected category and text/line rule."
+        },
+        {
+          "expected": {
+            "category": "INTELLECTUAL_PROPERTY_RISK",
+            "target_text_contains": "vendor packet",
+            "line_start": 37,
+            "line_end": 38,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          "matched": false,
+          "matched_actual": null,
+          "reason": "No actual finding matched the expected category and text/line rule."
+        },
+        {
+          "expected": {
+            "category": "REPUTATION_RISK",
+            "target_text_contains": "avoidable confusion",
+            "line_start": 40,
+            "line_end": 41,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          "matched": false,
+          "matched_actual": null,
+          "reason": "No actual finding matched the expected category and text/line rule."
+        }
+      ],
+      "actual_outcomes": [
+        {
+          "actual": {
+            "id": "finding:partner-integration.md:paragraph:30:16:internal_codename_exposure",
+            "reviewable_text_id": "partner-integration.md:paragraph:30:16",
+            "category": "INTERNAL_CODENAME_EXPOSURE",
+            "severity": "MEDIUM",
+            "confidence": "HIGH",
+            "detection_method": "TERM_MATCH",
+            "source_text": "This guide still references Project Atlas in one of the rollout notes, and that codename should be removed before the document is shared externally.",
+            "line_start": 30,
+            "line_end": 31,
+            "explanation": "The text references configured sensitive term(s): Project Atlas.",
+            "recommendation": "Review whether the internal project reference should be removed, generalized, or kept internal.",
+            "suggested_replacement": "This guide still references the internal project in one of the rollout notes, and that codename should be removed before the document is shared externally."
+          },
+          "matched": true,
+          "reason": "Matched expected finding 'Project Atlas'."
+        }
+      ]
+    },
+    {
+      "case_filename": "release-checklist.md",
+      "case_id": "docs/release-checklist",
+      "case_path": "C:/Users/phili/Desktop/semantic-compliance-review-agent/evaluation/cases/repository_benchmark/docs/release-checklist.md",
+      "expected_path": "C:/Users/phili/Desktop/semantic-compliance-review-agent/evaluation/expected/repository_benchmark/docs/release-checklist.json",
+      "status": "FAIL",
+      "tp": 0,
+      "fp": 0,
+      "fn": 2,
+      "count_in_range": false,
+      "expected_case": {
+        "case_id": "release-checklist",
+        "expected_findings": [
+          {
+            "category": "PROFESSIONALISM_RISK",
+            "target_text_contains": "sounds sloppy",
+            "line_start": 24,
+            "line_end": 25,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          {
+            "category": "COMPLIANCE_RISK",
+            "target_text_contains": "manual exception",
+            "line_start": 27,
+            "line_end": 28,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          }
+        ],
+        "expected_finding_count_min": 2,
+        "expected_finding_count_max": 2
+      },
+      "actual_findings": [],
+      "expected_outcomes": [
+        {
+          "expected": {
+            "category": "PROFESSIONALISM_RISK",
+            "target_text_contains": "sounds sloppy",
+            "line_start": 24,
+            "line_end": 25,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          "matched": false,
+          "matched_actual": null,
+          "reason": "No actual finding matched the expected category and text/line rule."
+        },
+        {
+          "expected": {
+            "category": "COMPLIANCE_RISK",
+            "target_text_contains": "manual exception",
+            "line_start": 27,
+            "line_end": 28,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          "matched": false,
+          "matched_actual": null,
+          "reason": "No actual finding matched the expected category and text/line rule."
+        }
+      ],
+      "actual_outcomes": []
+    },
+    {
+      "case_filename": "account_settings.ts",
+      "case_id": "frontend/account_settings",
+      "case_path": "C:/Users/phili/Desktop/semantic-compliance-review-agent/evaluation/cases/repository_benchmark/frontend/account_settings.ts",
+      "expected_path": "C:/Users/phili/Desktop/semantic-compliance-review-agent/evaluation/expected/repository_benchmark/frontend/account_settings.json",
+      "status": "FAIL",
+      "tp": 0,
+      "fp": 0,
+      "fn": 3,
+      "count_in_range": false,
+      "expected_case": {
+        "case_id": "account_settings",
+        "expected_findings": [
+          {
+            "category": "PROFESSIONALISM_RISK",
+            "target_text_contains": "sounds sloppy",
+            "line_start": 57,
+            "line_end": 58,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          {
+            "category": "REPUTATION_RISK",
+            "target_text_contains": "complain before we fix the workflow",
+            "line_start": 59,
+            "line_end": 60,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          {
+            "category": "REPUTATION_RISK",
+            "target_text_contains": "internal-only workaround",
+            "line_start": 61,
+            "line_end": 62,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          }
+        ],
+        "expected_finding_count_min": 3,
+        "expected_finding_count_max": 3
+      },
+      "actual_findings": [],
+      "expected_outcomes": [
+        {
+          "expected": {
+            "category": "PROFESSIONALISM_RISK",
+            "target_text_contains": "sounds sloppy",
+            "line_start": 57,
+            "line_end": 58,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          "matched": false,
+          "matched_actual": null,
+          "reason": "No actual finding matched the expected category and text/line rule."
+        },
+        {
+          "expected": {
+            "category": "REPUTATION_RISK",
+            "target_text_contains": "complain before we fix the workflow",
+            "line_start": 59,
+            "line_end": 60,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          "matched": false,
+          "matched_actual": null,
+          "reason": "No actual finding matched the expected category and text/line rule."
+        },
+        {
+          "expected": {
+            "category": "REPUTATION_RISK",
+            "target_text_contains": "internal-only workaround",
+            "line_start": 61,
+            "line_end": 62,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          "matched": false,
+          "matched_actual": null,
+          "reason": "No actual finding matched the expected category and text/line rule."
+        }
+      ],
+      "actual_outcomes": []
+    },
+    {
+      "case_filename": "admin_debug.js",
+      "case_id": "frontend/admin_debug",
+      "case_path": "C:/Users/phili/Desktop/semantic-compliance-review-agent/evaluation/cases/repository_benchmark/frontend/admin_debug.js",
+      "expected_path": "C:/Users/phili/Desktop/semantic-compliance-review-agent/evaluation/expected/repository_benchmark/frontend/admin_debug.json",
+      "status": "FAIL",
+      "tp": 1,
+      "fp": 0,
+      "fn": 2,
+      "count_in_range": false,
+      "expected_case": {
+        "case_id": "admin_debug",
+        "expected_findings": [
+          {
+            "category": "SECURITY_RISK",
+            "target_text_contains": "temporary support token note",
+            "line_start": 33,
+            "line_end": 33,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          {
+            "category": "INTERNAL_CODENAME_EXPOSURE",
+            "target_text_contains": "Project Atlas",
+            "line_start": 34,
+            "line_end": 34,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          {
+            "category": "SECURITY_RISK",
+            "target_text_contains": "bypassing audit logging",
+            "line_start": 35,
+            "line_end": 36,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          }
+        ],
+        "expected_finding_count_min": 3,
+        "expected_finding_count_max": 3
+      },
+      "actual_findings": [
+        {
+          "id": "finding:admin_debug.js:docstring:32:2:security_risk",
+          "reviewable_text_id": "admin_debug.js:docstring:32:2",
+          "category": "SECURITY_RISK",
+          "severity": "HIGH",
+          "confidence": "HIGH",
+          "detection_method": "HYBRID",
+          "source_text": "TODO: remove the temporary support token note before partner review.\nThe Atlas admin preview still mentions Project Atlas in the export path log.\nThe debug note about bypassing audit logging should not appear in release\npreview output because it suggests an unsafe internal workaround.\nExample preview name only: fictional-user-for-layout-checks.",
+          "line_start": 32,
+          "line_end": 38,
+          "explanation": "The text references a temporary or administrative secret-like value that should be reviewed before release.",
+          "recommendation": "Remove the sensitive reference or replace it with a neutral, human-reviewed task description.",
+          "suggested_replacement": "TODO: remove the temporary support token reference note before partner review.\nThe Atlas admin preview still mentions Project Atlas in the export path log.\nThe debug note about bypassing audit logging should not appear in release\npreview output because it suggests an unsafe internal workaround.\nExample preview name only: fictional-user-for-layout-checks."
+        }
+      ],
+      "expected_outcomes": [
+        {
+          "expected": {
+            "category": "SECURITY_RISK",
+            "target_text_contains": "temporary support token note",
+            "line_start": 33,
+            "line_end": 33,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          "matched": true,
+          "matched_actual": {
+            "id": "finding:admin_debug.js:docstring:32:2:security_risk",
+            "reviewable_text_id": "admin_debug.js:docstring:32:2",
+            "category": "SECURITY_RISK",
+            "severity": "HIGH",
+            "confidence": "HIGH",
+            "detection_method": "HYBRID",
+            "source_text": "TODO: remove the temporary support token note before partner review.\nThe Atlas admin preview still mentions Project Atlas in the export path log.\nThe debug note about bypassing audit logging should not appear in release\npreview output because it suggests an unsafe internal workaround.\nExample preview name only: fictional-user-for-layout-checks.",
+            "line_start": 32,
+            "line_end": 38,
+            "explanation": "The text references a temporary or administrative secret-like value that should be reviewed before release.",
+            "recommendation": "Remove the sensitive reference or replace it with a neutral, human-reviewed task description.",
+            "suggested_replacement": "TODO: remove the temporary support token reference note before partner review.\nThe Atlas admin preview still mentions Project Atlas in the export path log.\nThe debug note about bypassing audit logging should not appear in release\npreview output because it suggests an unsafe internal workaround.\nExample preview name only: fictional-user-for-layout-checks."
+          },
+          "reason": "Category matched, target text matched, and line range matched."
+        },
+        {
+          "expected": {
+            "category": "INTERNAL_CODENAME_EXPOSURE",
+            "target_text_contains": "Project Atlas",
+            "line_start": 34,
+            "line_end": 34,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          "matched": false,
+          "matched_actual": null,
+          "reason": "No actual finding matched the expected category and text/line rule."
+        },
+        {
+          "expected": {
+            "category": "SECURITY_RISK",
+            "target_text_contains": "bypassing audit logging",
+            "line_start": 35,
+            "line_end": 36,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          "matched": false,
+          "matched_actual": null,
+          "reason": "No actual finding matched the expected category and text/line rule."
+        }
+      ],
+      "actual_outcomes": [
+        {
+          "actual": {
+            "id": "finding:admin_debug.js:docstring:32:2:security_risk",
+            "reviewable_text_id": "admin_debug.js:docstring:32:2",
+            "category": "SECURITY_RISK",
+            "severity": "HIGH",
+            "confidence": "HIGH",
+            "detection_method": "HYBRID",
+            "source_text": "TODO: remove the temporary support token note before partner review.\nThe Atlas admin preview still mentions Project Atlas in the export path log.\nThe debug note about bypassing audit logging should not appear in release\npreview output because it suggests an unsafe internal workaround.\nExample preview name only: fictional-user-for-layout-checks.",
+            "line_start": 32,
+            "line_end": 38,
+            "explanation": "The text references a temporary or administrative secret-like value that should be reviewed before release.",
+            "recommendation": "Remove the sensitive reference or replace it with a neutral, human-reviewed task description.",
+            "suggested_replacement": "TODO: remove the temporary support token reference note before partner review.\nThe Atlas admin preview still mentions Project Atlas in the export path log.\nThe debug note about bypassing audit logging should not appear in release\npreview output because it suggests an unsafe internal workaround.\nExample preview name only: fictional-user-for-layout-checks."
+          },
+          "matched": true,
+          "reason": "Matched expected finding 'temporary support token note'."
+        }
+      ]
+    },
+    {
+      "case_filename": "support_banner.html",
+      "case_id": "frontend/support_banner",
+      "case_path": "C:/Users/phili/Desktop/semantic-compliance-review-agent/evaluation/cases/repository_benchmark/frontend/support_banner.html",
+      "expected_path": "C:/Users/phili/Desktop/semantic-compliance-review-agent/evaluation/expected/repository_benchmark/frontend/support_banner.json",
+      "status": "FAIL",
+      "tp": 0,
+      "fp": 0,
+      "fn": 2,
+      "count_in_range": false,
+      "expected_case": {
+        "case_id": "support_banner",
+        "expected_findings": [
+          {
+            "category": "PROFESSIONALISM_RISK",
+            "target_text_contains": "Keep the partner support message professional",
+            "line_start": 15,
+            "line_end": 15,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          {
+            "category": "REPUTATION_RISK",
+            "target_text_contains": "fallback copy still sounds defensive",
+            "line_start": 16,
+            "line_end": 16,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          }
+        ],
+        "expected_finding_count_min": 2,
+        "expected_finding_count_max": 2
+      },
+      "actual_findings": [],
+      "expected_outcomes": [
+        {
+          "expected": {
+            "category": "PROFESSIONALISM_RISK",
+            "target_text_contains": "Keep the partner support message professional",
+            "line_start": 15,
+            "line_end": 15,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          "matched": false,
+          "matched_actual": null,
+          "reason": "No actual finding matched the expected category and text/line rule."
+        },
+        {
+          "expected": {
+            "category": "REPUTATION_RISK",
+            "target_text_contains": "fallback copy still sounds defensive",
+            "line_start": 16,
+            "line_end": 16,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          "matched": false,
+          "matched_actual": null,
+          "reason": "No actual finding matched the expected category and text/line rule."
+        }
+      ],
+      "actual_outcomes": []
+    },
+    {
+      "case_filename": "roadmap-notes.md",
+      "case_id": "project/roadmap-notes",
+      "case_path": "C:/Users/phili/Desktop/semantic-compliance-review-agent/evaluation/cases/repository_benchmark/project/roadmap-notes.md",
+      "expected_path": "C:/Users/phili/Desktop/semantic-compliance-review-agent/evaluation/expected/repository_benchmark/project/roadmap-notes.json",
+      "status": "FAIL",
+      "tp": 2,
+      "fp": 0,
+      "fn": 2,
+      "count_in_range": false,
+      "expected_case": {
+        "case_id": "roadmap-notes",
+        "expected_findings": [
+          {
+            "category": "INTERNAL_CODENAME_EXPOSURE",
+            "target_text_contains": "Project Atlas in two planning bullets",
+            "line_start": 17,
+            "line_end": 18,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          {
+            "category": "PROFESSIONALISM_RISK",
+            "target_text_contains": "looks amateurish",
+            "line_start": 20,
+            "line_end": 21,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          {
+            "category": "REPUTATION_RISK",
+            "target_text_contains": "look unprepared",
+            "line_start": 23,
+            "line_end": 24,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          {
+            "category": "INTERNAL_CODENAME_EXPOSURE",
+            "target_text_contains": "Project Atlas codename",
+            "line_start": 26,
+            "line_end": 27,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          }
+        ],
+        "expected_finding_count_min": 4,
+        "expected_finding_count_max": 4
+      },
+      "actual_findings": [
+        {
+          "id": "finding:roadmap-notes.md:paragraph:17:10:internal_codename_exposure",
+          "reviewable_text_id": "roadmap-notes.md:paragraph:17:10",
+          "category": "INTERNAL_CODENAME_EXPOSURE",
+          "severity": "MEDIUM",
+          "confidence": "HIGH",
+          "detection_method": "TERM_MATCH",
+          "source_text": "The roadmap still uses Project Atlas in two planning bullets, which should be removed before any external sharing of the release packet.",
+          "line_start": 17,
+          "line_end": 18,
+          "explanation": "The text references configured sensitive term(s): Project Atlas.",
+          "recommendation": "Review whether the internal project reference should be removed, generalized, or kept internal.",
+          "suggested_replacement": "The roadmap still uses the internal project in two planning bullets, which should be removed before any external sharing of the release packet."
+        },
+        {
+          "id": "finding:roadmap-notes.md:paragraph:26:13:internal_codename_exposure",
+          "reviewable_text_id": "roadmap-notes.md:paragraph:26:13",
+          "category": "INTERNAL_CODENAME_EXPOSURE",
+          "severity": "MEDIUM",
+          "confidence": "HIGH",
+          "detection_method": "TERM_MATCH",
+          "source_text": "The archived planning section also repeats the Project Atlas codename in a feature comparison block that should stay internal only.",
+          "line_start": 26,
+          "line_end": 27,
+          "explanation": "The text references configured sensitive term(s): Project Atlas.",
+          "recommendation": "Review whether the internal project reference should be removed, generalized, or kept internal.",
+          "suggested_replacement": "The archived planning section also repeats the the internal project codename in a feature comparison block that should stay internal only."
+        }
+      ],
+      "expected_outcomes": [
+        {
+          "expected": {
+            "category": "INTERNAL_CODENAME_EXPOSURE",
+            "target_text_contains": "Project Atlas in two planning bullets",
+            "line_start": 17,
+            "line_end": 18,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          "matched": true,
+          "matched_actual": {
+            "id": "finding:roadmap-notes.md:paragraph:17:10:internal_codename_exposure",
+            "reviewable_text_id": "roadmap-notes.md:paragraph:17:10",
+            "category": "INTERNAL_CODENAME_EXPOSURE",
+            "severity": "MEDIUM",
+            "confidence": "HIGH",
+            "detection_method": "TERM_MATCH",
+            "source_text": "The roadmap still uses Project Atlas in two planning bullets, which should be removed before any external sharing of the release packet.",
+            "line_start": 17,
+            "line_end": 18,
+            "explanation": "The text references configured sensitive term(s): Project Atlas.",
+            "recommendation": "Review whether the internal project reference should be removed, generalized, or kept internal.",
+            "suggested_replacement": "The roadmap still uses the internal project in two planning bullets, which should be removed before any external sharing of the release packet."
+          },
+          "reason": "Category matched, target text matched, and line range matched."
+        },
+        {
+          "expected": {
+            "category": "PROFESSIONALISM_RISK",
+            "target_text_contains": "looks amateurish",
+            "line_start": 20,
+            "line_end": 21,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          "matched": false,
+          "matched_actual": null,
+          "reason": "No actual finding matched the expected category and text/line rule."
+        },
+        {
+          "expected": {
+            "category": "REPUTATION_RISK",
+            "target_text_contains": "look unprepared",
+            "line_start": 23,
+            "line_end": 24,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          "matched": false,
+          "matched_actual": null,
+          "reason": "No actual finding matched the expected category and text/line rule."
+        },
+        {
+          "expected": {
+            "category": "INTERNAL_CODENAME_EXPOSURE",
+            "target_text_contains": "Project Atlas codename",
+            "line_start": 26,
+            "line_end": 27,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          "matched": true,
+          "matched_actual": {
+            "id": "finding:roadmap-notes.md:paragraph:26:13:internal_codename_exposure",
+            "reviewable_text_id": "roadmap-notes.md:paragraph:26:13",
+            "category": "INTERNAL_CODENAME_EXPOSURE",
+            "severity": "MEDIUM",
+            "confidence": "HIGH",
+            "detection_method": "TERM_MATCH",
+            "source_text": "The archived planning section also repeats the Project Atlas codename in a feature comparison block that should stay internal only.",
+            "line_start": 26,
+            "line_end": 27,
+            "explanation": "The text references configured sensitive term(s): Project Atlas.",
+            "recommendation": "Review whether the internal project reference should be removed, generalized, or kept internal.",
+            "suggested_replacement": "The archived planning section also repeats the the internal project codename in a feature comparison block that should stay internal only."
+          },
+          "reason": "Category matched, target text matched, and line range matched."
+        }
+      ],
+      "actual_outcomes": [
+        {
+          "actual": {
+            "id": "finding:roadmap-notes.md:paragraph:17:10:internal_codename_exposure",
+            "reviewable_text_id": "roadmap-notes.md:paragraph:17:10",
+            "category": "INTERNAL_CODENAME_EXPOSURE",
+            "severity": "MEDIUM",
+            "confidence": "HIGH",
+            "detection_method": "TERM_MATCH",
+            "source_text": "The roadmap still uses Project Atlas in two planning bullets, which should be removed before any external sharing of the release packet.",
+            "line_start": 17,
+            "line_end": 18,
+            "explanation": "The text references configured sensitive term(s): Project Atlas.",
+            "recommendation": "Review whether the internal project reference should be removed, generalized, or kept internal.",
+            "suggested_replacement": "The roadmap still uses the internal project in two planning bullets, which should be removed before any external sharing of the release packet."
+          },
+          "matched": true,
+          "reason": "Matched expected finding 'Project Atlas in two planning bullets'."
+        },
+        {
+          "actual": {
+            "id": "finding:roadmap-notes.md:paragraph:26:13:internal_codename_exposure",
+            "reviewable_text_id": "roadmap-notes.md:paragraph:26:13",
+            "category": "INTERNAL_CODENAME_EXPOSURE",
+            "severity": "MEDIUM",
+            "confidence": "HIGH",
+            "detection_method": "TERM_MATCH",
+            "source_text": "The archived planning section also repeats the Project Atlas codename in a feature comparison block that should stay internal only.",
+            "line_start": 26,
+            "line_end": 27,
+            "explanation": "The text references configured sensitive term(s): Project Atlas.",
+            "recommendation": "Review whether the internal project reference should be removed, generalized, or kept internal.",
+            "suggested_replacement": "The archived planning section also repeats the the internal project codename in a feature comparison block that should stay internal only."
+          },
+          "matched": true,
+          "reason": "Matched expected finding 'Project Atlas codename'."
+        }
+      ]
+    },
+    {
+      "case_filename": "bootstrap_env.py",
+      "case_id": "scripts/bootstrap_env",
+      "case_path": "C:/Users/phili/Desktop/semantic-compliance-review-agent/evaluation/cases/repository_benchmark/scripts/bootstrap_env.py",
+      "expected_path": "C:/Users/phili/Desktop/semantic-compliance-review-agent/evaluation/expected/repository_benchmark/scripts/bootstrap_env.json",
+      "status": "FAIL",
+      "tp": 1,
+      "fp": 0,
+      "fn": 2,
+      "count_in_range": false,
+      "expected_case": {
+        "case_id": "bootstrap_env",
+        "expected_findings": [
+          {
+            "category": "SECURITY_RISK",
+            "target_text_contains": "temporary bootstrap secret reminder",
+            "line_start": 37,
+            "line_end": 37,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          {
+            "category": "PROFESSIONALISM_RISK",
+            "target_text_contains": "calling the preview script half-baked",
+            "line_start": 38,
+            "line_end": 39,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          {
+            "category": "COMPLIANCE_RISK",
+            "target_text_contains": "approval tagging can be skipped",
+            "line_start": 40,
+            "line_end": 41,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          }
+        ],
+        "expected_finding_count_min": 3,
+        "expected_finding_count_max": 3
+      },
+      "actual_findings": [
+        {
+          "id": "finding:bootstrap_env.py:todo:37:2:security_risk",
+          "reviewable_text_id": "bootstrap_env.py:todo:37:2",
+          "category": "SECURITY_RISK",
+          "severity": "HIGH",
+          "confidence": "HIGH",
+          "detection_method": "SEMANTIC_ANALYSIS",
+          "source_text": "TODO: remove the temporary bootstrap secret reminder before external sharing.",
+          "line_start": 37,
+          "line_end": 37,
+          "explanation": "The text references a temporary or administrative secret-like value that should be reviewed before release.",
+          "recommendation": "Remove the sensitive reference or replace it with a neutral, human-reviewed task description.",
+          "suggested_replacement": "TODO: remove the temporary bootstrap sensitive reference reminder before external sharing."
+        }
+      ],
+      "expected_outcomes": [
+        {
+          "expected": {
+            "category": "SECURITY_RISK",
+            "target_text_contains": "temporary bootstrap secret reminder",
+            "line_start": 37,
+            "line_end": 37,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          "matched": true,
+          "matched_actual": {
+            "id": "finding:bootstrap_env.py:todo:37:2:security_risk",
+            "reviewable_text_id": "bootstrap_env.py:todo:37:2",
+            "category": "SECURITY_RISK",
+            "severity": "HIGH",
+            "confidence": "HIGH",
+            "detection_method": "SEMANTIC_ANALYSIS",
+            "source_text": "TODO: remove the temporary bootstrap secret reminder before external sharing.",
+            "line_start": 37,
+            "line_end": 37,
+            "explanation": "The text references a temporary or administrative secret-like value that should be reviewed before release.",
+            "recommendation": "Remove the sensitive reference or replace it with a neutral, human-reviewed task description.",
+            "suggested_replacement": "TODO: remove the temporary bootstrap sensitive reference reminder before external sharing."
+          },
+          "reason": "Category matched, target text matched, and line range matched."
+        },
+        {
+          "expected": {
+            "category": "PROFESSIONALISM_RISK",
+            "target_text_contains": "calling the preview script half-baked",
+            "line_start": 38,
+            "line_end": 39,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          "matched": false,
+          "matched_actual": null,
+          "reason": "No actual finding matched the expected category and text/line rule."
+        },
+        {
+          "expected": {
+            "category": "COMPLIANCE_RISK",
+            "target_text_contains": "approval tagging can be skipped",
+            "line_start": 40,
+            "line_end": 41,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          "matched": false,
+          "matched_actual": null,
+          "reason": "No actual finding matched the expected category and text/line rule."
+        }
+      ],
+      "actual_outcomes": [
+        {
+          "actual": {
+            "id": "finding:bootstrap_env.py:todo:37:2:security_risk",
+            "reviewable_text_id": "bootstrap_env.py:todo:37:2",
+            "category": "SECURITY_RISK",
+            "severity": "HIGH",
+            "confidence": "HIGH",
+            "detection_method": "SEMANTIC_ANALYSIS",
+            "source_text": "TODO: remove the temporary bootstrap secret reminder before external sharing.",
+            "line_start": 37,
+            "line_end": 37,
+            "explanation": "The text references a temporary or administrative secret-like value that should be reviewed before release.",
+            "recommendation": "Remove the sensitive reference or replace it with a neutral, human-reviewed task description.",
+            "suggested_replacement": "TODO: remove the temporary bootstrap sensitive reference reminder before external sharing."
+          },
+          "matched": true,
+          "reason": "Matched expected finding 'temporary bootstrap secret reminder'."
+        }
+      ]
+    },
+    {
+      "case_filename": "deploy_preview.js",
+      "case_id": "scripts/deploy_preview",
+      "case_path": "C:/Users/phili/Desktop/semantic-compliance-review-agent/evaluation/cases/repository_benchmark/scripts/deploy_preview.js",
+      "expected_path": "C:/Users/phili/Desktop/semantic-compliance-review-agent/evaluation/expected/repository_benchmark/scripts/deploy_preview.json",
+      "status": "FAIL",
+      "tp": 1,
+      "fp": 0,
+      "fn": 2,
+      "count_in_range": false,
+      "expected_case": {
+        "case_id": "deploy_preview",
+        "expected_findings": [
+          {
+            "category": "SECURITY_RISK",
+            "target_text_contains": "temporary deployment token reminder",
+            "line_start": 31,
+            "line_end": 31,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          {
+            "category": "INTERNAL_CODENAME_EXPOSURE",
+            "target_text_contains": "Project Atlas",
+            "line_start": 32,
+            "line_end": 32,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          {
+            "category": "COMPLIANCE_RISK",
+            "target_text_contains": "release tag can be skipped",
+            "line_start": 33,
+            "line_end": 34,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          }
+        ],
+        "expected_finding_count_min": 3,
+        "expected_finding_count_max": 3
+      },
+      "actual_findings": [
+        {
+          "id": "finding:deploy_preview.js:docstring:30:2:security_risk",
+          "reviewable_text_id": "deploy_preview.js:docstring:30:2",
+          "category": "SECURITY_RISK",
+          "severity": "HIGH",
+          "confidence": "HIGH",
+          "detection_method": "HYBRID",
+          "source_text": "TODO: remove the temporary deployment token reminder before launch.\nThe Project Atlas preview label still appears in the deployment notes.\nThe fallback upload note still says the release tag can be skipped during\npartner review retries.\nExample target name for docs only: fictional-preview-target.",
+          "line_start": 30,
+          "line_end": 36,
+          "explanation": "The text references a temporary or administrative secret-like value that should be reviewed before release.",
+          "recommendation": "Remove the sensitive reference or replace it with a neutral, human-reviewed task description.",
+          "suggested_replacement": "TODO: remove the temporary deployment token reference reminder before launch.\nThe Project Atlas preview label still appears in the deployment notes.\nThe fallback upload note still says the release tag can be skipped during\npartner review retries.\nExample target name for docs only: fictional-preview-target."
+        }
+      ],
+      "expected_outcomes": [
+        {
+          "expected": {
+            "category": "SECURITY_RISK",
+            "target_text_contains": "temporary deployment token reminder",
+            "line_start": 31,
+            "line_end": 31,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          "matched": true,
+          "matched_actual": {
+            "id": "finding:deploy_preview.js:docstring:30:2:security_risk",
+            "reviewable_text_id": "deploy_preview.js:docstring:30:2",
+            "category": "SECURITY_RISK",
+            "severity": "HIGH",
+            "confidence": "HIGH",
+            "detection_method": "HYBRID",
+            "source_text": "TODO: remove the temporary deployment token reminder before launch.\nThe Project Atlas preview label still appears in the deployment notes.\nThe fallback upload note still says the release tag can be skipped during\npartner review retries.\nExample target name for docs only: fictional-preview-target.",
+            "line_start": 30,
+            "line_end": 36,
+            "explanation": "The text references a temporary or administrative secret-like value that should be reviewed before release.",
+            "recommendation": "Remove the sensitive reference or replace it with a neutral, human-reviewed task description.",
+            "suggested_replacement": "TODO: remove the temporary deployment token reference reminder before launch.\nThe Project Atlas preview label still appears in the deployment notes.\nThe fallback upload note still says the release tag can be skipped during\npartner review retries.\nExample target name for docs only: fictional-preview-target."
+          },
+          "reason": "Category matched, target text matched, and line range matched."
+        },
+        {
+          "expected": {
+            "category": "INTERNAL_CODENAME_EXPOSURE",
+            "target_text_contains": "Project Atlas",
+            "line_start": 32,
+            "line_end": 32,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          "matched": false,
+          "matched_actual": null,
+          "reason": "No actual finding matched the expected category and text/line rule."
+        },
+        {
+          "expected": {
+            "category": "COMPLIANCE_RISK",
+            "target_text_contains": "release tag can be skipped",
+            "line_start": 33,
+            "line_end": 34,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          "matched": false,
+          "matched_actual": null,
+          "reason": "No actual finding matched the expected category and text/line rule."
+        }
+      ],
+      "actual_outcomes": [
+        {
+          "actual": {
+            "id": "finding:deploy_preview.js:docstring:30:2:security_risk",
+            "reviewable_text_id": "deploy_preview.js:docstring:30:2",
+            "category": "SECURITY_RISK",
+            "severity": "HIGH",
+            "confidence": "HIGH",
+            "detection_method": "HYBRID",
+            "source_text": "TODO: remove the temporary deployment token reminder before launch.\nThe Project Atlas preview label still appears in the deployment notes.\nThe fallback upload note still says the release tag can be skipped during\npartner review retries.\nExample target name for docs only: fictional-preview-target.",
+            "line_start": 30,
+            "line_end": 36,
+            "explanation": "The text references a temporary or administrative secret-like value that should be reviewed before release.",
+            "recommendation": "Remove the sensitive reference or replace it with a neutral, human-reviewed task description.",
+            "suggested_replacement": "TODO: remove the temporary deployment token reference reminder before launch.\nThe Project Atlas preview label still appears in the deployment notes.\nThe fallback upload note still says the release tag can be skipped during\npartner review retries.\nExample target name for docs only: fictional-preview-target."
+          },
+          "matched": true,
+          "reason": "Matched expected finding 'temporary deployment token reminder'."
+        }
+      ]
+    },
+    {
+      "case_filename": "access_review.py",
+      "case_id": "security/access_review",
+      "case_path": "C:/Users/phili/Desktop/semantic-compliance-review-agent/evaluation/cases/repository_benchmark/security/access_review.py",
+      "expected_path": "C:/Users/phili/Desktop/semantic-compliance-review-agent/evaluation/expected/repository_benchmark/security/access_review.json",
+      "status": "FAIL",
+      "tp": 1,
+      "fp": 0,
+      "fn": 3,
+      "count_in_range": false,
+      "expected_case": {
+        "case_id": "access_review",
+        "expected_findings": [
+          {
+            "category": "SECURITY_RISK",
+            "target_text_contains": "temporary credential note",
+            "line_start": 56,
+            "line_end": 56,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          {
+            "category": "COMPLIANCE_RISK",
+            "target_text_contains": "approval can proceed",
+            "line_start": 57,
+            "line_end": 58,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          {
+            "category": "INTELLECTUAL_PROPERTY_RISK",
+            "target_text_contains": "licensed wording is not ours to reuse",
+            "line_start": 59,
+            "line_end": 60,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          {
+            "category": "REPUTATION_RISK",
+            "target_text_contains": "could look careless during review",
+            "line_start": 61,
+            "line_end": 62,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          }
+        ],
+        "expected_finding_count_min": 4,
+        "expected_finding_count_max": 4
+      },
+      "actual_findings": [
+        {
+          "id": "finding:access_review.py:todo:56:2:security_risk",
+          "reviewable_text_id": "access_review.py:todo:56:2",
+          "category": "SECURITY_RISK",
+          "severity": "HIGH",
+          "confidence": "HIGH",
+          "detection_method": "SEMANTIC_ANALYSIS",
+          "source_text": "TODO: remove the temporary credential note from the access review appendix.",
+          "line_start": 56,
+          "line_end": 56,
+          "explanation": "The text references a temporary or administrative secret-like value that should be reviewed before release.",
+          "recommendation": "Remove the sensitive reference or replace it with a neutral, human-reviewed task description.",
+          "suggested_replacement": null
+        }
+      ],
+      "expected_outcomes": [
+        {
+          "expected": {
+            "category": "SECURITY_RISK",
+            "target_text_contains": "temporary credential note",
+            "line_start": 56,
+            "line_end": 56,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          "matched": true,
+          "matched_actual": {
+            "id": "finding:access_review.py:todo:56:2:security_risk",
+            "reviewable_text_id": "access_review.py:todo:56:2",
+            "category": "SECURITY_RISK",
+            "severity": "HIGH",
+            "confidence": "HIGH",
+            "detection_method": "SEMANTIC_ANALYSIS",
+            "source_text": "TODO: remove the temporary credential note from the access review appendix.",
+            "line_start": 56,
+            "line_end": 56,
+            "explanation": "The text references a temporary or administrative secret-like value that should be reviewed before release.",
+            "recommendation": "Remove the sensitive reference or replace it with a neutral, human-reviewed task description.",
+            "suggested_replacement": null
+          },
+          "reason": "Category matched, target text matched, and line range matched."
+        },
+        {
+          "expected": {
+            "category": "COMPLIANCE_RISK",
+            "target_text_contains": "approval can proceed",
+            "line_start": 57,
+            "line_end": 58,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          "matched": false,
+          "matched_actual": null,
+          "reason": "No actual finding matched the expected category and text/line rule."
+        },
+        {
+          "expected": {
+            "category": "INTELLECTUAL_PROPERTY_RISK",
+            "target_text_contains": "licensed wording is not ours to reuse",
+            "line_start": 59,
+            "line_end": 60,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          "matched": false,
+          "matched_actual": null,
+          "reason": "No actual finding matched the expected category and text/line rule."
+        },
+        {
+          "expected": {
+            "category": "REPUTATION_RISK",
+            "target_text_contains": "could look careless during review",
+            "line_start": 61,
+            "line_end": 62,
+            "line_range_approximate": true,
+            "requires_suggested_replacement": false
+          },
+          "matched": false,
+          "matched_actual": null,
+          "reason": "No actual finding matched the expected category and text/line rule."
+        }
+      ],
+      "actual_outcomes": [
+        {
+          "actual": {
+            "id": "finding:access_review.py:todo:56:2:security_risk",
+            "reviewable_text_id": "access_review.py:todo:56:2",
+            "category": "SECURITY_RISK",
+            "severity": "HIGH",
+            "confidence": "HIGH",
+            "detection_method": "SEMANTIC_ANALYSIS",
+            "source_text": "TODO: remove the temporary credential note from the access review appendix.",
+            "line_start": 56,
+            "line_end": 56,
+            "explanation": "The text references a temporary or administrative secret-like value that should be reviewed before release.",
+            "recommendation": "Remove the sensitive reference or replace it with a neutral, human-reviewed task description.",
+            "suggested_replacement": null
+          },
+          "matched": true,
+          "reason": "Matched expected finding 'temporary credential note'."
+        }
+      ]
+    }
+  ]
+}

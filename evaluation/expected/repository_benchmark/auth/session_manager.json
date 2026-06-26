@@ -1,0 +1,31 @@
+{
+  "case_id": "session_manager",
+  "expected_findings": [
+    {
+      "category": "SECURITY_RISK",
+      "target_text_contains": "temporary admin password note",
+      "line_start": 119,
+      "line_end": 119,
+      "line_range_approximate": true,
+      "requires_suggested_replacement": false
+    },
+    {
+      "category": "COMPLIANCE_RISK",
+      "target_text_contains": "skip consent refresh",
+      "line_start": 120,
+      "line_end": 121,
+      "line_range_approximate": true,
+      "requires_suggested_replacement": false
+    },
+    {
+      "category": "SECURITY_RISK",
+      "target_text_contains": "stale session IDs",
+      "line_start": 122,
+      "line_end": 123,
+      "line_range_approximate": true,
+      "requires_suggested_replacement": false
+    }
+  ],
+  "expected_finding_count_min": 3,
+  "expected_finding_count_max": 3
+}

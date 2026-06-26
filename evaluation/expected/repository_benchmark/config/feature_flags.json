@@ -1,0 +1,31 @@
+{
+  "case_id": "feature_flags",
+  "expected_findings": [
+    {
+      "category": "INTERNAL_CODENAME_EXPOSURE",
+      "target_text_contains": "Project Atlas",
+      "line_start": 30,
+      "line_end": 31,
+      "line_range_approximate": true,
+      "requires_suggested_replacement": false
+    },
+    {
+      "category": "COMPLIANCE_RISK",
+      "target_text_contains": "approval switch as optional",
+      "line_start": 32,
+      "line_end": 33,
+      "line_range_approximate": true,
+      "requires_suggested_replacement": false
+    },
+    {
+      "category": "INTERNAL_CODENAME_EXPOSURE",
+      "target_text_contains": "Atlas review toggle name",
+      "line_start": 34,
+      "line_end": 34,
+      "line_range_approximate": true,
+      "requires_suggested_replacement": false
+    }
+  ],
+  "expected_finding_count_min": 3,
+  "expected_finding_count_max": 3
+}

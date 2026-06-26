@@ -1,0 +1,39 @@
+{
+  "case_id": "partner-integration",
+  "expected_findings": [
+    {
+      "category": "INTERNAL_CODENAME_EXPOSURE",
+      "target_text_contains": "Project Atlas",
+      "line_start": 30,
+      "line_end": 31,
+      "line_range_approximate": true,
+      "requires_suggested_replacement": false
+    },
+    {
+      "category": "COMPLIANCE_RISK",
+      "target_text_contains": "handled informally",
+      "line_start": 33,
+      "line_end": 35,
+      "line_range_approximate": true,
+      "requires_suggested_replacement": false
+    },
+    {
+      "category": "INTELLECTUAL_PROPERTY_RISK",
+      "target_text_contains": "vendor packet",
+      "line_start": 37,
+      "line_end": 38,
+      "line_range_approximate": true,
+      "requires_suggested_replacement": false
+    },
+    {
+      "category": "REPUTATION_RISK",
+      "target_text_contains": "avoidable confusion",
+      "line_start": 40,
+      "line_end": 41,
+      "line_range_approximate": true,
+      "requires_suggested_replacement": false
+    }
+  ],
+  "expected_finding_count_min": 4,
+  "expected_finding_count_max": 4
+}

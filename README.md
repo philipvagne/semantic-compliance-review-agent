@@ -102,12 +102,6 @@ Default model:
 
 - `gemini-2.5-flash`
 
-During project evaluation, `gemini-2.5-pro` produced the most consistent
-results and was therefore used for the committed Gemini evaluation snapshots
-and reliability-sensitive demos:
-
-- `gemini-2.5-pro`
-
 ### Deterministic
 
 Explicit offline and test backend.

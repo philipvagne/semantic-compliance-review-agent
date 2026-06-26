@@ -33,7 +33,7 @@ def build_release_summary(version: str, owner: str) -> ReleaseSummary:
     """Build a small release summary for internal release coordination."""
     safe_owner = _clean_owner_name(owner)
 
-    # TODO: remove the temporary admin password reference before the launch review.
+    # TODO: remove the temporary API key reference before the launch review.
     # Project Atlas pilot notes still need a public-safe label before external sharing.
     notes = [
         "Customer-facing wording reviewed by the docs team.",

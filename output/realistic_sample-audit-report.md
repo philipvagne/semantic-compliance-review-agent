@@ -3,9 +3,9 @@
 |                                |                                |
 | ------------------------------ | ------------------------------ |
 | **Target File**                | `examples/realistic_sample.py` |
-| **Generated On**               | 2026-06-23 · 17:21 UTC         |
-| **Backend**                    | Deterministic                  |
-| **Model**                      | `deterministic-local`          |
+| **Generated On**               | 2026-06-26 · 13:37 UTC         |
+| **Backend**                    | Gemini                         |
+| **Model**                      | `gemini-2.5-flash`             |
 | **Configured Sensitive Terms** | 3                              |
 | **Findings Count**             | 3                              |
 | **Audit Status**               | **ISSUES FOUND**               |
@@ -28,8 +28,8 @@ This audit completed with status **ISSUES FOUND**.
 | Reference | Category                   | Severity | Confidence |
 | --------- | -------------------------- | -------- | ---------- |
 | SEC-001   | Security Risk              | 🟠 High   | ● High     |
-| CDX-001   | Internal Codename Exposure | 🟡 Medium | ● High     |
-| PRO-001   | Professionalism Risk       | 🟢 Low    | ◐ Medium   |
+| CDX-001   | Internal Codename Exposure | 🟠 High   | ● High     |
+| PRO-001   | Professionalism Risk       | 🟡 Medium | ● High     |
 
 ---
 
@@ -46,29 +46,30 @@ This audit completed with status **ISSUES FOUND**.
 #### Source Text
 
 ```text
-TODO: remove the temporary admin password reference before the launch review.
+TODO: remove the temporary API key reference before the launch review.
 ```
 
 #### Why This Was Flagged
 
-- The text references a temporary or administrative secret-like value that should be reviewed before release.
+- The comment indicates a temporary API key reference is present in the code, which poses a security risk if not removed before launch.
+- Exposing API keys, even temporarily, can lead to unauthorized access.
 
 #### Recommended Action
 
-Remove the sensitive reference or replace it with a neutral, human-reviewed task description.
+Remove all references to temporary API keys or sensitive credentials from the codebase before any launch, external review, or sharing.
 
 #### Suggested Replacement
 
 ```diff
-- TODO: remove the temporary admin password reference before the launch review.
-+ TODO: remove the temporary admin credential reference before the launch review.
+- TODO: remove the temporary API key reference before the launch review.
++ TODO: remove the temporary credential reference before the launch review.
 ```
 
 ### CDX-001: Internal Codename Exposure
 
-**Severity:** 🟡 Medium | **Confidence:** ● High
+**Severity:** 🟠 High | **Confidence:** ● High
 
-**Detection Method:** Term Match
+**Detection Method:** Hybrid
 
 `examples/realistic_sample.py` — line 37
 
@@ -80,22 +81,22 @@ Project Atlas pilot notes still need a public-safe label before external sharing
 
 #### Why This Was Flagged
 
-- The text references configured sensitive term(s): Project Atlas.
+- The comment mentions an internal codename, 'Project Atlas', alongside a need for a 'public-safe label before external sharing', indicating a potential for external exposure of confidential internal project details without proper sanitization.
 
 #### Recommended Action
 
-Review whether the internal project reference should be removed, generalized, or kept internal.
+Replace internal project codenames with public-safe labels or remove the reference if not necessary for the external context.
 
 #### Suggested Replacement
 
 ```diff
 - Project Atlas pilot notes still need a public-safe label before external sharing.
-+ the internal project pilot notes still need a public-safe label before external sharing.
++ Pilot notes still need a public-safe label before external sharing.
 ```
 
 ### PRO-001: Professionalism Risk
 
-**Severity:** 🟢 Low | **Confidence:** ◐ Medium
+**Severity:** 🟡 Medium | **Confidence:** ● High
 
 **Detection Method:** Semantic Analysis
 
@@ -109,25 +110,18 @@ This hacky placeholder comment should be rewritten before sharing.
 
 #### Why This Was Flagged
 
-- The text appears to use unprofessional or dismissive wording that may not be suitable to keep.
+- The comment uses informal and unprofessional language ('hacky') that should be avoided in code destined for broader review or sharing.
 
 #### Recommended Action
 
-Replace the wording with a neutral, professional explanation.
+Rephrase the comment using professional and clear language.
 
 #### Suggested Replacement
 
-No automatic suggestion generated — confidence was not high enough for automated remediation.
-
----
-
-## Clean Copy Summary
-
-- Clean copy generated: `output/realistic_sample-clean-copy.py`
-- Replacements applied: `2`
-- Replacements skipped: `1`
-- Skipped replacement reasons:
-  - `finding:realistic_sample.py:comment:73:11:professionalism_risk` (line 73): Suggested replacement is missing.
+```diff
+- This hacky placeholder comment should be rewritten before sharing.
++ This temporary comment should be rewritten before sharing.
+```
 
 ---
 
